@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="c3a366f32263f39960452c297d19da74b29aa744">
+<index version="1" name="MH Scripts" commit="d3e7ddeb5f8938a019b05b2bd237d89d3780994e">
   <category name="Automation">
     <reapack name="MH - Insert New Pooled Automation Items For Selected Items On Top Track.lua" type="script" desc="Create New Pooled Automation Items For All Selected Items On Top Track">
       <metadata>
@@ -150,6 +150,60 @@
       </version>
     </reapack>
   </category>
+  <category name="Navigation">
+    <reapack name="MH - Mousewheel - Zoom Horizontally Dynamic.lua" type="script" desc="Mousewheel - Zoom Horizontally Dynamic">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 This script should be bound to mousewheel.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d3e7ddeb5f8938a019b05b2bd237d89d3780994e/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
+      </version>
+    </reapack>
+    <reapack name="MH - Mousewheel - Zoom Vertically Snapping to Active Folder Track.lua" type="script" desc="Mousewheel - Zoom Vertically Snapping to Active Folder Track">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 This script should be bound to mousewheel. Zooms the arrange window vertically. If you are zooming into or out of a folder track, the zoom will snap to the bounds of that folder track until the full folder is in view. This script is intended to be used with your zoom preferences being set to the default "Vertical Zoom Center: Track at View Center". You can set this value in the Reaper Preferences under "Appearance > Zoom/Scroll/Offset". This script requires the js_ReaScriptAPI extension.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d3e7ddeb5f8938a019b05b2bd237d89d3780994e/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Vertically%20Snapping%20to%20Active%20Folder%20Track.lua</source>
+      </version>
+    </reapack>
+    <reapack name="MH - Move Edit Cursor to Next Item Start or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Next Item Start or Transient on Selected Track">
+      <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d3e7ddeb5f8938a019b05b2bd237d89d3780994e/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Next%20Item%20Start%20or%20Transient%20on%20Selected%20Track.lua</source>
+      </version>
+    </reapack>
+    <reapack name="MH - Move Edit Cursor to Previous Item End or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Previous Item End or Transient on Selected Track">
+      <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d3e7ddeb5f8938a019b05b2bd237d89d3780994e/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Previous%20Item%20End%20or%20Transient%20on%20Selected%20Track.lua</source>
+      </version>
+    </reapack>
+    <reapack name="MH - Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks.lua" type="script" desc="Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Zooms arrange view to selected items while accounting for height locked tracks and hidden/supercollapsed tracks, and minimizing empty tracks.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d3e7ddeb5f8938a019b05b2bd237d89d3780994e/Navigation/MH%20-%20Toggle%20Zoom%20to%20Selected%20Items%20Ignoring%20Locked%20and%20Hidden%20Tracks.lua</source>
+      </version>
+    </reapack>
+  </category>
   <category name="Tracks">
     <reapack name="MH - Create New Track Accounting for Folder Tracks Above It.lua" type="script" desc="Create New Track Accounting for Folder Tracks Above It">
       <metadata>
@@ -296,16 +350,6 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Utility/MH%20-%20Center%20Window%20by%20Name.lua</source>
       </version>
     </reapack>
-    <reapack name="MH - Move Edit Cursor to Next Item Start or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Next Item Start or Transient on Selected Track">
-      <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Utility/MH%20-%20Move%20Edit%20Cursor%20to%20Next%20Item%20Start%20or%20Transient%20on%20Selected%20Track.lua</source>
-      </version>
-    </reapack>
-    <reapack name="MH - Move Edit Cursor to Previous Item End or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Previous Item End or Transient on Selected Track">
-      <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Utility/MH%20-%20Move%20Edit%20Cursor%20to%20Previous%20Item%20End%20or%20Transient%20on%20Selected%20Track.lua</source>
-      </version>
-    </reapack>
     <reapack name="MH - Toggle Actions Window.lua" type="script" desc="Toggle Actions Window">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
@@ -318,50 +362,6 @@
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Utility/MH%20-%20Toggle%20Actions%20Window.lua</source>
-      </version>
-    </reapack>
-  </category>
-  <category name="Zoom">
-    <reapack name="MH - Mousewheel - Zoom Horizontally Dynamic.lua" type="script" desc="Mousewheel - Zoom Horizontally Dynamic">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 This script should be bound to mousewheel.\par}
-}
-]]></description>
-      </metadata>
-      <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Zoom/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
-      </version>
-    </reapack>
-    <reapack name="MH - Mousewheel - Zoom Vertically Snapping to Active Folder Track.lua" type="script" desc="Mousewheel - Zoom Vertically Snapping to Active Folder Track">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 This script should be bound to mousewheel. Zooms the arrange window vertically. If you are zooming into or out of a folder track, the zoom will snap to the bounds of that folder track until the full folder is in view. This script is intended to be used with your zoom preferences being set to the default "Vertical Zoom Center: Track at View Center". You can set this value in the Reaper Preferences under "Appearance > Zoom/Scroll/Offset". This script requires the js_ReaScriptAPI extension.\par}
-}
-]]></description>
-      </metadata>
-      <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Zoom/MH%20-%20Mousewheel%20-%20Zoom%20Vertically%20Snapping%20to%20Active%20Folder%20Track.lua</source>
-      </version>
-    </reapack>
-    <reapack name="MH - Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks.lua" type="script" desc="Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Zooms arrange view to selected items while accounting for height locked tracks and hidden/supercollapsed tracks, and minimizing empty tracks.\par}
-}
-]]></description>
-      </metadata>
-      <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Zoom/MH%20-%20Toggle%20Zoom%20to%20Selected%20Items%20Ignoring%20Locked%20and%20Hidden%20Tracks.lua</source>
       </version>
     </reapack>
   </category>
