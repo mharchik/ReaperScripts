@@ -1,3 +1,4 @@
+----------------------------------------
 -- @description Create New Pooled Automation Items For All Selected Items On Top Track
 -- @author Max Harchik
 -- @version 1.0

@@ -10,7 +10,7 @@ mh = {}
 ----------------------------------------
 --Global Variables
 ----------------------------------------
-mh.DIVIDER_TRACK_SYMBOL = "<" --When this character is added to the start of a track name, that track will be treated as a divider track
+mh.DividerTrackSymbol = "<" --When this character is added to the start of a track name, that track will be treated as a divider track
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -54,7 +54,7 @@ function mh.noundo() end
 function mh.IsDividerTrack(track)
     local _, name = reaper.GetTrackName(track)
     name = string.gsub(name, " ", "")
-    return string.sub(name, 1, 1) == mh.DIVIDER_TRACK_SYMBOL
+    return string.sub(name, 1, 1) == mh.DividerTrackSymbol
 end
 
 --[[Gets the highest level parent folder track of input track.

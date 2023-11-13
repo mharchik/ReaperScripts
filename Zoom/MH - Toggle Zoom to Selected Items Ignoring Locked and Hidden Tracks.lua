@@ -13,7 +13,7 @@ mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.l
 local ZOOM_EXTRA_SPACE = 10 --% of screen left visible on either side of the zoomed in items
 local ZOOM_SENSITIVITY = 1  --in seconds, how much you can scroll after zooming in before script will zoom in again rather than zooming out
 ----------------------------------------
---Global Variables
+--Script Variables
 ----------------------------------------
 local scaledTracks = {} --stores references to all of the tracks that will have their heights changed when zooming in.
 local unscaledTracks = {} --stores references to all of the tracks that are height locked or will be set to the minium height
