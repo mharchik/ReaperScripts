@@ -47,7 +47,7 @@ function mh.JsChecker()
     end
 end
 
---Used to exit undo states in certain scripts
+--Used to exit scripts early without creating an undo point
 function mh.noundo() end
 
 --Returns whether or not a track can be classified as a divider track

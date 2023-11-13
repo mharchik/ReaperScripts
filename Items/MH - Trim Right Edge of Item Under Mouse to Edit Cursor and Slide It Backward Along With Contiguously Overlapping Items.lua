@@ -1,8 +1,8 @@
 ----------------------------------------
--- @description Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items
+-- @description Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items
 -- @author Max Harchik
 -- @version 1.0
--- @about Trims the start of any item, including fades, to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items behind it that are contiguously connected by overlapping crossfades
+-- @about Trims the end of any item, including fades, to the edit cursor and then moves it back to it's previous end time, keeping the same relative timing to all items in front of it that are contiguously connected by overlapping crossfades
 
 -- Requires SWS Extensions
 ----------------------------------------
@@ -14,7 +14,7 @@ mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.l
 --Functions
 ----------------------------------------
 
-function SelectOverlappingGroupOfItemsAfterItem(item)
+function SelectOverlappingGroupOfItemsBeforeItem(item)
 	local track = reaper.GetMediaItem_Track(item)
 	local itemCount = reaper.CountTrackMediaItems(track)
 	if itemCount == 0 then return end
@@ -22,11 +22,11 @@ function SelectOverlappingGroupOfItemsAfterItem(item)
 	local checkedItems = {}
 	itemsToCheck[1] = item
 	while #itemsToCheck > 0 do
-		local itemStart, itemEnd = mh.GetItemSize(itemsToCheck[1])
+		local itemStart = mh.GetItemSize(itemsToCheck[1])
 		for i = 0, itemCount - 1 do
 			local nextItem = reaper.GetTrackMediaItem(track, i)
-			local nextItemStart = mh.GetItemSize(nextItem)
-			if nextItemStart > itemStart and nextItemStart <= itemEnd then
+			local nextItemStart, nextItemEnd = mh.GetItemSize(nextItem)
+			if nextItemStart < itemStart and nextItemEnd >= itemStart then
 				local isNewItem = true
 				for _, checkedItem in ipairs(checkedItems) do
 					if nextItem == checkedItem then
@@ -54,24 +54,24 @@ function Main()
 		return
 	end
 	local editPos = reaper.GetCursorPosition()
-	local itemStart, ItemEnd = mh.GetItemSize(item)
-	if editPos <= itemStart then mh.noundo() return end
-	local fadeLength = reaper.GetMediaItemInfo_Value(item, "D_FADEINLEN")
+	local itemStart, itemEnd = mh.GetItemSize(item)
+	if editPos >= itemEnd then reaper.defer(mh.noundo()) return end
+	local fadeLength = reaper.GetMediaItemInfo_Value(item, "D_FADEOUTLEN")
     if fadeLength > 0 then
-        local newFadeLength = fadeLength - (editPos - itemStart)
-        reaper.SetMediaItemInfo_Value(item, "D_FADEINLEN", newFadeLength)
+        local newFadeLength = fadeLength - (itemEnd - editPos)
+        reaper.SetMediaItemInfo_Value(item, "D_FADEOUTLEN", newFadeLength)
     end
-	reaper.BR_SetItemEdges(item, editPos, ItemEnd)
-	local moveAmount = itemStart - editPos
+	reaper.BR_SetItemEdges(item, itemStart, editPos)
+	local moveAmount = editPos - itemEnd
 	reaper.SetMediaItemSelected(item, true)
-	SelectOverlappingGroupOfItemsAfterItem(item)
+	SelectOverlappingGroupOfItemsBeforeItem(item)
 	local selItemCount = reaper.CountSelectedMediaItems()
 	for i = 0, selItemCount - 1 do
 		local nextItem = reaper.GetSelectedMediaItem(0, i)
 		local nextItemStart = mh.GetItemSize(nextItem)
-		reaper.SetMediaItemPosition(nextItem, nextItemStart + moveAmount, false)
+		reaper.SetMediaItemPosition(nextItem, nextItemStart - moveAmount, false)
 	end
-	reaper.SetEditCurPos(itemStart, false, false)
+	reaper.SetEditCurPos(itemEnd, false, false)
 end
 
 --------------------
