@@ -20,7 +20,24 @@ function MoveCursorForward(track, cursorPos)
             local itemStart, itemEnd = mh.GetItemSize(item)
             if cursorPos >= itemStart and cursorPos < itemEnd and didMove == false then
                 reaper.SetMediaItemSelected(item, true)
+                local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
+                local take = reaper.GetActiveTake(item)
+                local offSet = reaper.GetMediaItemTakeInfo_Value(take, "D_STARTOFFS")
+                local source = reaper.GetMediaItemTake_Source(take)
+                local sLength, isSeconds = reaper.GetMediaSourceLength(source)
                 reaper.Main_OnCommand("40375", 0) --Calls Action "Item navigation: Move cursor to next transient in items"
+                --checking if we're passing by the start of the source. If so stop there first.
+                if offSet < 0 then
+                    if cursorPos < itemStart - offSet and reaper.GetCursorPosition() > itemStart - offSet then
+                        reaper.SetEditCurPos(itemStart - offSet, true, false)
+                    end
+                end
+                --checking if we're passing by the end of the source. If so stop there first.
+                if length > sLength - offSet then
+                    if cursorPos < itemStart + (sLength - offSet) and reaper.GetCursorPosition() > itemStart + (sLength - offSet) then
+                        reaper.SetEditCurPos(itemStart + (sLength - offSet), true, false)
+                    end
+                end
                 didMove = true
             elseif cursorPos < itemStart and didMove == false then
                 reaper.SetMediaItemSelected(item, true)
@@ -30,6 +47,8 @@ function MoveCursorForward(track, cursorPos)
         end
     end
 end
+
+
 
 function Main()
     local track = reaper.GetLastTouchedTrack()
