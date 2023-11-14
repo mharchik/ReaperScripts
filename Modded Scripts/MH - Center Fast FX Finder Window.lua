@@ -8,6 +8,7 @@
 --Setup
 ----------------------------------------
 local scriptName = ({reaper.get_action_context()})[2]:match("([^/\\_]+)%.lua$")
+mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory. Please resync it from the menu above:\nExtensions > ReaPack > Synchronize Packages > 'MH Scripts'", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository. Please install it from the menu above:\nExtensions > ReaPack > Browse Packages > 'MH Scripts'", "Error", 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -15,8 +16,8 @@ local scriptName = ({reaper.get_action_context()})[2]:match("([^/\\_]+)%.lua$")
 function Main()
 	local FX_win = reaper.JS_Window_Find("Fast FX Finder", false)
 	if not FX_win then return end
-	local retval, left, top, right, bottom = reaper.JS_Window_GetRect(FX_win)
-	local retval2, mLeft, mTop, mRight, mBottom = reaper.JS_Window_GetRect(reaper.GetMainHwnd())
+	local _, left, top, right, bottom = reaper.JS_Window_GetRect(FX_win)
+	local _, mLeft, mTop, mRight, mBottom = reaper.JS_Window_GetRect(reaper.GetMainHwnd())
 	local height = math.abs(bottom - top)
 	local width = right - left
 	left = math.floor((mRight - mLeft)/2 + mLeft - width/2)

@@ -14,7 +14,7 @@ mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.l
 ----------------------------------------
 
 ----------------------------------------
---Global Variables
+--Script Variables
 ----------------------------------------
 
 ----------------------------------------
