@@ -12,23 +12,13 @@ mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.l
 ----------------------------------------
 --User Settings
 ----------------------------------------
-local WINDOW_NAME = "ReaLauncher" --Type the name of the window you'd like to center here
+local WindowName = "ReaLauncher" --Type the name of the window you'd like to center here
 ----------------------------------------
 --Functions
 ----------------------------------------
 function Main()
-	if not mh.JsChecker then return end
-	local win = reaper.JS_Window_Find(WINDOW_NAME, false)
-	if not win then return end
-	local _, left, top, right, bottom = reaper.JS_Window_GetRect(win)
-	local _, mLeft, mTop, mRight, mBottom = reaper.JS_Window_GetRect(reaper.GetMainHwnd())
-	local height = math.abs(bottom - top)
-	local width = right - left
-	left = math.floor((mRight - mLeft) / 2 + mLeft - width / 2)
-	top = math.floor((mBottom - mTop) / 2 + mTop - height / 2)
-	reaper.JS_Window_SetPosition(win, left, top, width, height)
+	mh.CenterNamedWindow(WindowName)
 end
-
 ----------------------------------------
 --Main
 ----------------------------------------

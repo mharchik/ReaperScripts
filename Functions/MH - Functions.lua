@@ -210,3 +210,19 @@ function mh.SelectOverlappingGroupOfItems(item, shouldSelect)
 	end
     return checkedItems
 end
+
+--Finds the window with a name that matches the input string, and moves it 
+--
+-- @param string windowName : the name of the window you'd like to move. Does not need to match the full window name
+function mh.CenterNamedWindow(windowName)
+	if not mh.JsChecker then return end
+	local win = reaper.JS_Window_Find(windowName, false)
+	if not win then return end
+	local _, left, top, right, bottom = reaper.JS_Window_GetRect(win)
+	local _, mLeft, mTop, mRight, mBottom = reaper.JS_Window_GetRect(reaper.GetMainHwnd())
+	local height = math.abs(bottom - top)
+	local width = right - left
+	left = math.floor((mRight - mLeft) / 2 + mLeft - width / 2)
+	top = math.floor((mBottom - mTop) / 2 + mTop - height / 2)
+	reaper.JS_Window_SetPosition(win, left, top, width, height)
+end
