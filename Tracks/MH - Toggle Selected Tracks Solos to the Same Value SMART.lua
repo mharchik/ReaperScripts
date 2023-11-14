@@ -47,9 +47,18 @@ function Main()
 		if trackSoloState == 0 then
 			isAnySelTrackUnsolo = true
 		else
+			--Save track for later
 			soloSelTracks[#soloSelTracks+1] = selTrack
+			--Also grabbing all of that track's parents
+			local selTrackDepth = reaper.GetTrackDepth(selTrack)
+			while selTrackDepth > 0 do
+				selTrack = reaper.GetParentTrack(selTrack)
+				selTrackDepth = reaper.GetTrackDepth(selTrack)
+				soloSelTracks[#soloSelTracks+1] = selTrack
+			end
 		end
 	end
+	--Checking to see if any unselected tracks are soloed.
 	local isAnyOtherTrackSolo = false
 	local trackCount = reaper.CountTracks(0)
 	for i = 0, trackCount - 1 do
@@ -57,6 +66,7 @@ function Main()
 		local track = reaper.GetTrack(0, i)
 		local trackSoloState = reaper.GetMediaTrackInfo_Value(track, "I_SOLO")
 		if trackSoloState > 0 then
+			--if the track is selected or a parent of a selected track, we don't need to check it
 			for key, selTrack in ipairs(soloSelTracks) do
 				if track == selTrack then
 					ignoreTrack = true
@@ -78,7 +88,7 @@ end
 ----------------------------------------
 --Main
 ----------------------------------------
-reaper.ClearConsole()
+--reaper.ClearConsole()
 reaper.PreventUIRefresh(1)
 reaper.Undo_BeginBlock()
 Main()
