@@ -2,13 +2,14 @@
 -- @description Toggle Selected Tracks Solos to the Same Value or Unsolo All Tracks
 -- @author Max Harchik
 -- @version 1.0
--- @about	Toggles all selected track solos together, unsoloing any unselected tracks. If selected tracks are a mixture of soloed and unsoloed it will solo first. 
---			If only unsoloed tracks are selected and any unselected tracks are still soloed, it will unsolo all tracks
+-- @about	Solos all seleted tracks, If selected tracks are a mixture of soloed and unsoloed it will solo first. 
+--			if any unselected tracks are soloed, it will unsolo those tracks
 --			If parent track is muted it will solo that as well
 ----------------------------------------
 --Setup
 ----------------------------------------
 local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory. Please resync it from the menu above:\nExtensions > ReaPack > Synchronize Packages > 'MH Scripts'", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository. Please install it from the menu above:\nExtensions > ReaPack > Browse Packages > 'MH Scripts'", "Error", 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -27,7 +28,8 @@ function SetSelectedTrackSolos(selTrackCount, solo)
 	end
 end
 
-function SetAllTrackSolos(trackCount, solo)
+function SetAllTrackSolos(solo)
+	local trackCount = reaper.CountTracks(0)
 	for i = 0, trackCount - 1 do
 		local selTrack = reaper.GetTrack(0, i)
 		reaper.SetMediaTrackInfo_Value(selTrack, "I_SOLO", solo)
@@ -36,7 +38,7 @@ end
 
 function Main()
 	local isAnySelTrackUnsolo = false
-	local isAnySelTrackSolo = false
+	local soloSelTracks = {}
 	local selTrackCount = reaper.CountSelectedTracks(0)
 	if selTrackCount == 0 then return end
 	for i = 0, selTrackCount - 1 do
@@ -45,40 +47,38 @@ function Main()
 		if trackSoloState == 0 then
 			isAnySelTrackUnsolo = true
 		else
-			isAnySelTrackSolo = true
+			soloSelTracks[#soloSelTracks+1] = selTrack
 		end
 	end
-
-	local isAnyTrackSolo = false
+	local isAnyOtherTrackSolo = false
 	local trackCount = reaper.CountTracks(0)
 	for i = 0, trackCount - 1 do
+		local ignoreTrack = false
 		local track = reaper.GetTrack(0, i)
 		local trackSoloState = reaper.GetMediaTrackInfo_Value(track, "I_SOLO")
 		if trackSoloState > 0 then
-			if not reaper.IsTrackSelected(track) then
-				isAnyTrackSolo = true
-				break
+			for key, selTrack in ipairs(soloSelTracks) do
+				if track == selTrack then
+					ignoreTrack = true
+				end
+			end
+			if not ignoreTrack then
+				isAnyOtherTrackSolo = true
 			end
 		end
 	end
-
-	if isAnySelTrackUnsolo then
-		if isAnySelTrackSolo then
-			SetAllTrackSolos(trackCount, 0)
-			SetSelectedTrackSolos(selTrackCount, 2) --2 sets "Solo In Place" which will retain any sends you have active on the track
-		elseif isAnyTrackSolo then
-			SetAllTrackSolos(trackCount, 0)
-		else
-			SetSelectedTrackSolos(selTrackCount, 2)
-		end
+	if isAnySelTrackUnsolo or isAnyOtherTrackSolo then
+		SetAllTrackSolos(0)
+		SetSelectedTrackSolos(selTrackCount, 2) --2 sets "Solo In Place" which will retain any sends you have active on the track
 	else
-		SetAllTrackSolos(trackCount, 0)
+		SetAllTrackSolos(0)
 	end
 end
 
 ----------------------------------------
 --Main
 ----------------------------------------
+reaper.ClearConsole()
 reaper.PreventUIRefresh(1)
 reaper.Undo_BeginBlock()
 Main()
