@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="d3e7ddeb5f8938a019b05b2bd237d89d3780994e">
+<index version="1" name="MH Scripts" commit="f7e9a32e40cb6fc2d43c4a75f8ca3bd5e45e4fc3">
   <category name="Automation">
     <reapack name="MH - Insert New Pooled Automation Items For Selected Items On Top Track.lua" type="script" desc="Create New Pooled Automation Items For All Selected Items On Top Track">
       <metadata>
@@ -113,7 +113,7 @@
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Trims the start of any item to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items that are contiguously connected by overlapping crossfades\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Trims the start of any item, including fades, to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items behind it that are contiguously connected by overlapping crossfades\par}
 }
 ]]></description>
       </metadata>
@@ -133,6 +133,20 @@
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20In%20End%20Until%20Minimum%20Fade%20Length.lua</source>
+      </version>
+    </reapack>
+    <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Trims the end of any item, including fades, to the edit cursor and then moves it back to it's previous end time, keeping the same relative timing to all items in front of it that are contiguously connected by overlapping crossfades\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Max Harchik" time="2023-11-13T23:29:04Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/9f37469cffbaf7572b87ce5f5638803c99c07527/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Backward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length">
@@ -277,18 +291,18 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Mutes%20to%20the%20Same%20Value.lua</source>
       </version>
     </reapack>
-    <reapack name="MH - Toggle Selected Tracks Solos to the Same Value or Unsolo All Tracks.lua" type="script" desc="Toggle Selected Tracks Solos to the Same Value or Unsolo All Tracks">
+    <reapack name="MH - Toggle Selected Tracks Solos to the Same Value SMART.lua" type="script" desc="Toggle Selected Tracks Solos to the Same Value or Unsolo All Tracks">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Toggles all selected track solos together, unsoloing any unselected tracks. If selected tracks are a mixture of soloed and unsoloed it will solo first.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Solos all seleted tracks, If selected tracks are a mixture of soloed and unsoloed it will solo first.\par}
 }
 ]]></description>
       </metadata>
-      <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/45ddf8b35824999c7c8254fdf9639a82120376c0/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Solos%20to%20the%20Same%20Value%20or%20Unsolo%20All%20Tracks.lua</source>
+      <version name="1.0" author="Max Harchik" time="2023-11-14T07:30:31Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/f7e9a32e40cb6fc2d43c4a75f8ca3bd5e45e4fc3/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Solos%20to%20the%20Same%20Value%20SMART.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selection of Track Under Mouse and Set as Last Touched Track.lua" type="script" desc="Toggle Selection of Track Under Mouse and Set as Last Touched Track">
