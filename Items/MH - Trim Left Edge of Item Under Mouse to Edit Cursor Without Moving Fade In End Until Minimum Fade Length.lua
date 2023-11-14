@@ -6,14 +6,14 @@
 
 -- Requires SWS Extensions
 ----------------------------------------
---User Settings
-----------------------------------------
-local MIN_FADE_LENGTH = 0.016666667 --currently set to 1 frame at 60 fps
-----------------------------------------
 --Setup
 ----------------------------------------
 local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
 mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory. Please resync it from the menu above:\nExtensions > ReaPack > Synchronize Packages > 'MH Scripts'", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository. Please install it from the menu above:\nExtensions > ReaPack > Browse Packages > 'MH Scripts'", "Error", 0); return end
+----------------------------------------
+--User Settings
+----------------------------------------
+local MIN_FADE_LENGTH = 0.016666667 --currently set to 1 frame at 60 fps
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -22,6 +22,7 @@ function Main()
     if not item then return end
     local editPos = reaper.GetCursorPosition()
     local itemStart, itemEnd = mh.GetItemSize(item)
+	if editPos >= itemEnd then mh.noundo() return end
     local fadeLength = reaper.GetMediaItemInfo_Value(item, "D_FADEINLEN")
     if fadeLength > 0 then
         local newFadeLength = fadeLength - (editPos - itemStart)

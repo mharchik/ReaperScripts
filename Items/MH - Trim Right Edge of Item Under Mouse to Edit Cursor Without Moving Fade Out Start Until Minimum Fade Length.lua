@@ -22,6 +22,7 @@ function Main()
     if not item then return end
     local editPos = reaper.GetCursorPosition()
     local itemStart, itemEnd = mh.GetItemSize(item)
+	if editPos <= itemStart then mh.noundo() return end
     local fadeLength = reaper.GetMediaItemInfo_Value(item, "D_FADEOUTLEN")
     if fadeLength > 0 then
         local newFadeLength = fadeLength - (itemEnd - editPos)
