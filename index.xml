@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="f7e9a32e40cb6fc2d43c4a75f8ca3bd5e45e4fc3">
+<index version="1" name="MH Scripts" commit="2ae2696365b2733380c81620a526af5064d9dc6d">
   <category name="Automation">
     <reapack name="MH - Insert New Pooled Automation Items For Selected Items On Top Track.lua" type="script" desc="Create New Pooled Automation Items For All Selected Items On Top Track">
       <metadata>
@@ -302,7 +302,7 @@
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-14T07:30:31Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/f7e9a32e40cb6fc2d43c4a75f8ca3bd5e45e4fc3/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Solos%20to%20the%20Same%20Value%20SMART.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2ae2696365b2733380c81620a526af5064d9dc6d/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Solos%20to%20the%20Same%20Value%20SMART.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selection of Track Under Mouse and Set as Last Touched Track.lua" type="script" desc="Toggle Selection of Track Under Mouse and Set as Last Touched Track">
