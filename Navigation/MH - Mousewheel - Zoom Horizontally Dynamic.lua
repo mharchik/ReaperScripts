@@ -17,15 +17,15 @@ if not reaper.HasExtState(scriptName, "firstrun") then reaper.SetExtState(script
 --User Settings
 ----------------------------------------
 local ZoomAmount = 2   --Higher values increase the strength of the zoom in/out
+local CursorOffsetAmount = 60 --(0-100) This affects how far to the left the edit cursor will shift when focused on it. 0 will be the default center of the screen, while 100 will be full to the left edge of the screen 
 ----------------------------------------
 --Functions
 ----------------------------------------
 
---This shifts the zoom point based on how close you're zooming in on your selected items. As you get closer to the items, zoom will start to shift towards the edit cursor instead
+--Changes the zoom center point based on how close you're zooming in.
 function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
 	local zoomedOutCenter
 	local zoomCenterLength
-
 	--getting the positions and lengths of the different elements of the arrange view
 	local curStart, curEnd = reaper.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	local arrlength = curEnd - curStart
@@ -34,7 +34,7 @@ function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
 	local timeStart, timeSelEnd = reaper.GetSet_LoopTimeRange(false, false, 0, 0, false)
 	local timeLength = timeSelEnd - timeStart
 	local timeCenter = (timeSelEnd + timeStart)/2
-
+	local cursorOffset = GetCursorOffset()
 	--Setting the center of our zoom point based on what exists/is on screen. Priority is Time selection > Item Selection > Edit Cursor > Center of View
 	if timeCenter > curStart and timeCenter < curEnd then
 		zoomedOutCenter = timeCenter
@@ -49,25 +49,27 @@ function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
 		zoomedOutCenter = curStart + arrlength/2
 		zoomCenterLength = arrlength
 	end
-
-	local zoomBias = math.log(arrlength / zoomCenterLength, 5)
-	--some questionable math above but this clamps the value so that we can more reliably scale our final output
+	--zoomBias will be the scaling amount that the zoom shifts from our zoomed out target to our edit cursor. 
+	local zoomBias = (1 - zoomCenterLength/ arrlength) * 2
+	--some vaguely questionable math above but this clamps the value so that we can reliably scale our final output
 	if zoomBias > 1 then
 		zoomBias = 1
 	elseif zoomBias < 0 then
 		zoomBias = 0
 	end
-	-- point when zoomed in + the extra space between the cursor and the center of selected items scaled by zoomBias + how much we're to the left we're going to shift that point when zoomed in
- 	local center = cursorPos + (zoomedOutCenter - cursorPos) * zoomBias + (arrlength / 5) * (1 - zoomBias)
-	
+	-- Centering the view on the cursor plus the scaled distance to our zoomed out center point. We also add the cursor offset which is scaled opposite from the zoomedOutCenter so that it only starts affecting our positioning when zooming in on the actual edit cursor
+ 	local center = cursorPos + (zoomedOutCenter - cursorPos) * zoomBias + cursorOffset * (1 - zoomBias)
 	return center
 end
 
-function Zoom(pos)
+function Zoom()
 	if val < 0 then
 		ZoomAmount = ZoomAmount * -1
 	end
 	reaper.CSurf_OnZoom(ZoomAmount, 0)
+end
+
+function MoveToNewCenter(pos)
 	local curStart, curEnd = reaper.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	local newStart = pos - (curEnd - curStart) / 2
 	local newEnd = pos + (curEnd - curStart) / 2
@@ -79,14 +81,24 @@ function Zoom(pos)
 	reaper.GetSet_ArrangeView2(0, true, 0, 0, newStart, newEnd)
 end
 
+--Gets the optional offset for how much to the left we want to shift the edit cursor when zooming on it
+function GetCursorOffset()
+	local curStart, curEnd = reaper.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
+	local arrlength = curEnd - curStart
+	return (arrlength/2)*(CursorOffsetAmount/100)
+end
+
 function Main()
 	local cursorPos = reaper.GetCursorPosition()
 	local retval, itemsStart, itemsEnd = mh.GetVisibleSelectedItemsSize()
 	if retval then
+		Zoom()
 		local zoomCenter = FindZoomCenter(itemsStart, itemsEnd, cursorPos)
-		Zoom(zoomCenter)
+		MoveToNewCenter(zoomCenter)
 	else
-		Zoom(cursorPos)
+		Zoom()
+		local cursorOffset = GetCursorOffset()
+		MoveToNewCenter(cursorPos + cursorOffset)
 	end
 	reaper.defer(mh.noundo)
 end
