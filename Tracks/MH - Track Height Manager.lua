@@ -11,7 +11,7 @@
 local _, _, section_ID, cmd_ID, _, _, _ = reaper.get_action_context()
 reaper.SetToggleCommandState(section_ID, cmd_ID, 1)
 reaper.RefreshToolbar2(section_ID, cmd_ID)
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory. Please resync it from the menu above:\nExtensions > ReaPack > Synchronize Packages > 'MH Scripts'", "Error", 0); return end else reaper.ShowMessageBox( "This script requires the full MH Scripts repository. Please install it from the menu above:\nExtensions > ReaPack > Browse Packages > 'MH Scripts'", "Error", 0); return end
+mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit www.maxharchik.com/reaper for more information", "Error", 0); return end
 local lastActiveTime = reaper.time_precise()
 ----------------------------------------
 --User Settings
@@ -64,7 +64,7 @@ end
 function Main()
     local currentTime = reaper.time_precise()
     if currentTime - lastActiveTime > refreshRate then
-        reaper.ClearConsole()
+        --reaper.ClearConsole()
         local trackCount = reaper.CountTracks(0)
         if trackCount > 0 then
             for i = 0, trackCount - 1 do
