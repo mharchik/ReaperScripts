@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="2e9ae67b96170ad6885837361a7120613fb17b7b">
+<index version="1" name="MH Scripts" commit="2aa1ada0cfba841ec236a4d4d81130d838a01af5">
   <category name="Automation">
     <reapack name="MH - Insert New Pooled Automation Items For Selected Items On Top Track.lua" type="script" desc="Create New Pooled Automation Items For All Selected Items On Top Track">
       <metadata>
@@ -19,7 +19,7 @@
   <category name="Functions">
     <reapack name="MH - Functions.lua" type="script">
       <version name="1.0" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/405e9d39976f882ee33984fbbfb44994147b91b6/Functions/MH%20-%20Functions.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2aa1ada0cfba841ec236a4d4d81130d838a01af5/Functions/MH%20-%20Functions.lua</source>
       </version>
     </reapack>
   </category>
@@ -176,7 +176,7 @@
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2e9ae67b96170ad6885837361a7120613fb17b7b/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/aa3baf35f7c015df6621d3271a9e07d26ca21163/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Mousewheel - Zoom Vertically Snapping to Active Folder Track.lua" type="script" desc="Mousewheel - Zoom Vertically Snapping to Active Folder Track">
@@ -195,12 +195,12 @@
     </reapack>
     <reapack name="MH - Move Edit Cursor to Next Item Start or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Next Item Start or Transient on Selected Track">
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/5fe9d72ca4825834e61600c1760ea31d88e6133f/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Next%20Item%20Start%20or%20Transient%20on%20Selected%20Track.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2aa1ada0cfba841ec236a4d4d81130d838a01af5/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Next%20Item%20Start%20or%20Transient%20on%20Selected%20Track.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Move Edit Cursor to Previous Item End or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Previous Item End or Transient on Selected Track">
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/5fe9d72ca4825834e61600c1760ea31d88e6133f/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Previous%20Item%20End%20or%20Transient%20on%20Selected%20Track.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2aa1ada0cfba841ec236a4d4d81130d838a01af5/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Previous%20Item%20End%20or%20Transient%20on%20Selected%20Track.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks.lua" type="script" desc="Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks">
@@ -214,7 +214,7 @@
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/5fe9d72ca4825834e61600c1760ea31d88e6133f/Navigation/MH%20-%20Toggle%20Zoom%20to%20Selected%20Items%20Ignoring%20Locked%20and%20Hidden%20Tracks.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2aa1ada0cfba841ec236a4d4d81130d838a01af5/Navigation/MH%20-%20Toggle%20Zoom%20to%20Selected%20Items%20Ignoring%20Locked%20and%20Hidden%20Tracks.lua</source>
       </version>
     </reapack>
   </category>
