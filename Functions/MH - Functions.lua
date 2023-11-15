@@ -211,9 +211,9 @@ function mh.SelectOverlappingGroupOfItems(item, shouldSelect)
     return checkedItems
 end
 
---Finds the window with a name that matches the input string, and moves it 
---
--- @param string windowName : the name of the window you'd like to move. Does not need to match the full window name
+--[[Finds the window with a name that matches the input string, and moves it 
+
+    @param string windowName : the name of the window you'd like to move. Does not need to match the full window name]]
 function mh.CenterNamedWindow(windowName)
 	if not mh.JsChecker then return end
 	local win = reaper.JS_Window_Find(windowName, false)
@@ -225,4 +225,20 @@ function mh.CenterNamedWindow(windowName)
 	left = math.floor((mRight - mLeft) / 2 + mLeft - width / 2)
 	top = math.floor((mBottom - mTop) / 2 + mTop - height / 2)
 	reaper.JS_Window_SetPosition(win, left, top, width, height)
+end
+
+--[[Checks if input item is a folder Item
+
+    @param MediaItem item : item to check]]
+function mh.IsFolderItem(item)
+    local take = reaper.GetActiveTake(item)
+    local source = reaper.GetMediaItemTake_Source(take)
+    local typebuf = reaper.GetMediaSourceType(source)
+    if typebuf == "EMPTY" then
+        local track = reaper.GetMediaItemTrack(item)
+        if reaper.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 then
+            return true
+        end
+    end
+    return false
 end

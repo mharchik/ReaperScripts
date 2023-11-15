@@ -56,10 +56,7 @@ function GetTracks()
 		for j = 0, numItems - 1 do
 			local itemOnTrack = reaper.GetTrackMediaItem(track, j)
 			if reaper.IsMediaItemSelected(itemOnTrack) then
-				local take = reaper.GetActiveTake(itemOnTrack)
-				local source = reaper.GetMediaItemTake_Source(take)
-				local typebuf = reaper.GetMediaSourceType(source)
-				if typebuf ~= "EMPTY" then
+				if not mh.IsFolderItem(itemOnTrack) then
 					isActiveTrack = true
 				end
 			end

@@ -10,7 +10,8 @@ mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.l
 ----------------------------------------
 --User Settings
 ----------------------------------------
-local ShouldSelectItem = false
+local ShouldSelectItem = true
+local ShouldSelectFolderItem = false
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -23,7 +24,9 @@ function MoveCursorBack(track, cursorPos)
             local item = reaper.GetTrackMediaItem(track, i)
             local itemStart, itemEnd = mh.GetItemSize(item)
             if cursorPos > itemStart and cursorPos <= itemEnd and didMove == false then
-                if not ShouldSelectItem then
+                if not ShouldSelectItem and not mh.IsFolderItem then
+                    reaper.Main_OnCommand(reaper.NamedCommandLookup("_SWS_SAVEALLSELITEMS1"), 0) -- Calls Action: "SWS: Save selected item(s)"
+                elseif mh.IsFolderItem(item) and not ShouldSelectFolderItem then
                     reaper.Main_OnCommand(reaper.NamedCommandLookup("_SWS_SAVEALLSELITEMS1"), 0) -- Calls Action: "SWS: Save selected item(s)"
                 end
                 reaper.SetMediaItemSelected(item, true)
@@ -45,12 +48,16 @@ function MoveCursorBack(track, cursorPos)
                         reaper.SetEditCurPos(itemStart + (sLength - offSet), true, false)
                     end
                 end
-                if not ShouldSelectItem then
+                if not ShouldSelectItem and not mh.IsFolderItem(item) then
+                    reaper.Main_OnCommand(reaper.NamedCommandLookup("_SWS_RESTALLSELITEMS1"), 0) -- Calls Action: "SWS: Restore saved selected item(s)"
+                elseif mh.IsFolderItem(item) and not ShouldSelectFolderItem then
                     reaper.Main_OnCommand(reaper.NamedCommandLookup("_SWS_RESTALLSELITEMS1"), 0) -- Calls Action: "SWS: Restore saved selected item(s)"
                 end
                 didMove = true
             elseif cursorPos > itemEnd and didMove == false then
-                if ShouldSelectItem then
+                if ShouldSelectItem and not mh.IsFolderItem(item) then
+                    reaper.SetMediaItemSelected(item, true)
+                elseif mh.IsFolderItem and ShouldSelectFolderItem then
                     reaper.SetMediaItemSelected(item, true)
                 end
                 reaper.SetEditCurPos(itemEnd, true, false)
