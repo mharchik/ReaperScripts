@@ -1,5 +1,5 @@
 ----------------------------------------
--- @description Move Edit Cursor to Previous Item End or Transient on Selected Track
+-- @description Move Edit Cursor to Previous Item Edge or Transient on Selected Track
 -- @author Max Harchik
 -- @version 1.0
 ----------------------------------------
