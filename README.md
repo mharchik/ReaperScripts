@@ -6,7 +6,7 @@ This is a collection of scripts that I've created for Reaper. They are mainly fo
 Many scripts include more specific information on their functionality in their header and some also include user configurable settings near the top of the file.
 
 # Installation:
-You can install these scripts by using ReaPack. From inside Reaper go to the menu _Extension > ReaPack > Import Repositories..._ and copy and past the link below into the dialogue box.
+You can install these scripts by using ReaPack. From inside Reaper go to the menu: _Extension > ReaPack > Import Repositories..._ and copy and past the link below into the dialogue box.
 
 `https://raw.githubusercontent.com/mharchik/ReaperScripts/main/index.xml`
  
@@ -36,8 +36,8 @@ For more information on how to use these scripts please check out https://www.ma
 ### Navigation
 * MH - Mousewheel - Zoom Horizontally Dynamic
 * MH - Mousewheel - Zoom Vertically Snapping to Active Folder Track
-* MH - Move Edit Cursor to Next Item Start or Transient on Selected Track
-* MH - Move Edit Cursor to Previous Item End or Transient on Selected Track
+* MH - Move Edit Cursor to Next Item Edge or Transient on Selected Track
+* MH - Move Edit Cursor to Previous Item Edge or Transient on Selected Track
 * MH - Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks
 
 ### Tracks
@@ -56,7 +56,7 @@ For more information on how to use these scripts please check out https://www.ma
 * MH - Toggle Selection of Track Under Mouse
 * MH - Toggle Solo of Last Touched Tracks Top Level Folder Track and Unsolo All Other Tracks
 * MH - Toggle Visibility of Muted Top Level Folders Below Divider Track Under Mouse
-* MH - Track Manager
+* MH - Track Style Manager
 
 ### Utility
 * MH - Center Window by Name
