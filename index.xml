@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="5578c63a88c8a8388265c163a94c8d5726b77c06">
+<index version="1" name="MH Scripts" commit="4f49e20623bb978bcc39f08f713f26918a875ca6">
   <category name="Automation">
-    <reapack name="MH - Insert New Pooled Automation Items For Selected Items On Top Track.lua" type="script" desc="Create New Pooled Automation Items For All Selected Items On Top Track">
+    <reapack name="MH - Insert New Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Create New Pooled Automation Items For All Selected Items On Top Track">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
@@ -11,15 +11,15 @@
 }
 ]]></description>
       </metadata>
-      <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/bbbc1480f53e31d32bd468a5634d49777e9e4d6b/Automation/MH%20-%20Insert%20New%20Pooled%20Automation%20Items%20For%20Selected%20Items%20On%20Top%20Track.lua</source>
+      <version name="1.0" author="Max Harchik" time="2023-11-17T03:50:26Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/4f49e20623bb978bcc39f08f713f26918a875ca6/Automation/MH%20-%20Insert%20New%20Pooled%20Automation%20Items%20For%20Selected%20Items%20On%20Last%20Touched%20Track.lua</source>
       </version>
     </reapack>
   </category>
   <category name="Functions">
     <reapack name="MH - Functions.lua" type="script">
       <version name="1.0" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2aa1ada0cfba841ec236a4d4d81130d838a01af5/Functions/MH%20-%20Functions.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/f6e5068b6ed5fbec728f50b577f7009ec2e7d485/Functions/MH%20-%20Functions.lua</source>
       </version>
     </reapack>
   </category>
