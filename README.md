@@ -14,7 +14,7 @@ For more information on how to use these scripts please check out https://www.ma
 
 # Included Actions
 ### Automation 
-* MH - Insert New Pooled Automation Items For Selected Items On Top Track
+* MH - Insert New Pooled Automation Items For Selected Items On Last Touched Track
 
 ### FX
 * MH - Center FX Window
