@@ -76,19 +76,7 @@ function StoreItemGroups(track)
 end
 
 function Main()
-    --Get the top track of the items we have selected
-    local selItemCount = reaper.CountSelectedMediaItems(0)
-    if selItemCount == 0 then return end
-    local topTrackNum
-    for i = 0, selItemCount - 1 do
-        local item = reaper.GetSelectedMediaItem(0, i)
-        local track = reaper.GetMediaItem_Track(item)
-        local trackNum = reaper.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
-        if topTrackNum == nil or topTrackNum > trackNum then
-            topTrackNum = trackNum
-        end
-    end
-    local track = reaper.GetTrack(0, topTrackNum - 1)
+    local track = reaper.GetLastTouchedTrack()
 
     -- Creating a master table to store all of our item groups in
     local itemGroups = StoreItemGroups(track)
