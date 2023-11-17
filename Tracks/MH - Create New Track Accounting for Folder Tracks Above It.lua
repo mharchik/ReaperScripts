@@ -7,46 +7,47 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+r = reaper
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
 function Main()
-    local selTrackCount = reaper.CountSelectedTracks(0)
+    local selTrackCount = r.CountSelectedTracks(0)
     if selTrackCount == 0 then return end
-    local track = reaper.GetSelectedTrack(0, selTrackCount - 1)
-    local folderDepth = reaper.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
-    local trackNum = reaper.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
+    local track = r.GetSelectedTrack(0, selTrackCount - 1)
+    local folderDepth = r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
+    local trackNum = r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
     if folderDepth == 1 then
-        local nextTrack = reaper.GetTrack(0, trackNum)
-        local trackHeight = reaper.GetMediaTrackInfo_Value(nextTrack, "I_TCPH")
+        local nextTrack = r.GetTrack(0, trackNum)
+        local trackHeight = r.GetMediaTrackInfo_Value(nextTrack, "I_TCPH")
         while trackHeight == 0 do
             trackNum = trackNum + 1
-            nextTrack = reaper.GetTrack(0, trackNum)
-            trackHeight = reaper.GetMediaTrackInfo_Value(nextTrack, "I_TCPH")
+            nextTrack = r.GetTrack(0, trackNum)
+            trackHeight = r.GetMediaTrackInfo_Value(nextTrack, "I_TCPH")
         end
     end
-    reaper.InsertTrackAtIndex(trackNum, true)
-    local newTrack = reaper.GetTrack(0, trackNum)
+    r.InsertTrackAtIndex(trackNum, true)
+    local newTrack = r.GetTrack(0, trackNum)
     if folderDepth < 0 then
-        reaper.SetMediaTrackInfo_Value(track, "I_FOLDERDEPTH", 0)
-        reaper.SetMediaTrackInfo_Value(newTrack, "I_FOLDERDEPTH", folderDepth)
+        r.SetMediaTrackInfo_Value(track, "I_FOLDERDEPTH", 0)
+        r.SetMediaTrackInfo_Value(newTrack, "I_FOLDERDEPTH", folderDepth)
     end
 end
 
 ----------------------------------------
 --Utilities
 ----------------------------------------
-function Msg(msg) reaper.ShowConsoleMsg(msg .. "\n") end
+function Msg(msg) r.ShowConsoleMsg(msg .. "\n") end
 
 ----------------------------------------
 --Main
 ----------------------------------------
 --reaper.ClearConsole()
-reaper.PreventUIRefresh(1)
-reaper.Undo_BeginBlock()
+r.PreventUIRefresh(1)
+r.Undo_BeginBlock()
 Main()
-reaper.Undo_EndBlock(scriptName, -1)
-reaper.PreventUIRefresh(-1)
-reaper.UpdateArrange()
+r.Undo_EndBlock(scriptName, -1)
+r.PreventUIRefresh(-1)
+r.UpdateArrange()

@@ -12,8 +12,9 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+r = reaper
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 
 
 ----------------------------------------
@@ -21,15 +22,15 @@ mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.l
 ----------------------------------------
 
 function Main()
-    local item, position = reaper.BR_ItemAtMouseCursor()
-    local take = reaper.GetActiveTake(item)
-    local window, segment, details = reaper.BR_GetMouseCursorContext()
-    local idx = reaper.BR_GetMouseCursorContext_StretchMarker()
+    local item, position = r.BR_ItemAtMouseCursor()
+    local take = r.GetActiveTake(item)
+    local window, segment, details = r.BR_GetMouseCursorContext()
+    local idx = r.BR_GetMouseCursorContext_StretchMarker()
 
 
-    local slope = reaper.GetTakeStretchMarkerSlope(take, idx)
-    local _, pos_a, srcpos_a = reaper.GetTakeStretchMarker(take, idx)
-    local _, pos_b, srcpos_b = reaper.GetTakeStretchMarker(take, idx + 1)
+    local slope = r.GetTakeStretchMarkerSlope(take, idx)
+    local _, pos_a, srcpos_a = r.GetTakeStretchMarker(take, idx)
+    local _, pos_b, srcpos_b = r.GetTakeStretchMarker(take, idx + 1)
     -- Calculation
     local len_init = srcpos_b - srcpos_a -- length between two SM source positions
     local len_after = pos_b - pos_a      -- Length between two SM actual item positions
@@ -40,21 +41,21 @@ function Main()
     Msg(pos_b)
     pos_b = (1 + slope) / rate_left * (len_init) + pos_a
     Msg(pos_b)
-    reaper.SetTakeStretchMarker(take, idx + 1, pos_b, srcpos_b)
+    r.SetTakeStretchMarker(take, idx + 1, pos_b, srcpos_b)
 end
 
 ----------------------------------------
 --Utilities
 ----------------------------------------
-function Msg(msg) reaper.ShowConsoleMsg(msg .. "\n") end
+function Msg(msg) r.ShowConsoleMsg(msg .. "\n") end
 
 ----------------------------------------
 --Main
 ----------------------------------------
-reaper.ClearConsole() -- comment out once script is complete
-reaper.PreventUIRefresh(1)
-reaper.Undo_BeginBlock()
+r.ClearConsole() -- comment out once script is complete
+r.PreventUIRefresh(1)
+r.Undo_BeginBlock()
 Main()
-reaper.Undo_EndBlock(scriptName, -1)
-reaper.PreventUIRefresh(-1)
-reaper.UpdateArrange()
+r.Undo_EndBlock(scriptName, -1)
+r.PreventUIRefresh(-1)
+r.UpdateArrange()

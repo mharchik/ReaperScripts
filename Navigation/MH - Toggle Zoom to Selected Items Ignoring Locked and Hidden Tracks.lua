@@ -6,7 +6,8 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+r = reaper
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 ----------------------------------------
 --User Settings
 ----------------------------------------
@@ -29,23 +30,23 @@ local numOfSpacers = 0
 ----------------------------------------
 function GetTracks()
 	--determining range of items/tracks that we need to check
-	local selItemCount = reaper.CountSelectedMediaItems()
-	local firstItem = reaper.GetSelectedMediaItem(0, 0)
-	local firstTrack = reaper.GetMediaItem_Track(firstItem)
-	local firstTrackNum = reaper.GetMediaTrackInfo_Value(firstTrack, "IP_TRACKNUMBER")
-	local lastItem = reaper.GetSelectedMediaItem(0, selItemCount - 1)
-	local lastTrack = reaper.GetMediaItem_Track(lastItem)
-	local lastTrackNum = reaper.GetMediaTrackInfo_Value(lastTrack, "IP_TRACKNUMBER")
+	local selItemCount = r.CountSelectedMediaItems()
+	local firstItem = r.GetSelectedMediaItem(0, 0)
+	local firstTrack = r.GetMediaItem_Track(firstItem)
+	local firstTrackNum = r.GetMediaTrackInfo_Value(firstTrack, "IP_TRACKNUMBER")
+	local lastItem = r.GetSelectedMediaItem(0, selItemCount - 1)
+	local lastTrack = r.GetMediaItem_Track(lastItem)
+	local lastTrackNum = r.GetMediaTrackInfo_Value(lastTrack, "IP_TRACKNUMBER")
 
 	--check each track to see what settings it has that affect what height we can zoom it to
 	for i = 0, lastTrackNum - firstTrackNum do
-		local track = reaper.GetTrack(0, firstTrackNum + i - 1)
-		local trackHeight = reaper.GetMediaTrackInfo_Value(track, "I_TCPH")
-		local isLocked = reaper.GetMediaTrackInfo_Value(track, "B_HEIGHTLOCK")
-		local isRecArm = reaper.GetMediaTrackInfo_Value(track, "I_RECARM")
-		local numItems = reaper.CountTrackMediaItems(track)
-		local isVisible = reaper.GetMediaTrackInfo_Value(track, "B_SHOWINTCP")
-		if reaper.GetMediaTrackInfo_Value(track, "I_SPACER") == 1 then
+		local track = r.GetTrack(0, firstTrackNum + i - 1)
+		local trackHeight = r.GetMediaTrackInfo_Value(track, "I_TCPH")
+		local isLocked = r.GetMediaTrackInfo_Value(track, "B_HEIGHTLOCK")
+		local isRecArm = r.GetMediaTrackInfo_Value(track, "I_RECARM")
+		local numItems = r.CountTrackMediaItems(track)
+		local isVisible = r.GetMediaTrackInfo_Value(track, "B_SHOWINTCP")
+		if r.GetMediaTrackInfo_Value(track, "I_SPACER") == 1 then
 			if i > 0 then --ignores spacer if its at the very top of the selection, since we'll just be scrolling down past it anyways
 				numOfSpacers = numOfSpacers + 1
 			end
@@ -54,8 +55,8 @@ function GetTracks()
 		--Checking if track actually has any items on it that are part of our selection. This ignores Empty items like folder items
 		local isActiveTrack = false
 		for j = 0, numItems - 1 do
-			local itemOnTrack = reaper.GetTrackMediaItem(track, j)
-			if reaper.IsMediaItemSelected(itemOnTrack) then
+			local itemOnTrack = r.GetTrackMediaItem(track, j)
+			if r.IsMediaItemSelected(itemOnTrack) then
 				if not mh.IsFolderItem(itemOnTrack) then
 					isActiveTrack = true
 				end
@@ -63,14 +64,14 @@ function GetTracks()
 		end
 
 		-- Checking if has an envelopes that are actually visible and not displayed in the same lane as the track
-		local numEnvs = reaper.CountTrackEnvelopes(track)
+		local numEnvs = r.CountTrackEnvelopes(track)
 		if numEnvs > 0 then
 			local ignoreEnvs = 0
 			for j = 0, numEnvs - 1 do
-				local env = reaper.GetTrackEnvelope(track, j)
-				local envTCPY = reaper.GetEnvelopeInfo_Value(env, "I_TCPY")
-				local envTCPH = reaper.GetEnvelopeInfo_Value(env, "I_TCPH")
-				local envTCPH_Used = reaper.GetEnvelopeInfo_Value(env, "I_TCPH_USED")
+				local env = r.GetTrackEnvelope(track, j)
+				local envTCPY = r.GetEnvelopeInfo_Value(env, "I_TCPY")
+				local envTCPH = r.GetEnvelopeInfo_Value(env, "I_TCPH")
+				local envTCPH_Used = r.GetEnvelopeInfo_Value(env, "I_TCPH_USED")
 				if envTCPH > envTCPY or envTCPH_Used == 0 then --if envTCPH > envTCPY that means the envelope is being displayed in the media lane and we don't need to scale it.
 					ignoreEnvs = ignoreEnvs + 1
 				end
@@ -111,7 +112,7 @@ function GetTracks()
 end
 
 function CalculateTrackHeights()
-	local _, _, top, _, bottom = reaper.JS_Window_GetClientRect(reaper.JS_Window_FindChildByID(reaper.GetMainHwnd(), 1000))
+	local _, _, top, _, bottom = r.JS_Window_GetClientRect(r.JS_Window_FindChildByID(r.GetMainHwnd(), 1000))
 	local arrangeViewHeight = bottom - top
 	--grabbing the total height of all locked tracks or tracks that will be minimized.
 	local newHeight = 0
@@ -180,14 +181,14 @@ function SetTrackHeights(newHeight)
 	for track, savedHeight in pairs(scaledTracks) do
 		--if we didn't save any height with the tracks earlier we can safely scale, or if the height we saved is less than the height we're scaling too, then we can scale the track height safely
 		if savedHeight == 0 or savedHeight <= newHeight then
-			reaper.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", newHeight)
+			r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", newHeight)
 		else --otherwise we need to fall back to the saved height
-			reaper.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", savedHeight)
+			r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", savedHeight)
 		end
 	end
 	--setting the heights of all of our unscaled tracks. locked tracks will just be set to the same height they're currently at, and unlocked tracks will be set to the minimume height.
 	for track, savedHeight in pairs(unscaledTracks) do
-		reaper.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", savedHeight)
+		r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", savedHeight)
 	end
 end
 
@@ -201,8 +202,8 @@ end
 
 --Checking if zoom wil actually move our view by any significant amount.
 function DecideIfShouldZoom(firstTrack, newTrackHeight, newStart, newEnd)
-	local tcpy = reaper.GetMediaTrackInfo_Value(firstTrack, "I_TCPY") --grabbing the position of the top track in our selection
-	local curStart, curEnd = reaper.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
+	local tcpy = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY") --grabbing the position of the top track in our selection
+	local curStart, curEnd = r.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	--checking if the current start and end are close to what we would zoom to, if the top track is already at the top of the arrange view. If all of that is already true then we don't need to zoom in again and we'll zoom out instead later
 	if CheckIfNumsAreClose(curStart, newStart) and CheckIfNumsAreClose(curEnd, newEnd) and CheckIfNumsAreClose(tcpy, 0) then
 		return false
@@ -213,21 +214,21 @@ end
 
 function ZoomIn(firstTrack, zoomStart, zoomEnd, itemsStart)
 	--Zoom the arrange view to our new start and end
-	reaper.GetSet_ArrangeView2(0, true, 0, 0, zoomStart, zoomEnd)
+	r.GetSet_ArrangeView2(0, true, 0, 0, zoomStart, zoomEnd)
 	--find the top track and scroll the arrange view down to the top of it
-	local tcpy = reaper.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
-	local arrangeView = reaper.JS_Window_FindChildByID(reaper.GetMainHwnd(), 1000)
-	local retval, pos, _, _, _, _ = reaper.JS_Window_GetScrollInfo(arrangeView, "v")
+	local tcpy = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
+	local arrangeView = r.JS_Window_FindChildByID(r.GetMainHwnd(), 1000)
+	local retval, pos, _, _, _, _ = r.JS_Window_GetScrollInfo(arrangeView, "v")
 	local newScroll = tcpy + pos
 	if retval then
-		reaper.JS_Window_SetScrollPos(arrangeView, "v", newScroll)
+		r.JS_Window_SetScrollPos(arrangeView, "v", newScroll)
 	end
 	--Moving edit cursor to start of items as well
-	reaper.SetEditCurPos(itemsStart, false, false)
+	r.SetEditCurPos(itemsStart, false, false)
 end
 
 function ZoomOut()
-	reaper.Main_OnCommandEx(reaper.NamedCommandLookup("_SWS_UNDOZOOM"), 1, 0) -- calls action "View: Restore previous zoom/scroll position"
+	r.Main_OnCommandEx(r.NamedCommandLookup("_SWS_UNDOZOOM"), 1, 0) -- calls action "View: Restore previous zoom/scroll position"
 end
 
 function CheckIfNumsAreClose(x, y)
@@ -241,23 +242,23 @@ end
 function Main()
 	if not mh.JsChecker() then return end
 	local retval, itemsStart, itemsEnd = mh.GetVisibleSelectedItemsSize()
-	if not retval then reaper.defer(mh.noundo) return end --if no items are selected we'll exit without creating any undo state
+	if not retval then mh.noundo() return end --if no items are selected we'll exit without creating any undo state
 	local firstTrack = GetTracks()
 	local zoomStart, zoomEnd = GetHorizontalZoomAmount(itemsStart, itemsEnd)
 	local newTrackHeight = CalculateTrackHeights()
 	local shouldZoom = DecideIfShouldZoom(firstTrack, newTrackHeight, zoomStart, zoomEnd)
 	if shouldZoom then
 		SetTrackHeights(newTrackHeight)
-		reaper.TrackList_AdjustWindows(true) --need to refresh view in order to get an updated values for the arrange view dimensions/scroll position
+		r.TrackList_AdjustWindows(true) --need to refresh view in order to get an updated values for the arrange view dimensions/scroll position
 		ZoomIn(firstTrack, zoomStart, zoomEnd, itemsStart)
 	else
 		ZoomOut()
 	end
-    reaper.defer(mh.noundo) --used to avoid creating any undo state
+    mh.noundo() --used to avoid creating any undo state
 end
 ----------------------------------------
 --Main
 ----------------------------------------
 --reaper.ClearConsole()
 Main()
-reaper.TrackList_AdjustWindows(true)
+r.TrackList_AdjustWindows(true)

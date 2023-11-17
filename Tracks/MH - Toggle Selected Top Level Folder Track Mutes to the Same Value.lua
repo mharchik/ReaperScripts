@@ -5,19 +5,20 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+r = reaper
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
 function CheckIfChildrenActive()
 	local tracks = {}
 	local prevSelTracks = {}
-	local countSelTrack = reaper.CountSelectedTracks(0)
+	local countSelTrack = r.CountSelectedTracks(0)
 	if countSelTrack == 0 then return end
 	for i = 0, countSelTrack - 1 do
-		local selTrack = reaper.GetSelectedTrack(0, i)
-		local trackDepth = reaper.GetTrackDepth(selTrack) + 1
+		local selTrack = r.GetSelectedTrack(0, i)
+		local trackDepth = r.GetTrackDepth(selTrack) + 1
 		if not tracks[trackDepth] then
 			local folderLevel = {}
 			tracks[trackDepth] = folderLevel
@@ -39,7 +40,7 @@ function DeselectChildren(tracks)
 			end
 		else
 			for num, track in pairs(setOfTracks) do
-				reaper.SetTrackSelected(track, false)
+				r.SetTrackSelected(track, false)
 			end
 		end
 	end
@@ -47,17 +48,17 @@ end
 
 function ReselectTracks(prevSelTracks)
 	for i = 1, #prevSelTracks do
-		reaper.SetTrackSelected(prevSelTracks[i], true)
+		r.SetTrackSelected(prevSelTracks[i], true)
 	end
 end
 
 function ToggleTrackMutes()
 	local isAnyTrackUnmuted = false
-	local selTrackCount = reaper.CountSelectedTracks(0)
+	local selTrackCount = r.CountSelectedTracks(0)
 	if selTrackCount == 0 then return end
 	for i = 0, selTrackCount - 1 do
-		local selTrack = reaper.GetSelectedTrack(0, i)
-		local trackMuteState = reaper.GetMediaTrackInfo_Value(selTrack, "B_MUTE")
+		local selTrack = r.GetSelectedTrack(0, i)
+		local trackMuteState = r.GetMediaTrackInfo_Value(selTrack, "B_MUTE")
 		if trackMuteState == 0 then
 			isAnyTrackUnmuted = true
 			break
@@ -72,8 +73,8 @@ end
 
 function SetTrackMutes(selTrackCount, mute)
 	for i = 0, selTrackCount - 1 do
-		local selTrack = reaper.GetSelectedTrack(0, i)
-		reaper.SetMediaTrackInfo_Value(selTrack, "B_MUTE", mute)
+		local selTrack = r.GetSelectedTrack(0, i)
+		r.SetMediaTrackInfo_Value(selTrack, "B_MUTE", mute)
 	end
 end
 
@@ -87,15 +88,15 @@ end
 ----------------------------------------
 --Utilities
 ----------------------------------------
-function Msg(msg) reaper.ShowConsoleMsg(msg .. "\n") end
+function Msg(msg) r.ShowConsoleMsg(msg .. "\n") end
 
 ----------------------------------------
 --Main
 ----------------------------------------
 --reaper.ClearConsole()
-reaper.PreventUIRefresh(1)
-reaper.Undo_BeginBlock()
+r.PreventUIRefresh(1)
+r.Undo_BeginBlock()
 Main()
-reaper.Undo_EndBlock(scriptName, -1)
-reaper.PreventUIRefresh(-1)
-reaper.UpdateArrange()
+r.Undo_EndBlock(scriptName, -1)
+r.PreventUIRefresh(-1)
+r.UpdateArrange()

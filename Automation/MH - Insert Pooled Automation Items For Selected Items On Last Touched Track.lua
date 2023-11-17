@@ -8,24 +8,25 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+r = reaper
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
 function GetPoolID()
     local pool = 0
-    local trackCount = reaper.CountTracks(0)
+    local trackCount = r.CountTracks(0)
     for i = 0, trackCount - 1 do
-        local track = reaper.GetTrack(0, i)
-        local envCount = reaper.CountTrackEnvelopes(track)
+        local track = r.GetTrack(0, i)
+        local envCount = r.CountTrackEnvelopes(track)
         if envCount > 0 then
             for j = 0, envCount - 1 do
-                local env = reaper.GetTrackEnvelope(track, j)
-                local aiCount = reaper.CountAutomationItems(env)
+                local env = r.GetTrackEnvelope(track, j)
+                local aiCount = r.CountAutomationItems(env)
                 if aiCount > 0 then
                     for k = 0, aiCount - 1 do
-                        local usedPool = reaper.GetSetAutomationItemInfo(env, k, "D_POOL_ID", 0, false)
+                        local usedPool = r.GetSetAutomationItemInfo(env, k, "D_POOL_ID", 0, false)
                         if usedPool >= pool then
                             pool = usedPool + 1
                         end
@@ -40,11 +41,11 @@ end
 --each group of overlapping items will be stored into their own table, and then those tables will all be stored in a master table: itemGroups
 function GetItemGroups(track)
     local itemGroups = {}
-    local itemCount = reaper.CountTrackMediaItems(track)
+    local itemCount = r.CountTrackMediaItems(track)
     if itemCount > 0 then
         for i = 0, itemCount - 1 do
-            local selItem = reaper.GetTrackMediaItem(track, i)
-            if reaper.IsMediaItemSelected(selItem) then
+            local selItem = r.GetTrackMediaItem(track, i)
+            if r.IsMediaItemSelected(selItem) then
                 --first time through there's nothing that exists to compare our item to, so instead we need to make new table for our first group and put our item in it
                 if i == 0 then
                     local itemGroup = {}
@@ -80,7 +81,7 @@ function GetItemGroups(track)
 end
 
 function Main()
-    local track = reaper.GetLastTouchedTrack()
+    local track = r.GetLastTouchedTrack()
     if not track then return end
 
     -- Creating a master table to store all of our item groups in
@@ -88,14 +89,14 @@ function Main()
     if #itemGroups == 0 then return end
 
     --finding our active envelope. If there is no active envelope it will show the volume envelop instead
-    local envCount = reaper.CountTrackEnvelopes(track)
+    local envCount = r.CountTrackEnvelopes(track)
     if envCount == 0 then
-        reaper.Main_OnCommand(41866, 0) -- Show Volume Track Envelope
+        r.Main_OnCommand(41866, 0) -- Show Volume Track Envelope
     end
 
-    local env = reaper.GetSelectedEnvelope()
+    local env = r.GetSelectedEnvelope()
     if not env then
-        env = reaper.GetTrackEnvelope(track, 0)
+        env = r.GetTrackEnvelope(track, 0)
         if not env then
             return
         end
@@ -114,8 +115,8 @@ function Main()
         local itemsEnd
         local itemsLength
         for j, item in ipairs(itemGroup) do
-            local itemLeftEdge = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
-            local itemRightEdge = reaper.GetMediaItemInfo_Value(item, "D_LENGTH") + itemLeftEdge
+            local itemLeftEdge = r.GetMediaItemInfo_Value(item, "D_POSITION")
+            local itemRightEdge = r.GetMediaItemInfo_Value(item, "D_LENGTH") + itemLeftEdge
             if not itemsStart then
                 itemsStart = itemLeftEdge
             elseif itemsStart > itemLeftEdge then
@@ -130,11 +131,11 @@ function Main()
         end
         --Grabbing the start value for the envelope position at the very first item. Since items are pooled we can't set different start values for each, so we'll just default to the first item's value
         if i == 1 then
-            envValue = ({ reaper.Envelope_Evaluate(env, itemsStart, 48000, 1) })[2]
+            envValue = ({ r.Envelope_Evaluate(env, itemsStart, 48000, 1) })[2]
         end
-        local autoItem = reaper.InsertAutomationItem(env, pool, itemsStart, itemsLength)
-        reaper.InsertEnvelopePointEx(env, autoItem, itemsStart, envValue, 0, 0, false, false)
-        reaper.GetSetAutomationItemInfo(env, autoItem, "D_LOOPSRC", 0, true)
+        local autoItem = r.InsertAutomationItem(env, pool, itemsStart, itemsLength)
+        r.InsertEnvelopePointEx(env, autoItem, itemsStart, envValue, 0, 0, false, false)
+        r.GetSetAutomationItemInfo(env, autoItem, "D_LOOPSRC", 0, true)
     end
 end
 
@@ -142,9 +143,9 @@ end
 --Main
 ----------------------------------------
 --reaper.ClearConsole()
-reaper.PreventUIRefresh(1)
-reaper.Undo_BeginBlock()
+r.PreventUIRefresh(1)
+r.Undo_BeginBlock()
 Main()
-reaper.Undo_EndBlock(scriptName, -1)
-reaper.PreventUIRefresh(-1)
-reaper.UpdateArrange()
+r.Undo_EndBlock(scriptName, -1)
+r.PreventUIRefresh(-1)
+r.UpdateArrange()

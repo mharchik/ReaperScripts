@@ -1,9 +1,9 @@
 ----------------------------------------
 --@noindex
 ----------------------------------------
-local hwnd = reaper.JS_Window_GetForeground()
+local hwnd = r.JS_Window_GetForeground()
 if hwnd then
-  reaper.ShowConsoleMsg(reaper.JS_Window_GetTitle(hwnd))
+  reaper.ShowConsoleMsg(r.JS_Window_GetTitle(hwnd))
 else
   reaper.ShowConsoleMsg("No Window Found")
 end

@@ -8,15 +8,16 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+r = reaper
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
 
 function SelectOverlappingGroupOfItemsBeforeItem(item)
-	local track = reaper.GetMediaItem_Track(item)
-	local itemCount = reaper.CountTrackMediaItems(track)
+	local track = r.GetMediaItem_Track(item)
+	local itemCount = r.CountTrackMediaItems(track)
 	if itemCount == 0 then return end
 	local itemsToCheck = {}
 	local checkedItems = {}
@@ -24,7 +25,7 @@ function SelectOverlappingGroupOfItemsBeforeItem(item)
 	while #itemsToCheck > 0 do
 		local itemStart = mh.GetItemSize(itemsToCheck[1])
 		for i = 0, itemCount - 1 do
-			local nextItem = reaper.GetTrackMediaItem(track, i)
+			local nextItem = r.GetTrackMediaItem(track, i)
 			local nextItemStart, nextItemEnd = mh.GetItemSize(nextItem)
 			if nextItemStart < itemStart and nextItemEnd >= itemStart then
 				local isNewItem = true
@@ -34,7 +35,7 @@ function SelectOverlappingGroupOfItemsBeforeItem(item)
 					end
 				end
 				if isNewItem then
-					reaper.SetMediaItemSelected(nextItem, true)
+					r.SetMediaItemSelected(nextItem, true)
 					itemsToCheck[#itemsToCheck + 1] = nextItem
 					checkedItems[#checkedItems + 1] = nextItem
 				end
@@ -45,42 +46,42 @@ function SelectOverlappingGroupOfItemsBeforeItem(item)
 end
 
 function Main()
-	reaper.Main_OnCommand(reaper.NamedCommandLookup("_SWS_SAVEALLSELITEMS1"),0) -- Calls Action: "SWS: Save selected item(s)"
-	reaper.SelectAllMediaItems(0, false)
-	local item = reaper.BR_ItemAtMouseCursor()
+	r.Main_OnCommand(r.NamedCommandLookup("_SWS_SAVEALLSELITEMS1"),0) -- Calls Action: "SWS: Save selected item(s)"
+	r.SelectAllMediaItems(0, false)
+	local item = r.BR_ItemAtMouseCursor()
 	if not item then
-		reaper.Main_OnCommand(reaper.NamedCommandLookup("_SWS_RESTALLSELITEMS1"),0) -- Calls Action: "SWS: Restore saved selected item(s)"
-		reaper.defer(mh.noundo)
+		r.Main_OnCommand(r.NamedCommandLookup("_SWS_RESTALLSELITEMS1"),0) -- Calls Action: "SWS: Restore saved selected item(s)"
+		mh.noundo()
 		return
 	end
-	local editPos = reaper.GetCursorPosition()
+	local editPos = r.GetCursorPosition()
 	local itemStart, itemEnd = mh.GetItemSize(item)
-	if editPos >= itemEnd then reaper.defer(mh.noundo()) return end
-	local fadeLength = reaper.GetMediaItemInfo_Value(item, "D_FADEOUTLEN")
+	if editPos >= itemEnd then mh.noundo() return end
+	local fadeLength = r.GetMediaItemInfo_Value(item, "D_FADEOUTLEN")
     if fadeLength > 0 then
         local newFadeLength = fadeLength - (itemEnd - editPos)
-        reaper.SetMediaItemInfo_Value(item, "D_FADEOUTLEN", newFadeLength)
+        r.SetMediaItemInfo_Value(item, "D_FADEOUTLEN", newFadeLength)
     end
-	reaper.BR_SetItemEdges(item, itemStart, editPos)
+	r.BR_SetItemEdges(item, itemStart, editPos)
 	local moveAmount = editPos - itemEnd
-	reaper.SetMediaItemSelected(item, true)
+	r.SetMediaItemSelected(item, true)
 	SelectOverlappingGroupOfItemsBeforeItem(item)
-	local selItemCount = reaper.CountSelectedMediaItems()
+	local selItemCount = r.CountSelectedMediaItems()
 	for i = 0, selItemCount - 1 do
-		local nextItem = reaper.GetSelectedMediaItem(0, i)
+		local nextItem = r.GetSelectedMediaItem(0, i)
 		local nextItemStart = mh.GetItemSize(nextItem)
-		reaper.SetMediaItemPosition(nextItem, nextItemStart - moveAmount, false)
+		r.SetMediaItemPosition(nextItem, nextItemStart - moveAmount, false)
 	end
-	reaper.SetEditCurPos(itemEnd, false, false)
+	r.SetEditCurPos(itemEnd, false, false)
 end
 
 --------------------
 --Main
 ----------------------------------------
 --reaper.ClearConsole()
-reaper.PreventUIRefresh(1)
-reaper.Undo_BeginBlock()
+r.PreventUIRefresh(1)
+r.Undo_BeginBlock()
 Main()
-reaper.Undo_EndBlock(scriptName, -1)
-reaper.PreventUIRefresh(-1)
-reaper.UpdateArrange()
+r.Undo_EndBlock(scriptName, -1)
+r.PreventUIRefresh(-1)
+r.UpdateArrange()

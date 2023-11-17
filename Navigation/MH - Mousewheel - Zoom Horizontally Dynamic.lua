@@ -9,15 +9,16 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local val = ({ reaper.get_action_context() })[7]	--This has to be the first thing in the script to correctly get the mousewheel direction
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
-if not reaper.HasExtState(scriptName, "firstrun") then reaper.SetExtState(scriptName, "firstrun", "true", true) reaper.ShowMessageBox("This script is intended to be used with the zoom preferences set to 'Horizontal zoom center: Center of view'. \n\n You can set this value in the REAPER Preferences under 'Appearance > Zoom/Scroll/Offset'", "Script Info", 0) end
+r = reaper
+local val = ({ r.get_action_context() })[7]	--This has to be the first thing in the script to correctly get the mousewheel direction
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+if not r.HasExtState(scriptName, "firstrun") then r.SetExtState(scriptName, "firstrun", "true", true) r.ShowMessageBox("This script is intended to be used with the zoom preferences set to 'Horizontal zoom center: Center of view'. \n\n You can set this value in the REAPER Preferences under 'Appearance > Zoom/Scroll/Offset'", "Script Info", 0) end
 ----------------------------------------
 --User Settings
 ----------------------------------------
 local ZoomAmount = 2   --Higher values increase the strength of the zoom in/out
-local CursorOffsetAmount = 60 --(0-100) This affects how far to the left the edit cursor will shift when focused on it. 0 will be the default center of the screen, while 100 will be full to the left edge of the screen 
+local CursorOffsetAmount = 50 --(0-100) This affects how far to the left the edit cursor will shift when focused on it. 0 will be the default center of the screen, while 100 will be full to the left edge of the screen 
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -27,11 +28,11 @@ function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
 	local zoomedOutCenter
 	local zoomCenterLength
 	--getting the positions and lengths of the different elements of the arrange view
-	local curStart, curEnd = reaper.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
+	local curStart, curEnd = r.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	local arrlength = curEnd - curStart
 	local itemsLength = itemsEnd - itemsStart
 	local itemsCenter = (itemsStart + itemsEnd) / 2
-	local timeStart, timeSelEnd = reaper.GetSet_LoopTimeRange(false, false, 0, 0, false)
+	local timeStart, timeSelEnd = r.GetSet_LoopTimeRange(false, false, 0, 0, false)
 	local timeLength = timeSelEnd - timeStart
 	local timeCenter = (timeSelEnd + timeStart)/2
 	local cursorOffset = GetCursorOffset()
@@ -66,11 +67,11 @@ function Zoom()
 	if val < 0 then
 		ZoomAmount = ZoomAmount * -1
 	end
-	reaper.CSurf_OnZoom(ZoomAmount, 0)
+	r.CSurf_OnZoom(ZoomAmount, 0)
 end
 
 function MoveToNewCenter(pos)
-	local curStart, curEnd = reaper.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
+	local curStart, curEnd = r.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	local newStart = pos - (curEnd - curStart) / 2
 	local newEnd = pos + (curEnd - curStart) / 2
 	--if new start is past the edge of the screen, shift it to the right until it starts at 0
@@ -78,18 +79,18 @@ function MoveToNewCenter(pos)
 		newEnd = newEnd - newStart
 		newStart = 0
 	end
-	reaper.GetSet_ArrangeView2(0, true, 0, 0, newStart, newEnd)
+	r.GetSet_ArrangeView2(0, true, 0, 0, newStart, newEnd)
 end
 
 --Gets the optional offset for how much to the left we want to shift the edit cursor when zooming on it
 function GetCursorOffset()
-	local curStart, curEnd = reaper.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
+	local curStart, curEnd = r.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	local arrlength = curEnd - curStart
 	return (arrlength/2)*(CursorOffsetAmount/100)
 end
 
 function Main()
-	local cursorPos = reaper.GetCursorPosition()
+	local cursorPos = r.GetCursorPosition()
 	local retval, itemsStart, itemsEnd = mh.GetVisibleSelectedItemsSize()
 	if retval then
 		Zoom()
@@ -100,14 +101,14 @@ function Main()
 		local cursorOffset = GetCursorOffset()
 		MoveToNewCenter(cursorPos + cursorOffset)
 	end
-	reaper.defer(mh.noundo)
+	mh.noundo()
 end
 
 ----------------------------------------
 --Main
 ----------------------------------------
 --reaper.ClearConsole()
-reaper.PreventUIRefresh(1)
+r.PreventUIRefresh(1)
 Main()
-reaper.PreventUIRefresh(-1)
-reaper.UpdateArrange()
+r.PreventUIRefresh(-1)
+r.UpdateArrange()

@@ -6,20 +6,21 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+r = reaper
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
 function CheckIfChildrenActive(track)
-	local depth = reaper.GetTrackDepth(track)
-	local trackNum = reaper.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
+	local depth = r.GetTrackDepth(track)
+	local trackNum = r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
 	local i = 1
 	local nextDepth = depth + 1
 	while nextDepth > depth do
-		local nextTrack = reaper.GetTrack(0, trackNum + i)
-		nextDepth = reaper.GetTrackDepth(nextTrack)
-		if reaper.CountTrackMediaItems(nextTrack) > 0 then
+		local nextTrack = r.GetTrack(0, trackNum + i)
+		nextDepth = r.GetTrackDepth(nextTrack)
+		if r.CountTrackMediaItems(nextTrack) > 0 then
 			return true
 		end
 		i = i + 1
@@ -28,22 +29,22 @@ function CheckIfChildrenActive(track)
 end
 
 function IsTrackActive(track)
-	if reaper.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 then
+	if r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 then
 		if CheckIfChildrenActive(track) then
 			return true
 		end
-	elseif reaper.CountTrackMediaItems(track) > 0 then
+	elseif r.CountTrackMediaItems(track) > 0 then
 		return true
 	end
 	return false
 end
 
 function Main()
-	local selTrackCount = reaper.CountSelectedTracks()
+	local selTrackCount = r.CountSelectedTracks()
 	if selTrackCount == 0 then return end
 	local toDelete = {}
 	for i = 0, selTrackCount - 1 do
-		local track = reaper.GetSelectedTrack(0, i)
+		local track = r.GetSelectedTrack(0, i)
 		if not IsTrackActive(track) then
 			toDelete[#toDelete + 1] = track
 		end
@@ -51,15 +52,15 @@ function Main()
 	if #toDelete > 0 then
 		for index, track in ipairs(toDelete) do
 			--Checking folder depth first to make sure tracks below the ones we're deleting aren't getting moved into folders by accident
-			local trackDepth = reaper.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
+			local trackDepth = r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
 			if trackDepth < 0 then
-				local trackNum = reaper.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
-				local prevTrack = reaper.GetTrack(0, trackNum - 2)
-				reaper.SetTrackSelected(prevTrack, true)
-				local prevTrackDepth = reaper.GetMediaTrackInfo_Value(prevTrack, "I_FOLDERDEPTH")
-				reaper.SetMediaTrackInfo_Value(prevTrack, "I_FOLDERDEPTH", prevTrackDepth + trackDepth)
+				local trackNum = r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
+				local prevTrack = r.GetTrack(0, trackNum - 2)
+				r.SetTrackSelected(prevTrack, true)
+				local prevTrackDepth = r.GetMediaTrackInfo_Value(prevTrack, "I_FOLDERDEPTH")
+				r.SetMediaTrackInfo_Value(prevTrack, "I_FOLDERDEPTH", prevTrackDepth + trackDepth)
 			end
-			reaper.DeleteTrack(track)
+			r.DeleteTrack(track)
 		end
 	end
 end
@@ -67,15 +68,15 @@ end
 ----------------------------------------
 --Utilities
 ----------------------------------------
-function Msg(msg) reaper.ShowConsoleMsg(msg .. "\n") end
+function Msg(msg) r.ShowConsoleMsg(msg .. "\n") end
 
 ----------------------------------------
 --Main
 ----------------------------------------
 --reaper.ClearConsole()
-reaper.PreventUIRefresh(1)
-reaper.Undo_BeginBlock()
+r.PreventUIRefresh(1)
+r.Undo_BeginBlock()
 Main()
-reaper.Undo_EndBlock(scriptName, -1)
-reaper.PreventUIRefresh(-1)
-reaper.TrackList_AdjustWindows(true)
+r.Undo_EndBlock(scriptName, -1)
+r.PreventUIRefresh(-1)
+r.TrackList_AdjustWindows(true)

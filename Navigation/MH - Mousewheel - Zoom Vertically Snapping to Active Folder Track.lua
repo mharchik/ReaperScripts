@@ -9,10 +9,11 @@
 ----------------------------------------
 --Setup
 ----------------------------------------
-local val = ({ reaper.get_action_context() })[7] --Must be first in the script to correctly get the mousewheel direction
-local scriptName = ({ reaper.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if reaper.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then reaper.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else reaper.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
-if not reaper.HasExtState(scriptName, "firstrun") then reaper.SetExtState(scriptName, "firstrun", "true", true) reaper.ShowMessageBox("This script is intended to be used with the zoom preferences set to the default 'Vertical zoom center: Track at view center'. \n\n You can set this value in the REAPER Preferences under 'Appearance > Zoom/Scroll/Offset'", "Script Info", 0) end
+r = reaper
+local val = ({ r.get_action_context() })[7] --Must be first in the script to correctly get the mousewheel direction
+local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+if not r.HasExtState(scriptName, "firstrun") then r.SetExtState(scriptName, "firstrun", "true", true) r.ShowMessageBox("This script is intended to be used with the zoom preferences set to the default 'Vertical zoom center: Track at view center'. \n\n You can set this value in the REAPER Preferences under 'Appearance > Zoom/Scroll/Offset'", "Script Info", 0) end
 ----------------------------------------
 --User Settings
 ----------------------------------------
@@ -33,23 +34,23 @@ function Zoom()
     if not IsZoomIn() then
         ZoomAmount = ZoomAmount * -1
     end
-    reaper.CSurf_OnZoom(0, ZoomAmount)
+    r.CSurf_OnZoom(0, ZoomAmount)
 end
 
 function ScrollToPosition(arrangeView, pTCPY)
-    local retval, pos, _, _, _, _ = reaper.JS_Window_GetScrollInfo(arrangeView, "v")
+    local retval, pos, _, _, _, _ = r.JS_Window_GetScrollInfo(arrangeView, "v")
     local newScroll = pTCPY + pos
     if retval then
-        reaper.JS_Window_SetScrollPos(arrangeView, "v", newScroll)
+        r.JS_Window_SetScrollPos(arrangeView, "v", newScroll)
     end
 end
 
 function GetCenterTrack(left, top, right, bottom)
-    local track = reaper.GetLastTouchedTrack()
+    local track = r.GetLastTouchedTrack()
     local IsTrackVisible = false
     if track then
-        local tcpy = reaper.GetMediaTrackInfo_Value(track, "I_TCPY")
-        local tcph = reaper.GetMediaTrackInfo_Value(track, "I_TCPH")
+        local tcpy = r.GetMediaTrackInfo_Value(track, "I_TCPY")
+        local tcph = r.GetMediaTrackInfo_Value(track, "I_TCPH")
         if tcpy >= 0 and tcpy - tcph <= bottom then
             IsTrackVisible = true
         end
@@ -60,7 +61,7 @@ function GetCenterTrack(left, top, right, bottom)
         local y = (top + bottom) / 2
         local centerTrack
         while not centerTrack and x <= right do
-            centerTrack = reaper.GetTrackFromPoint(x, y)
+            centerTrack = r.GetTrackFromPoint(x, y)
             x = x + 1
             if centerTrack then
                 track = centerTrack
@@ -74,9 +75,9 @@ end
 function GetFolderEndTracks(track)
     local retval = false
     local pRetval, parentTrack, cRetval, lastChildTrack
-    if reaper.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 and reaper.GetTrackDepth(track) == 0 then
+    if r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 and r.GetTrackDepth(track) == 0 then
         parentTrack = track
-        local nextTrack = reaper.GetTrack(0, reaper.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER"))
+        local nextTrack = r.GetTrack(0, r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER"))
 
         cRetval, lastChildTrack = mh.GetLastChildTrack(nextTrack)
     else
@@ -91,15 +92,15 @@ end
 
 function Main()
     if not mh.JsChecker() then return end
-    local arrangeView = reaper.JS_Window_FindChildByID(reaper.GetMainHwnd(), 1000)
-    local _, left, top, right, bottom = reaper.JS_Window_GetRect(arrangeView)
+    local arrangeView = r.JS_Window_FindChildByID(r.GetMainHwnd(), 1000)
+    local _, left, top, right, bottom = r.JS_Window_GetRect(arrangeView)
     local screenBottomEdge = bottom - top
     local track = GetCenterTrack(left, top, right, screenBottomEdge)
     --Checking to see if we're zooming out from anywhere inside a folder track
     local isFolder, firstTrack, lastTrack
     if track then
         isFolder, firstTrack, lastTrack = GetFolderEndTracks(track)
-        local folderState = reaper.GetMediaTrackInfo_Value(firstTrack, "I_FOLDERCOMPACT")
+        local folderState = r.GetMediaTrackInfo_Value(firstTrack, "I_FOLDERCOMPACT")
         if folderState == 2 then --if the track is fully collapsed we'll pre
             isFolder = true
         end
@@ -108,8 +109,8 @@ function Main()
     if isFolder then
         --if we're already outside the folder track before we even zoom, don't let it scroll
         local canScrollUp, canScrollDown = true, true
-        local firstTrackTopEdge = reaper.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
-        local lastTrackBottomEdge = reaper.GetMediaTrackInfo_Value(lastTrack, "I_TCPY") + reaper.GetMediaTrackInfo_Value(lastTrack, "I_TCPH")
+        local firstTrackTopEdge = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
+        local lastTrackBottomEdge = r.GetMediaTrackInfo_Value(lastTrack, "I_TCPY") + r.GetMediaTrackInfo_Value(lastTrack, "I_TCPH")
         --disabling scroll changes after zooming in for some edge case situations
         if IsZoomIn() then
             if firstTrackTopEdge < 0 then
@@ -121,8 +122,8 @@ function Main()
         end
         Zoom()
         --check if we should scroll
-        firstTrackTopEdge = reaper.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
-        lastTrackBottomEdge = reaper.GetMediaTrackInfo_Value(lastTrack, "I_TCPY") + reaper.GetMediaTrackInfo_Value(lastTrack, "I_TCPH")
+        firstTrackTopEdge = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
+        lastTrackBottomEdge = r.GetMediaTrackInfo_Value(lastTrack, "I_TCPY") + r.GetMediaTrackInfo_Value(lastTrack, "I_TCPH")
         if IsZoomIn() then
             if firstTrackTopEdge <= 0 and lastTrackBottomEdge <= screenBottomEdge then
                 if canScrollDown then
@@ -147,7 +148,7 @@ function Main()
     else
         Zoom()
     end
-    reaper.defer(mh.noundo)
+    mh.noundo()
 end
 
 ----------------------------------------
@@ -155,4 +156,4 @@ end
 ----------------------------------------
 --reaper.ClearConsole()
 Main()
-reaper.UpdateArrange()
+r.UpdateArrange()
