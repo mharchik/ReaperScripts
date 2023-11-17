@@ -28,6 +28,7 @@ For more information on how to use these scripts please check out https://www.ma
 * MH - Select Items Contiguously Overlapping With Item Under Mouse
 * MH - Select Items Contiguously Overlapping With Selected Items
 * MH - Select Only Items on Track Under Mouse
+* MH - Show Full Source of Selected Items
 * MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items
 * MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length
 * MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items
