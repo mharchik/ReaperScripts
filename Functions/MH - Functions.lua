@@ -66,6 +66,21 @@ function mh.JsChecker()
     end
 end
 
+--[[
+## Checks If you have the SWS Extensions Installed
+
+### returns
+**_bool_**
+]]
+function mh.SWSChecker()
+    if not r.CF_GetSWSVersion then
+        r.ShowMessageBox("Please install the SWS extensions before trying to run this script.", "Error", 0)
+        return false
+    else
+        return true
+    end
+end
+
 --## Used to exit scripts early without creating an undo point.
 function mh.noundo()
     r.defer(function () end)
@@ -281,7 +296,6 @@ end
 **_windowName: string_** : the name of the window you'd like to move. Does not need to match the full window name.
 ]]
 function mh.CenterNamedWindow(windowName)
-	if not mh.JsChecker then return end
 	local win = r.JS_Window_Find(windowName, false)
 	if not win then return end
 	local _, left, top, right, bottom = r.JS_Window_GetRect(win)

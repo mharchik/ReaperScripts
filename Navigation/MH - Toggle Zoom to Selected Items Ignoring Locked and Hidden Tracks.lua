@@ -8,6 +8,7 @@
 ----------------------------------------
 r = reaper
 mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+if not mh.SWSChecker() or not mh.JsChecker() then mh.noundo() return end
 ----------------------------------------
 --User Settings
 ----------------------------------------
@@ -240,7 +241,6 @@ function CheckIfNumsAreClose(x, y)
 end
 
 function Main()
-	if not mh.JsChecker() then return end
 	local retval, itemsStart, itemsEnd = mh.GetVisibleSelectedItemsSize()
 	if not retval then mh.noundo() return end --if no items are selected we'll exit without creating any undo state
 	local firstTrack = GetTracks()

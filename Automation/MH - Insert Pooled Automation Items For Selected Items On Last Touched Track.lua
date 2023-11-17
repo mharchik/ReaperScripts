@@ -3,8 +3,8 @@
 -- @author Max Harchik
 -- @version 1.0
 -- @about   Creates automation items for all selected items on the last selected track. 
-            --Automation items will be created on the selected envelope, unless there is no active automation lane in which case it will open up the automation lane for "Volume" and create automation items there.
-            --Only one automation item will be created for groups of items that are overlapping, spanning their combined length
+--          Automation items will be created on the selected envelope, unless there is no active automation lane in which case it will open up the automation lane for "Volume" and create automation items there.
+--          Only one automation item will be created for groups of items that are overlapping, spanning their combined length
 ----------------------------------------
 --Setup
 ----------------------------------------

@@ -24,7 +24,7 @@ function Main()
         randRange = RANDOM_AMOUNT
     else
         local retval, input = r.GetUserInputs(scriptName, 1, "Volume Random Range (+/- dB)", RANDOM_AMOUNT)
-        if not retval then return end
+        if not retval then mh.noundo() return end
         randRange = input
     end
     randRange = math.abs(randRange)

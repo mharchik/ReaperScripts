@@ -3,9 +3,8 @@
 -- @author Max Harchik
 -- @version 1.0
 -- @about   Auto sets track heights, colors, and layouts.
-            -- for folder parents that are used only as a bus, and any divider tracks
-
--- Requires using the HYDRA reaper theme if you want it to change the look of your divider tracks. Otherwise you'll need to change the Layout variables to match the Track Control Panel Layout names for your theme
+--          for folder parents that are used only as a bus, and any divider tracks
+--          Requires using the HYDRA reaper theme if you want it to change the look of your divider tracks. Otherwise you'll need to change the Layout variables to match the Track Control Panel Layout names for your theme
 ----------------------------------------
 --Setup
 ----------------------------------------

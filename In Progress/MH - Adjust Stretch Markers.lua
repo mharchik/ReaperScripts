@@ -38,16 +38,12 @@ function Main()
     local rate_right = (len_init / len_after) * (1 + slope)
     local rate_ratio = rate_right / rate_left
     --(1+slope)/(1-slope) = rateRight/rateLeft
-    Msg(pos_b)
+    mh.Msg(pos_b)
     pos_b = (1 + slope) / rate_left * (len_init) + pos_a
-    Msg(pos_b)
+    mh.Msg(pos_b)
     r.SetTakeStretchMarker(take, idx + 1, pos_b, srcpos_b)
 end
 
-----------------------------------------
---Utilities
-----------------------------------------
-function Msg(msg) r.ShowConsoleMsg(msg .. "\n") end
 
 ----------------------------------------
 --Main

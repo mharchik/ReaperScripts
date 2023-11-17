@@ -8,16 +8,16 @@
 r = reaper
 local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
 mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+if not mh.SWSChecker() then mh.noundo() return end
 ----------------------------------------
 --Functions
 ----------------------------------------
 function Main()
-	local x, y = r.GetMousePosition()
-	local newTrack = r.GetTrackFromPoint(x, y)
+	local nextTrack = r.BR_TrackAtMouseCursor()
 	local prevTrack = r.GetLastTouchedTrack()
-	if not newTrack or not prevTrack then return end
+	if not nextTrack or not prevTrack then return end
 	local prevTrackNum = r.GetMediaTrackInfo_Value(prevTrack, "IP_TRACKNUMBER")
-	local newTrackNum = r.GetMediaTrackInfo_Value(newTrack, "IP_TRACKNUMBER")
+	local newTrackNum = r.GetMediaTrackInfo_Value(nextTrack, "IP_TRACKNUMBER")
 	local startIndex = 0
 	if prevTrackNum > newTrackNum then
 		startIndex = newTrackNum - 1
@@ -28,11 +28,6 @@ function Main()
 		r.SetTrackSelected(r.GetTrack(0, startIndex + i), true)
 	end
 end
-
-----------------------------------------
---Utilities
-----------------------------------------
-function Msg(msg) r.ShowConsoleMsg(msg .. "\n") end
 
 ----------------------------------------
 --Main
