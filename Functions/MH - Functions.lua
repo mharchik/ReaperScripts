@@ -10,13 +10,19 @@ mh = {}
 ----------------------------------------
 --Global Variables
 ----------------------------------------
-mh.DividerTrackSymbol = "<" --When this character is added to the start of a track name, that track will be treated as a divider track
+
+--When this character is added to the start of a track name, that track will be treated as a divider track
+mh.DividerTrackSymbol = "<"
 ----------------------------------------
 --Functions
 ----------------------------------------
---[[Checks the version of MH Scripts that you have Installed
 
-    @return number t]]
+--[[
+## Checks the version of MH Scripts that you have Installed
+
+### returns
+**_t: number_** : current version of the script that is installed
+]]
 function mh.version()
     local file = io.open((reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'):gsub('\\', '/'), "r")
     local vers_header = "-- @version "
@@ -32,12 +38,24 @@ function mh.version()
     return tonumber(t)
 end
 
---Prints a message to the reaper console
+--[[  
+## Prints a message to the reaper console
+
+### params
+
+**_msg: any_** : text to print
+
+]]
 function mh.Msg(msg)
     reaper.ShowConsoleMsg(tostring(msg) .. "\n")
 end
 
---Checks If you have the js_ReaScriptAPI Installed
+--[[
+## Checks If you have the js_ReaScriptAPI Installed
+
+### returns
+**_bool_**
+]]
 function mh.JsChecker()
     if not reaper.JS_ReaScriptAPI_Version or not reaper.JS_Window_Destroy then
         reaper.ShowMessageBox("Please install the js_ReaScriptAPI extension via Reapack before trying to run this script.", "Error", 0)
@@ -47,22 +65,32 @@ function mh.JsChecker()
     end
 end
 
---Used to exit scripts early without creating an undo point
+--## Used to exit scripts early without creating an undo point.
 function mh.noundo() end
 
---Returns whether or not a track can be classified as a divider track
+--[[
+## Returns whether or not a track can be classified as a divider track.
+
+### returns
+**_bool_**
+]]
 function mh.IsDividerTrack(track)
     local _, name = reaper.GetTrackName(track)
     name = string.gsub(name, " ", "")
     return string.sub(name, 1, 1) == mh.DividerTrackSymbol
 end
 
---[[Gets the highest level parent folder track of input track.
+--[[
+## Gets the highest level parent folder track of input track.
 
-    @param MediaTrack track : input track
+### params 
+**_track: MediaTrack_**  : input track
 
-    @return integer retval : '0 = No Parent track, 1 = Track is Parent Track, 2 = Track is Child Track.'
-    @return MediaTrack parentTrack : 'Parent Folder Track if it exists, else returns input track.']]
+### returns
+**_retval: int_** : 0 = No Parent track, 1 = Track is Parent Track, 2 = Track is Child Track.
+
+MediaTrack _parentTrack_ : 'Parent Folder Track if it exists, else returns input track.'
+]]
 function mh.GetTopParentTrack(track)
     local depth = reaper.GetTrackDepth(track)
     if depth > 0 then
@@ -81,12 +109,17 @@ function mh.GetTopParentTrack(track)
     end
 end
 
---[[Gets the last track in the folder track structure of input track
+--[[
+## Gets the last track in the folder track structure of input track
 
-    @param MediaTrack track : input track
+### params
+**_track: MediaTrack_** : input track
 
-    @return integer retval : '0 = Track is not in Folder, 1 = Track is in Folder.''
-    @return MediaTrack childTrack : 'The last child track if input track is in folder, else returns input track.']]
+### returns
+**_retval: int_** : 0 = Track is not in Folder, 1 = Track is in Folder.
+
+**_childTrack: MediaTrack_** : The last child track if input track is in folder, else returns input track.
+]]
 function mh.GetLastChildTrack(track)
     local childTrack
     local depth = reaper.GetTrackDepth(track)
@@ -108,13 +141,19 @@ function mh.GetLastChildTrack(track)
     end
 end
 
---[[Gets the start position, end position, and length of any item
+--[[
+## Gets the start position, end position, and length of any item
 
-    @param MediaItem item: input item 
+### params
+**_item: MediaItem_** : input item 
 
-    @return integer itemStart : 'The start position of the item in seconds'
-    @return integer itemEnd : 'The end position of the item in seconds'
-    @return integer itemLength : 'The length of the item in seconds']]
+### returns
+**_itemStart: double_**  : The start position of the item in seconds
+
+**_itemEnd: double_** : The end position of the item in seconds.
+    
+**_itemLength: double_** : The length of the item in seconds.
+]]
 function mh.GetItemSize(item)
     local itemStart = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
     local itemLength = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
@@ -122,14 +161,19 @@ function mh.GetItemSize(item)
     return itemStart, itemEnd, itemLength
 end
 
---[[Gets the combined start position, end position, and length of all selected items, ignoring any items that are on hidden tracks
+--[[
+## Gets the combined start position, end position, and length of all selected items, ignoring any items that are on hidden tracks
 
-    @return boolean retval : returns false if no selected items are visible
-    @return integer itemStart : 'The start position of the item in seconds'
-    @return integer itemEnd : 'The end position of the item in seconds'
-    @return integer itemLength : 'The length of the item in seconds']]
+### returns
+**_retval: bool_** : returns false if no selected items are visible.
+
+**_itemStart: int_** : The start position of the item in seconds.
+
+**_itemEnd: int_** : The end position of the item in seconds.
+
+**_itemLength: int_**  : The length of the item in seconds.
+]]
 function mh.GetVisibleSelectedItemsSize()
-	--Getting the positions of all visible selected items to see where they start and end
     local selItemCount = reaper.CountSelectedMediaItems(0)
     if selItemCount > 0 then
         local itemsStart, itemsEnd
@@ -153,9 +197,8 @@ function mh.GetVisibleSelectedItemsSize()
                 end
             end
         end
-        local itemsLength
         if itemsStart and itemsEnd then
-            itemsLength = itemsEnd - itemsStart
+            local itemsLength = itemsEnd - itemsStart
             return true, itemsStart, itemsEnd, itemsLength
         else
             return false
@@ -166,12 +209,29 @@ function mh.GetVisibleSelectedItemsSize()
 end
 
 
---[[Selects all items that are overlapping with the input item, as well as any items overlapping those items, and so on.
-    
-    @param MediaItem item : 'Item to check.'
-    @param boolean shouldSelect :  'Decides whether overlapping items should be selected.'
+function mh.CheckIfItemsOverlap(item1, item2)
+    local item1Start, item1End = mh.GetItemSize(item1)
+    local item2Start, item2End = mh.GetItemSize(item2)
+    if item1Start < item2Start and item1End > item2Start then
+        return true
+    elseif item1Start > item2Start and item1Start < item2End then
+        return true
+    end
+    return false
+end
 
-    @return table|MediaItem checkedItems : 'Table of all overlapping items.']]
+
+--[[
+## Selects all items that are overlapping with the input item, as well as any items overlapping those items, and so on.
+    
+### params
+**_item: MediaItem_** : Item to check.
+    
+**_shouldSelect: bool_** :  Decides whether overlapping items should be selected.
+
+### returns
+**_checkedItems: table|MediaItem_** : Table of all overlapping items.
+]]
 function mh.SelectOverlappingGroupOfItems(item, shouldSelect)
 	local track = reaper.GetMediaItem_Track(item)
 	local itemCount = reaper.CountTrackMediaItems(track)
@@ -211,9 +271,12 @@ function mh.SelectOverlappingGroupOfItems(item, shouldSelect)
     return checkedItems
 end
 
---[[Finds the window with a name that matches the input string, and moves it 
+--[[
+## Finds the window with a name that matches the input string, and moves it 
 
-    @param string windowName : the name of the window you'd like to move. Does not need to match the full window name]]
+### params
+**_windowName: string_** : the name of the window you'd like to move. Does not need to match the full window name.
+]]
 function mh.CenterNamedWindow(windowName)
 	if not mh.JsChecker then return end
 	local win = reaper.JS_Window_Find(windowName, false)
@@ -227,9 +290,12 @@ function mh.CenterNamedWindow(windowName)
 	reaper.JS_Window_SetPosition(win, left, top, width, height)
 end
 
---[[Checks if input item is a folder Item
+--[[
+## Checks if input item is a folder Item.
 
-    @param MediaItem item : item to check]]
+### params
+**_item: MediaItem_** : item to check.
+]]
 function mh.IsFolderItem(item)
     local take = reaper.GetActiveTake(item)
     local source = reaper.GetMediaItemTake_Source(take)

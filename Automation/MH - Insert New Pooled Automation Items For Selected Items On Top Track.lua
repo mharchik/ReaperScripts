@@ -11,7 +11,72 @@ mh = reaper.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.l
 ----------------------------------------
 --Functions
 ----------------------------------------
+function GetPoolID()
+    local pool = 0
+    local trackCount = reaper.CountTracks(0)
+    for i = 0, trackCount - 1 do
+        local track = reaper.GetTrack(0, i)
+        local envCount = reaper.CountTrackEnvelopes(track)
+        if envCount > 0 then
+            for j = 0, envCount - 1 do
+                local env = reaper.GetTrackEnvelope(track, j)
+                local aiCount = reaper.CountAutomationItems(env)
+                if aiCount > 0 then
+                    for k = 0, aiCount - 1 do
+                        local usedPool = reaper.GetSetAutomationItemInfo(env, k, "D_POOL_ID", 0, false)
+                        if usedPool >= pool then
+                            pool = usedPool + 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return pool
+end
+
+--each group of overlapping items will be stored into their own table, and then those tables will all be stored in a master table: itemGroups
+function StoreItemGroups(track)
+    local itemGroups = {}
+    local itemCount = reaper.CountTrackMediaItems(track)
+    for i = 0, itemCount - 1 do
+        local selItem = reaper.GetTrackMediaItem(track, i)
+        if reaper.IsMediaItemSelected(selItem) then
+            --first time through there's nothing that exists to compare our item to, so instead we need to make new table for our first group and put our item in it
+            if i == 0 then
+                local itemGroup = {}
+                itemGroup[1] = selItem
+                itemGroups[1] = itemGroup
+            else
+                local isOverlapping = false
+                --checking each group of items in our master table
+                for j, group in ipairs(itemGroups) do
+                    --in each group we see if the item is overlapping.
+                    for k, item in ipairs(group) do
+                        if mh.CheckIfItemsOverlap(item, selItem) then
+                            isOverlapping = true
+                            break
+                        end
+                    end
+                    --if the item were checking was overlapping an item in this group, then we can add it to the group.
+                    if isOverlapping then
+                        group[#group + 1] = selItem
+                    end
+                end
+                --if the item wasn't overlapping with any existing group, we'll create a new group for it.
+                if not isOverlapping then
+                    local itemGroup = {}
+                    itemGroup[#itemGroup + 1] = selItem
+                    itemGroups[#itemGroups + 1] = itemGroup
+                end
+            end
+        end
+    end
+    return itemGroups
+end
+
 function Main()
+    --Get the top track of the items we have selected
     local selItemCount = reaper.CountSelectedMediaItems(0)
     if selItemCount == 0 then return end
     local topTrackNum
@@ -24,56 +89,66 @@ function Main()
         end
     end
     local track = reaper.GetTrack(0, topTrackNum - 1)
-    local itemCount = reaper.CountTrackMediaItems(track)
-    local items = {}
-    for i = 0, itemCount - 1 do
-        local item = reaper.GetTrackMediaItem(track, i)
-        if reaper.IsMediaItemSelected(item) then
-            items[#items + 1] = item
-        end
-    end
 
+    -- Creating a master table to store all of our item groups in
+    local itemGroups = StoreItemGroups(track)
+
+    --finding our active envelope. If there is no active envelope it will show the volume envelop instead
     local envCount = reaper.CountTrackEnvelopes(track)
     if envCount == 0 then
         reaper.Main_OnCommand(41866, 0) -- Show Volume Track Envelope
     end
-    local env = reaper.GetTrackEnvelope(track, 0)
+
+    local env = reaper.GetSelectedEnvelope()
     if not env then
-        return
-    end
-    local aiCount = reaper.CountAutomationItems(env)
-    local pool = 0
-    if aiCount > 0 then
-        for i = 0, aiCount - 1 do
-            local usedPool = reaper.GetSetAutomationItemInfo(env, i, "D_POOL_ID", 0, false)
-            if usedPool >= pool then
-                pool = usedPool + 1
-            end
+        env = reaper.GetTrackEnvelope(track, 0)
+        if not env then
+            return
         end
     end
-    local length
+
+    --Deciding what pool id the automaiton items should use.
+    local pool = GetPoolID()
+    if not pool then
+        pool = 1
+    end
+
+    --Create Automation Items
     local envValue
-    for i = 1, #items do
-        local pos = reaper.GetMediaItemInfo_Value(items[i], "D_POSITION")
-        if i == 1 then
-            length = reaper.GetMediaItemInfo_Value(items[i], "D_LENGTH")
-            envValue = ({ reaper.Envelope_Evaluate(env, pos, 48000, 1) })[2]
+    local z = 0
+    for i, itemGroup in ipairs(itemGroups) do
+        local itemsStart
+        local itemsEnd
+        local itemsLength
+        for j, item in ipairs(itemGroup) do
+            local itemLeftEdge = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
+            local itemRightEdge = reaper.GetMediaItemInfo_Value(item, "D_LENGTH") + itemLeftEdge
+            if not itemsStart then
+                itemsStart = itemLeftEdge
+            elseif itemsStart > itemLeftEdge then
+                itemsStart = itemLeftEdge
+            end
+            if not itemsEnd then
+                itemsEnd = itemRightEdge
+            elseif itemsEnd < itemRightEdge then
+                itemsEnd = itemRightEdge
+            end
+            itemsLength = itemsEnd - itemsStart
         end
-        local ai = reaper.InsertAutomationItem(env, pool, pos, length)
-        reaper.InsertEnvelopePointEx(env, ai, pos, envValue, 0, 0, false, false)
+        if z == 0 then
+            envValue = ({ reaper.Envelope_Evaluate(env, itemsStart, 48000, 1) })[2]
+            z = 1
+        end
+        local ai = reaper.InsertAutomationItem(env, pool, itemsStart, itemsLength)
+        reaper.InsertEnvelopePointEx(env, ai, itemsStart, envValue, 0, 0, false, false)
         reaper.GetSetAutomationItemInfo(env, ai, "D_LOOPSRC", 0, true)
     end
 end
 
 ----------------------------------------
---Utilities
-----------------------------------------
-function Msg(msg) reaper.ShowConsoleMsg(msg .. "\n") end
-
-----------------------------------------
 --Main
 ----------------------------------------
---reaper.ClearConsole() -- comment out once script is complete
+reaper.ClearConsole() -- comment out once script is complete
 reaper.PreventUIRefresh(1)
 reaper.Undo_BeginBlock()
 Main()
