@@ -12,7 +12,7 @@ mh = {}
 --Global Variables
 ----------------------------------------
 
---When this character is added to the start of a track name, that track will be treated as a divider track
+--### When this character is added to the start of a track name, that track will be treated as a divider track
 mh.DividerTrackSymbol = "<"
 ----------------------------------------
 --Functions
@@ -45,11 +45,16 @@ end
 ### params
 
 **_msg: any_** : text to print
-
 ]]
 function mh.Msg(msg)
     r.ShowConsoleMsg(tostring(msg) .. "\n")
 end
+
+--## Used to exit scripts early without creating an undo point.
+function mh.noundo()
+    r.defer(function () end)
+end
+
 
 --[[
 ## Checks If you have the js_ReaScriptAPI Installed
@@ -57,8 +62,8 @@ end
 ### returns
 **_bool_**
 ]]
-function mh.JsChecker()
-    if not r.JS_ReaScriptAPI_Version or not r.JS_Window_Destroy then
+function mh.JS()
+    if not r.JS_ReaScriptAPI_Version then
         r.ShowMessageBox("Please install the js_ReaScriptAPI extension via Reapack before trying to run this script.", "Error", 0)
         return false
     else
@@ -72,18 +77,13 @@ end
 ### returns
 **_bool_**
 ]]
-function mh.SWSChecker()
+function mh.SWS()
     if not r.CF_GetSWSVersion then
         r.ShowMessageBox("Please install the SWS extensions before trying to run this script.", "Error", 0)
         return false
     else
         return true
     end
-end
-
---## Used to exit scripts early without creating an undo point.
-function mh.noundo()
-    r.defer(function () end)
 end
 
 --[[
@@ -96,6 +96,28 @@ function mh.IsDividerTrack(track)
     local _, name = r.GetTrackName(track)
     name = string.gsub(name, " ", "")
     return string.sub(name, 1, 1) == mh.DividerTrackSymbol
+end
+
+--[[
+## Checks if input item is a folder Item.
+
+### params
+**_item: MediaItem_** : item to check.
+
+### returns
+**_bool_**
+]]
+function mh.IsFolderItem(item)
+    local take = r.GetActiveTake(item)
+    local source = r.GetMediaItemTake_Source(take)
+    local typebuf = r.GetMediaSourceType(source)
+    if typebuf == "EMPTY" then
+        local track = r.GetMediaItemTrack(item)
+        if r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 then
+            return true
+        end
+    end
+    return false
 end
 
 --[[
@@ -226,14 +248,28 @@ function mh.GetVisibleSelectedItemsSize()
     end
 end
 
+--[[
+## Compares two items to see if they're are overlapping
 
+### params
+**_item1: MediaItem_** : first item to compare
+
+**_item2: MediaItem_** : second item to compare
+    
+### returns
+**_bool_**
+]]
 function mh.CheckIfItemsOverlap(item1, item2)
-    local item1Start, item1End = mh.GetItemSize(item1)
-    local item2Start, item2End = mh.GetItemSize(item2)
-    if item1Start < item2Start and item1End > item2Start then
-        return true
-    elseif item1Start > item2Start and item1Start < item2End then
-        return true
+    local track1 = r.GetMediaItemTrack(item1)
+    local track2 = r.GetMediaItemTrack(item2)
+    if track1 == track2 then
+        local itemStart1, itemEnd1 = mh.GetItemSize(item1)
+        local itemStart2, itemEnd2 = mh.GetItemSize(item2)
+        if itemStart1 < itemStart2 and itemEnd1 > itemStart2 then
+            return true
+        elseif itemStart1 > itemStart2 and itemStart1 < itemEnd2 then
+            return true
+        end
     end
     return false
 end
@@ -250,7 +286,7 @@ end
 ### returns
 **_checkedItems: table|MediaItem_** : Table of all overlapping items.
 ]]
-function mh.SelectOverlappingGroupOfItems(item, shouldSelect)
+function mh.GetOverlappingItems(item, shouldSelect)
 	local track = r.GetMediaItem_Track(item)
 	local itemCount = r.CountTrackMediaItems(track)
 	if itemCount == 0 then return end
@@ -305,23 +341,4 @@ function mh.CenterNamedWindow(windowName)
 	left = math.floor((mRight - mLeft) / 2 + mLeft - width / 2)
 	top = math.floor((mBottom - mTop) / 2 + mTop - height / 2)
 	r.JS_Window_SetPosition(win, left, top, width, height)
-end
-
---[[
-## Checks if input item is a folder Item.
-
-### params
-**_item: MediaItem_** : item to check.
-]]
-function mh.IsFolderItem(item)
-    local take = r.GetActiveTake(item)
-    local source = r.GetMediaItemTake_Source(take)
-    local typebuf = r.GetMediaSourceType(source)
-    if typebuf == "EMPTY" then
-        local track = r.GetMediaItemTrack(item)
-        if r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 then
-            return true
-        end
-    end
-    return false
 end

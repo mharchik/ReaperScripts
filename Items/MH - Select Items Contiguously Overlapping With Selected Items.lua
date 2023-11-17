@@ -15,7 +15,7 @@ function Main()
 	local selItemCount = r.CountSelectedMediaItems(0)
 	if selItemCount == 0 then return end
 	for i = 0, selItemCount - 1 do
-		mh.SelectOverlappingGroupOfItems(r.GetSelectedMediaItem(0, i), true)
+		mh.GetOverlappingItems(r.GetSelectedMediaItem(0, i), true)
 	end
 end
 

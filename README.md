@@ -19,7 +19,7 @@ For more information on how to use these scripts please check out https://www.ma
 ### FX
 * MH - Center FX Window
 * MH - Remove FX From Track or Item Under Mouse
-* MH - Toggle FX Window of Selected Take
+* MH - Toggle FX Window of Selected Item
 * MH - Toggle FX Window of Track or Item Under Mouse
 
 ### Items
