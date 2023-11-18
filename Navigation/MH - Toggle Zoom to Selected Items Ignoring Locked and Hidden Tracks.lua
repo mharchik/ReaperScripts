@@ -21,14 +21,15 @@ local scaledTracks = {} --stores references to all of the tracks that will have 
 local unscaledTracks = {} --stores references to all of the tracks that are height locked or will be set to the minium height
 local scaledEnv = {} --tracks the envelope lanes that will have their heights changed when zooming in
 local unscaledEnv = {} --tracks the envelope lanes that won't be changed when zooming in
-local envZoomScale = mh.settings("envvzoomscale"); if not envZoomScale then envZoomScale = 0.5 end --how many pixels envelopes take up are in comparison to a track
-local minTrackHeight = 28
-local minTrackHeightOverrides = { minRecArmHeight = 60 } --Add any situations for tracks where they can't be scaled down to the miniume track height
+local envZoomScale = mh.settings("envvzoomscale"); if not envZoomScale then envZoomScale = 0.5 end
+local minHeight
+local minRecarmHeight
 local spacerHeight = mh.settings("trackgapmax"); if not spacerHeight then spacerHeight = 16 end
 local numOfSpacers = 0
 ----------------------------------------
 --Functions
 ----------------------------------------
+
 function GetTracks()
 	--determining range of items/tracks that we need to check
 	local selItemCount = r.CountSelectedMediaItems()
@@ -84,9 +85,9 @@ function GetTracks()
 		if trackHeight > 0 and isVisible then
 			if isLocked == 0 and isActiveTrack then --if a track isn't locked and does have items on it we're zooming too, we'll want to scale that track's height later
 				if isRecArm == 1 then
-					scaledTracks[track] = minTrackHeightOverrides["minRecArmHeight"] --storing the minium record armed height for this track. We'll need this later if later we find out we wanted to scale this track to be too small.
+					scaledTracks[track] = minRecarmHeight --storing the minium record armed height for this track. We'll need this later if later we find out we wanted to scale this track to be too small.
 					for j = 1, numEnvs do
-						scaledEnv[#scaledEnv + 1] = minTrackHeightOverrides["minRecArmHeight"] --storing the minium record armed height for this track's envelope lane. We'll need this later if later we find out we wanted to scale this track to be too small.
+						scaledEnv[#scaledEnv + 1] = minRecarmHeight --storing the minium record armed height for this track's envelope lane. We'll need this later if later we find out we wanted to scale this track to be too small.
 					end
 				else
 					scaledTracks[track] = 0 --any tracks that we store with a height of 0 we can assume later that it's fine to scale to what ever height we want.
@@ -101,9 +102,9 @@ function GetTracks()
 						unscaledEnv[#unscaledEnv + 1] = trackHeight
 					end
 				else --if the track is unlocked and doesn't have any items that we care about on it, we'll store it's height as being the minimum track height
-					unscaledTracks[track] = minTrackHeight
+					unscaledTracks[track] = minHeight
 					for j = 1, numEnvs do
-						unscaledEnv[#unscaledEnv + 1] = minTrackHeight
+						unscaledEnv[#unscaledEnv + 1] = minHeight
 					end
 				end
 			end
@@ -139,12 +140,10 @@ function CalculateTrackHeights()
 	-- the new track height is the total height of the arrangeView, not counting any space taken up by tracks/envelopes/spaces that can't be scaled, divided by the number of tracks/envelopes that we're going to have scale across that space.
 	newHeight = (arrangeViewHeight - unscaledTracksHeight - unscaledEnvHeight * envZoomScale - numOfSpacers * spacerHeight) / (scaledTrackCount + scaledEnvCount * envZoomScale)
 
-	-- if we have any special situations where a track can't get as small as our newHeight, we'll recalculate with that track's minimum possible height included
+	-- if we have any record armed tracks can't get as small as our new height, we'll recalculate with that track's minimum record armed height included
 	local shouldRecalculate = false
-	for key, height in pairs(minTrackHeightOverrides) do
-		if newHeight < height then
-			shouldRecalculate = true
-		end
+	if newHeight < minRecarmHeight then
+		shouldRecalculate = true
 	end
 
 	if shouldRecalculate then
@@ -171,8 +170,8 @@ function CalculateTrackHeights()
 	end
 
 	--if we're trying to scale any tracks to be smaller than they can be, we'll just default to using the default minimum and be fine with some tracks being off screen
-	if newHeight < minTrackHeight then
-		newHeight = minTrackHeight
+	if newHeight < minHeight then
+		newHeight = minHeight
 	end
 	return newHeight
 end
@@ -243,6 +242,7 @@ end
 function Main()
 	local retval, itemsStart, itemsEnd = mh.GetVisibleSelectedItemsSize()
 	if not retval then mh.noundo() return end --if no items are selected we'll exit without creating any undo state
+	minHeight, minRecarmHeight = mh.GetMinTrackHeights()
 	local firstTrack = GetTracks()
 	local zoomStart, zoomEnd = GetHorizontalZoomAmount(itemsStart, itemsEnd)
 	local newTrackHeight = CalculateTrackHeights()

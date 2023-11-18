@@ -365,3 +365,43 @@ function mh.CenterNamedWindow(windowName)
 	top = math.floor((mBottom - mTop) / 2 + mTop - height / 2)
 	r.JS_Window_SetPosition(win, left, top, width, height)
 end
+
+--[[
+## returns the minimum track height, and minimum record armed track height of the current theme.
+
+### returns
+**_minHeight: integer_** : the minimum track height in pixels
+
+**_minRecarmHeight: integer_** : the minimum track height while record armed in pixels
+]]
+function mh.GetMinTrackHeights()
+    r.PreventUIRefresh(1)
+	local minHeight
+	local minRecarmHeight
+	local track = r.GetTrack(0,0)
+	if not track then return end
+	--get track current settings
+	local height = r.GetMediaTrackInfo_Value(track, "I_TCPH")
+	local recarm = r.GetMediaTrackInfo_Value(track, "I_RECARM")
+	local show = r.GetMediaTrackInfo_Value(track, "B_SHOWINTCP")
+	local lock = r.GetMediaTrackInfo_Value(track, "B_HEIGHTLOCK")
+	--set track record armed to get its minimum recarm height
+	r.SetMediaTrackInfo_Value(track, "B_SHOWINTCP", 1)
+	r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", 0)
+	r.SetMediaTrackInfo_Value(track, "I_RECARM", 1)
+	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", 1)
+	minRecarmHeight = r.GetMediaTrackInfo_Value(track, "I_TCPH")
+	--unarm and get it's actual minimum height
+	r.SetMediaTrackInfo_Value(track, "I_RECARM", 0)
+	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", 1)
+	minHeight = r.GetMediaTrackInfo_Value(track, "I_TCPH")
+	--reset values
+	r.SetMediaTrackInfo_Value(track, "I_RECARM", recarm)
+	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", height)
+	r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", lock)
+	r.SetMediaTrackInfo_Value(track, "B_SHOWINTCP", show)
+    
+    r.PreventUIRefresh(-1)
+
+    return minHeight, minRecarmHeight
+end
