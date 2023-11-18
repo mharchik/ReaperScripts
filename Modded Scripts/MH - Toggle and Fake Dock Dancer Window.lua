@@ -26,9 +26,16 @@ local lastActiveTime = r.time_precise()
 local lastWinCheckTime = r.time_precise()
 
 local win, mLeft, mTop, mRight, mBottom, left, top, right, bottom, width, height
+local DancerNames = {"Baba+Background", "Keke+Background", "Me+Background", "Jiji+Background", "Fofo+Background"}
 ----------------------------------------
 --Functions
 ----------------------------------------
+
+function RandomizeDancer()
+  math.randomseed(os.time() * 100)
+  local index = math.random(#DancerNames)
+  r.SetExtState( "REAPER-Dancer", "LastDancer", DancerNames[index], true)
+end
 
 function Setup()
     local window = r.JS_Window_Find(WINDOW_NAME, false)
@@ -53,7 +60,7 @@ function Main()
     _, mLeft, mTop, mRight, mBottom = r.JS_Window_GetRect(r.GetMainHwnd())
     height = math.abs(bottom - top)
     width = right - left
-    r.JS_Window_SetPosition(win, mLeft + 5, mTop + 64, width, height)
+    r.JS_Window_SetPosition(win, mLeft + 7, mTop + 66, width, height)
     lastActiveTime = currentTime
   end
   if win then
@@ -72,6 +79,7 @@ end
 ----------------------------------------
 --Main
 ----------------------------------------
+RandomizeDancer()
 win = Setup()
 Main()
 r.atexit(Exit)
