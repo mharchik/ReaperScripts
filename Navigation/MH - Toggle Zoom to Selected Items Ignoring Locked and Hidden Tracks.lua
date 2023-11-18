@@ -21,10 +21,10 @@ local scaledTracks = {} --stores references to all of the tracks that will have 
 local unscaledTracks = {} --stores references to all of the tracks that are height locked or will be set to the minium height
 local scaledEnv = {} --tracks the envelope lanes that will have their heights changed when zooming in
 local unscaledEnv = {} --tracks the envelope lanes that won't be changed when zooming in
-local envZoomScale = 0.5 --how many pixels envelopes take up are in comparison to a track --stored in reaper.ini - envzoomscale
+local envZoomScale = mh.settings("envvzoomscale"); if not envZoomScale then envZoomScale = 0.5 end --how many pixels envelopes take up are in comparison to a track
 local minTrackHeight = 28
 local minTrackHeightOverrides = { minRecArmHeight = 60 } --Add any situations for tracks where they can't be scaled down to the miniume track height
-local spacerHeight = 16 --stored in reaper.ini - trackgapmax
+local spacerHeight = mh.settings("trackgapmax"); if not spacerHeight then spacerHeight = 16 end
 local numOfSpacers = 0
 ----------------------------------------
 --Functions

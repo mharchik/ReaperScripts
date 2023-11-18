@@ -39,6 +39,29 @@ function mh.version()
     return tonumber(t)
 end
 
+--[[
+## Gets current reaper settings
+
+### params
+**_settingName: string_** : the name of the setting your checking.
+
+### returns
+**_val: number_** : value of the setting your checking.
+]]
+function mh.settings(settingName)
+    local settings = io.open((r.GetResourcePath() .. '/reaper.ini'):gsub('\\', '/'), "r")
+    io.input(settings)
+    local val
+    for line in io.lines() do
+        if line:find(settingName) then
+            val = line:gsub(settingName .. "=", "")
+            break
+        end
+    end
+    io.close(settings)
+    return val
+end
+
 --[[  
 ## Prints a message to the reaper console
 
