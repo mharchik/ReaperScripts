@@ -14,6 +14,7 @@ mh = {}
 
 --### When this character is added to the start of a track name, that track will be treated as a divider track
 mh.DividerTrackSymbol = "<"
+
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -399,3 +400,9 @@ function mh.GetMinTrackHeights()
 
     return minHeight, minRecarmHeight
 end
+
+
+
+
+
+

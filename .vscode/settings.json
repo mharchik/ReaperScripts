@@ -2,7 +2,8 @@
     "Lua.diagnostics.globals": [
         "reaper",
         "mh",
-        "r"
+        "r",
+        "tsm"
     ],
     "editor.defaultFormatter": "sumneko.lua"
 }
