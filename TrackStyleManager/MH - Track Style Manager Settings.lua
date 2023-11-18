@@ -19,12 +19,21 @@ local Values = tsm.GetExtValues()
 --Functions
 ----------------------------------------
 
-
 function SetExtValues(retvals_csv)
+    local vals = {}
     local i = 1
     for value in string.gmatch(retvals_csv, '([^,]+)') do
-        r.SetExtState(tsm.ExtSection, tsm.Settings[i], value, true)
-        i = i + 1
+        vals[#vals+1] = value
+    end
+
+    if string.lower(((vals[#vals]:gsub(" ", "")):sub(1,1))):match("y") then
+        tsm.ResetExtValues()
+    else
+        for j, value in ipairs(vals) do
+            if j < #vals then --ignoring the last entry since that's the "Reset to Defaults" setting
+                r.SetExtState(tsm.ExtSection, tsm.Settings[j], value, true)
+            end
+        end
     end
 end
 
@@ -43,7 +52,7 @@ function PromptUser()
             captions = captions ..","..name
         end
     end
-    return reaper.GetUserInputs( "Style Manager Settings", 10, captions.. ",extrawidth=100", retvals)
+    return reaper.GetUserInputs( "Style Manager Settings", #tsm.Settings + 1, captions.. ",Reset to Defaults (y/n),extrawidth=100", retvals..",n")
 end
 
 
@@ -51,7 +60,7 @@ function Main()
     tsm.GetExtValues()
     local retval, retvals_csv = PromptUser()
     if not retval then
-        tsm.ResetExtValues()
+
         mh.noundo()
         return
     end

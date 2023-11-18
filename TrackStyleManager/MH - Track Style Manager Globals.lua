@@ -19,29 +19,27 @@ tsm = {}
 tsm.ExtSection = "MH - TSM"
 
 tsm.Settings = {
---[[1]] "Default Track Layout",
---[[2]] "Divider Track Height",
---[[3]] "Divider Track Layout Name",
---[[4]] "Divider Track Color (Hex)",
---[[5]] "Folder Item Track Height",
---[[6]] "Folder Item Track Layout Name",
---[[7]] "Folder Item Track Color (Hex)",
---[[8]] "Folder Bus Track Height",
---[[9]] "Folder Bus Track Layout Name",
---[[10]] "Folder Bus Track Color (Hex)"
+--[[1]] "Divider Track Height",
+--[[2]] "Divider Track Layout Name",
+--[[3]] "Divider Track Color (Hex)",
+--[[4]] "Folder Item Track Height",
+--[[5]] "Folder Item Track Layout Name",
+--[[6]] "Folder Item Track Color (Hex)",
+--[[7]] "Folder Bus Track Height",
+--[[8]] "Folder Bus Track Layout Name",
+--[[9]] "Folder Bus Track Color (Hex)"
 }
 
 tsm.Defaults = {
-    [tsm.Settings[1]] = "Global layout default",
-    [tsm.Settings[2]] = 33,
-    [tsm.Settings[3]] = "A - NO CONTROL",
-    [tsm.Settings[4]] = "00FFFF",
-    [tsm.Settings[5]] = 28,
-    [tsm.Settings[6]] = "A - COLOR FULL",
-    [tsm.Settings[7]] = "4A2C69",
-    [tsm.Settings[8]] = 28,
-    [tsm.Settings[9]] = "A - COLOR FULL",
-    [tsm.Settings[10]] = "25255A"
+    [tsm.Settings[1]] = 33,
+    [tsm.Settings[2]] = "A - NO CONTROL",
+    [tsm.Settings[3]] = "00FFFF",
+    [tsm.Settings[4]] = 28,
+    [tsm.Settings[5]] = "A - COLOR FULL",
+    [tsm.Settings[6]] = "4A2C69",
+    [tsm.Settings[7]] = 28,
+    [tsm.Settings[8]] = "A - COLOR FULL",
+    [tsm.Settings[9]] = "25255A"
 }
 
 tsm.TrackColorOverrides = {
@@ -53,7 +51,7 @@ tsm.TrackColorOverrides = {
 function tsm.GetExtValues()
     local ExtVals = {}
     for key, name in ipairs(tsm.Settings) do
-        if  not r.HasExtState(tsm.ExtSection, name) then
+        if not r.HasExtState(tsm.ExtSection, name) then
             r.SetExtState(tsm.ExtSection, name, tsm.Defaults[name], true)
             ExtVals[name] = r.GetExtState(tsm.ExtSection, name)
         else
@@ -68,4 +66,3 @@ function tsm.ResetExtValues()
         r.SetExtState(tsm.ExtSection, name, tsm.Defaults[name], true)
     end
 end
-

@@ -48,8 +48,8 @@ local refreshRate = 0.5
 ----------------------------------------
 
 function HexToRgb(num)
-    num = string.gsub(num, "#", "")
-    num = string.gsub(num, " ", "")
+    num = num:gsub("#", "")
+    num = num:gsub(" ", "")
     local rgb = {}
     for i = 1, #num, 2 do
         rgb[#rgb+1] = tonumber(num:sub(i, i+1), 16)
@@ -86,8 +86,9 @@ function SetTrackSettings(track, height, layout, lock, color)
         end
     end
     --Check Layout
-    local curLayout = r.GetSetMediaTrackInfo_String(track, "P_TCP_LAYOUT", "", false)
+    local curLayout = ({r.GetSetMediaTrackInfo_String(track, "P_TCP_LAYOUT", "", false)})[2]
     if curLayout ~= layout then
+        mh.Msg(({r.GetTrackName(track)})[2] .. " Layout changed")
         r.GetSetMediaTrackInfo_String(track, "P_TCP_LAYOUT", layout, true)
     end
     --Check Height Lock
@@ -122,7 +123,7 @@ function Main()
         reaper.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
-            tsm.GetExtValues()
+            Values = tsm.GetExtValues()
             for i = 0, trackCount - 1 do
                 local track = r.GetTrack(0, i)
                 if track then
@@ -139,7 +140,7 @@ function Main()
                             SetTrackSettings(track, 0, Values["Folder Item Track Layout Name"], 0, Values["Folder Item Track Color (Hex)"])
                         end
                     else --if none of the above then we'll set it all back to default
-                        SetTrackSettings(track, 0, Values['Default Track Layout'], 0, 0)
+                        SetTrackSettings(track, 0, "Global layout Default", 0, 0)
                     end
                 end
             end
