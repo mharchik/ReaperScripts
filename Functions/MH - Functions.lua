@@ -131,14 +131,8 @@ end
 **_bool_**
 ]]
 function mh.IsFolderItem(item)
-    local take = r.GetActiveTake(item)
-    local source = r.GetMediaItemTake_Source(take)
-    local typebuf = r.GetMediaSourceType(source)
-    if typebuf == "EMPTY" then
-        local track = r.GetMediaItemTrack(item)
-        if r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 then
-            return true
-        end
+    if ({r.GetSetMediaItemInfo_String(item, "P_EXT:nvk_item_type", "", 0)})[2] == "folder" then
+        return true
     end
     return false
 end
