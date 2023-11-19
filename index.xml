@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="0c93ffcda0083ef929f9482bef13ff6831274fae">
+<index version="1" name="MH Scripts" commit="a199248dc7380f62f0c2f4f4eadda52b7cada06d">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -28,8 +28,8 @@
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/0c93ffcda0083ef929f9482bef13ff6831274fae/FX/MH%20-%20Center%20FX%20Window.lua</source>
-        <source file="../Functions/MH - Functions.lua">https://github.com/mharchik/ReaperScripts/raw/0c93ffcda0083ef929f9482bef13ff6831274fae/Functions/MH%20-%20Functions.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/FX/MH%20-%20Center%20FX%20Window.lua</source>
+        <source file="../Functions/MH - Functions.lua">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/Functions/MH%20-%20Functions.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Remove FX From Track or Item Under Mouse.lua" type="script" desc="Remove FX From Track or Item Under Mouse">
@@ -115,18 +115,18 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/e0cd5c47be92b0b2c19679190058cf1d71273080/Items/MH%20-%20Show%20Full%20Source%20of%20Selected%20Items.lua</source>
       </version>
     </reapack>
-    <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items">
+    <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Item Edges">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Trims the start of any item, including fades, to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items behind it that are contiguously connected by overlapping crossfades\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Included Actions:\par}
 }
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua" type="script" desc="Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length">
@@ -157,18 +157,18 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Backward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
-    <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length">
+    <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Item Edges">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Trims the right edge of the item under your mouse cursor to the edit cursor. This will also trim the fade out up to a minimum length, at which point the fade will move with the edge of the item\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Included Actions:\par}
 }
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
       </version>
     </reapack>
   </category>
