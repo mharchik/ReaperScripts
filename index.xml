@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="259f55410c916ca3c2dc54585af7728ddf59951e">
+<index version="1" name="MH Scripts" commit="405fe6c6b8a648e4308965ef016106737e8a727c">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -19,7 +19,7 @@
   <category name="Functions">
     <reapack name="MH - Functions.lua" type="script">
       <version name="1.0" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/259f55410c916ca3c2dc54585af7728ddf59951e/Functions/MH%20-%20Functions.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3acb9adf7c6ee212d785cdbd782b9186c158bb73/Functions/MH%20-%20Functions.lua</source>
       </version>
     </reapack>
   </category>
@@ -348,6 +348,8 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20Toggle%20Visibility%20of%20Muted%20Top%20Level%20Folders%20Below%20Divider%20Track%20Under%20Mouse.lua</source>
       </version>
     </reapack>
+  </category>
+  <category name="TrackStyleManager">
     <reapack name="MH - Track Style Manager.lua" type="script" desc="Track Style Manager">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
@@ -358,8 +360,10 @@
 }
 ]]></description>
       </metadata>
-      <version name="1.0" author="Max Harchik" time="2023-11-16T16:20:08Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8c4a08fd4e52353e65e0ea19e18f672bd0cdd817/Tracks/MH%20-%20Track%20Style%20Manager.lua</source>
+      <version name="1.0" author="Max Harchik" time="2023-11-18T22:15:38Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/405fe6c6b8a648e4308965ef016106737e8a727c/TrackStyleManager/MH%20-%20Track%20Style%20Manager.lua</source>
+        <source main="main" file="MH - Track Style Manager Settings.lua">https://github.com/mharchik/ReaperScripts/raw/405fe6c6b8a648e4308965ef016106737e8a727c/TrackStyleManager/MH%20-%20Track%20Style%20Manager%20Settings.lua</source>
+        <source type="data" file="MH - Track Style Manager Globals.lua">https://github.com/mharchik/ReaperScripts/raw/405fe6c6b8a648e4308965ef016106737e8a727c/TrackStyleManager/MH%20-%20Track%20Style%20Manager%20Globals.lua</source>
       </version>
     </reapack>
   </category>
