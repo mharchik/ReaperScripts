@@ -24,32 +24,18 @@ local Values = {}
 ----------------------------------------
 --User Settings
 ----------------------------------------
---[[
-local DefaultLayout = "Global layout default"
-local DividerHeight = 33
-local DividerLayout = "A - NO CONTROL"
-local DividerColor = { r = 0, g = 255, b = 255 }
-local BusHeight = 28
-local BusLayout = "A - COLOR FULL"
-local BusColor = { r = 37, g = 37, b = 90 }
-local FolderItemTrackHeight = 28
-local FolderItemTrackLayout = "A - COLOR FULL"
-local FolderItemTrackColor = { r = 74, g = 44, b = 105 }
-]]
-
 local Recolor = true --set false if you don't want the script to change any of your track colors
 local RecolorTrackNameOverrides = { Video = "#FFFF00" } --If you want tracks with a specific name to have a specific color, you can set that override here
 ----------------------------------------
 -- Script Variables
 ----------------------------------------
-local refreshRate = 0.5
+local refreshRate = 0.2
 ----------------------------------------
 --Functions
 ----------------------------------------
 
 function HexToRgb(num)
-    num = num:gsub("#", "")
-    num = num:gsub(" ", "")
+    num = num:gsub("[^%x]", "") --removing all non hexidecimal characters from input
     local rgb = {}
     for i = 1, #num, 2 do
         rgb[#rgb+1] = tonumber(num:sub(i, i+1), 16)
@@ -88,7 +74,6 @@ function SetTrackSettings(track, height, layout, lock, color)
     --Check Layout
     local curLayout = ({r.GetSetMediaTrackInfo_String(track, "P_TCP_LAYOUT", "", false)})[2]
     if curLayout ~= layout then
-        mh.Msg(({r.GetTrackName(track)})[2] .. " Layout changed")
         r.GetSetMediaTrackInfo_String(track, "P_TCP_LAYOUT", layout, true)
     end
     --Check Height Lock
@@ -99,12 +84,23 @@ function SetTrackSettings(track, height, layout, lock, color)
     --Check Color
     if Recolor then
         --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
-        local trackName = string.lower(({r.GetTrackName(track)})[2])
-        for name, newColor in pairs(RecolorTrackNameOverrides) do
-            if string.match(trackName, string.lower(name)) then
+        local trackName = ({r.GetTrackName(track)})[2]:lower()
+        for name, newColor in pairs(tsm.TrackColorOverrides) do
+            if trackName:match(name:lower()) then
                 color = newColor
             end
         end
+        --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
+        if color ~= 0 then
+            if trackName:match("<hidden>") then
+                local rgb = HexToRgb(color)
+                for key, value in pairs(rgb) do
+                    rgb[key] = math.floor(value * 0.5)
+                end
+                color = RgbToHex(rgb)
+            end
+        end
+        --Check if we need to change color
         local curColor = RgbToHex(({r.ColorFromNative(r.GetTrackColor(track))}))
         if curColor ~= color then
             if color == 0 then --Reset Color to Default
@@ -127,20 +123,22 @@ function Main()
             for i = 0, trackCount - 1 do
                 local track = r.GetTrack(0, i)
                 if track then
-                    local numOfItems = r.CountTrackMediaItems(track)
-                    local folderDepth = r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
-                    if mh.IsDividerTrack(track) then --Checking if the track is a Divider Track
-                        SetTrackSettings(track, Values["Divider Track Height"], Values["Divider Track Layout Name"], 1, Values["Divider Track Color (Hex)"])
-                    elseif folderDepth == 1 and numOfItems == 0 then --Checking if the track is a parent sub mix bus
-                        SetTrackSettings(track, Values["Folder Bus Track Height"], Values["Folder Bus Track Layout Name"], 1, Values["Folder Bus Track Color (Hex)"])
-                    elseif folderDepth == 1 and r.GetTrackDepth(track) == 0 and numOfItems > 0 then --Checking if the track is a top level Folder Item Track
-                        if r.GetMediaTrackInfo_Value(track, "I_FOLDERCOMPACT") == 2 then --if folder is fully collpased then minimize it's height and lock it
-                            SetTrackSettings(track, Values["Folder Item Track Height"], Values["Folder Item Track Layout Name"], 1, Values["Folder Item Track Color (Hex)"])
-                        else
-                            SetTrackSettings(track, 0, Values["Folder Item Track Layout Name"], 0, Values["Folder Item Track Color (Hex)"])
+                    if r.GetMediaTrackInfo_Value(track, "I_TCPH") > 0 then --only update visuals on tracks that are actually visible
+                        local numOfItems = r.CountTrackMediaItems(track)
+                        local folderDepth = r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
+                        if mh.IsDividerTrack(track) then --Checking if the track is a Divider Track
+                            SetTrackSettings(track, Values["Divider Track Height"], Values["Divider Track Layout Name"], 1, Values["Divider Track Color (Hex)"])
+                        elseif folderDepth == 1 and numOfItems == 0 then --Checking if the track is a parent sub mix bus
+                            SetTrackSettings(track, Values["Folder Bus Track Height"], Values["Folder Bus Track Layout Name"], 1, Values["Folder Bus Track Color (Hex)"])
+                        elseif folderDepth == 1 and r.GetTrackDepth(track) == 0 and numOfItems > 0 then --Checking if the track is a top level Folder Item Track
+                            if r.GetMediaTrackInfo_Value(track, "I_FOLDERCOMPACT") == 2 then --if folder is fully collpased then minimize it's height and lock it
+                                SetTrackSettings(track, Values["Folder Item Track Height"], Values["Folder Item Track Layout Name"], 1, Values["Folder Item Track Color (Hex)"])
+                            else
+                                SetTrackSettings(track, 0, Values["Folder Item Track Layout Name"], 0, Values["Folder Item Track Color (Hex)"])
+                            end
+                        else --if none of the above then we'll set it all back to default
+                            SetTrackSettings(track, 0, "Global layout Default", 0, 0)
                         end
-                    else --if none of the above then we'll set it all back to default
-                        SetTrackSettings(track, 0, "Global layout Default", 0, 0)
                     end
                 end
             end
