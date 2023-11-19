@@ -3,10 +3,10 @@
 -- @author Max Harchik
 -- @version 1.0
 -- @provides
---          [main] .
---          [main] MH - Track Style Manager Settings.lua
---          [data] MH - Track Style Manager Globals.lua
---  
+--  [main] .
+--  [main] MH - Track Style Manager Settings.lua
+--  [nomain] MH - Track Style Manager Globals.lua
+--
 -- @about   Auto sets track heights, colors, and layouts.
 --          for folder parents that are used only as a bus, and any divider tracks
 --          Requires using the HYDRA reaper theme if you want it to change the look of your divider tracks. Otherwise you'll need to change the Layout variables to match the Track Control Panel Layout names for your theme
