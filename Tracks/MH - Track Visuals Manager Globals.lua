@@ -10,11 +10,11 @@ if not mh.SWS() or not mh.JS() then mh.noundo() return end
 ----------------------------------------
 --Script Variables
 ----------------------------------------
-tsm = {}
+tvm = {}
 
-tsm.ExtSection = "MH - TSM"
+tvm.ExtSection = "MH - TSM"
 
-tsm.Settings = {
+tvm.Settings = {
 --[[1]] "Divider Track Height",
 --[[2]] "Divider Track Layout Name",
 --[[3]] "Divider Track Color (Hex)",
@@ -27,40 +27,43 @@ tsm.Settings = {
 }
 
 -- Default values for all settings
-tsm.Defaults = {
-    [tsm.Settings[1]] = 33,
-    [tsm.Settings[2]] = "A - NO CONTROL",
-    [tsm.Settings[3]] = "00FFFF",
-    [tsm.Settings[4]] = 28,
-    [tsm.Settings[5]] = "A - COLOR FULL",
-    [tsm.Settings[6]] = "4A2C69",
-    [tsm.Settings[7]] = 28,
-    [tsm.Settings[8]] = "A - COLOR FULL",
-    [tsm.Settings[9]] = "25255A"
+tvm.Defaults = {
+    [tvm.Settings[1]] = 33,
+    [tvm.Settings[2]] = "A - NO CONTROL",
+    [tvm.Settings[3]] = "00FFFF",
+    [tvm.Settings[4]] = 28,
+    [tvm.Settings[5]] = "A - COLOR FULL",
+    [tvm.Settings[6]] = "4A2C69",
+    [tvm.Settings[7]] = 28,
+    [tvm.Settings[8]] = "A - COLOR FULL",
+    [tvm.Settings[9]] = "25255A"
 }
 
 --If you want tracks with a specific name to have a specific color, you can set that override here
-tsm.TrackColorOverrides = {
+tvm.TrackColorOverrides = {
     Video = "#FFFF00"
 }
+
+tvm.Recolor = true --set false if you don't want the script to change any of your track colors
+
 ----------------------------------------
 --Functions
 ----------------------------------------
-function tsm.GetExtValues()
+function tvm.GetExtValues()
     local ExtVals = {}
-    for key, name in ipairs(tsm.Settings) do
-        if not r.HasExtState(tsm.ExtSection, name) then
-            r.SetExtState(tsm.ExtSection, name, tsm.Defaults[name], true)
-            ExtVals[name] = r.GetExtState(tsm.ExtSection, name)
+    for key, name in ipairs(tvm.Settings) do
+        if not r.HasExtState(tvm.ExtSection, name) then
+            r.SetExtState(tvm.ExtSection, name, tvm.Defaults[name], true)
+            ExtVals[name] = r.GetExtState(tvm.ExtSection, name)
         else
-            ExtVals[name] = r.GetExtState(tsm.ExtSection, name)
+            ExtVals[name] = r.GetExtState(tvm.ExtSection, name)
         end
     end
     return ExtVals
 end
 
-function tsm.ResetExtValues()
-    for i, name in pairs(tsm.Settings) do
-        r.SetExtState(tsm.ExtSection, name, tsm.Defaults[name], true)
+function tvm.ResetExtValues()
+    for i, name in pairs(tvm.Settings) do
+        r.SetExtState(tvm.ExtSection, name, tvm.Defaults[name], true)
     end
 end

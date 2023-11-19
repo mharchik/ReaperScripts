@@ -1,14 +1,14 @@
 ----------------------------------------
--- @description Track Style Manager
+-- @description Track Visuals Manager
 -- @author Max Harchik
 -- @version 1.0
 -- @provides
 --  [main] .
---  [main] MH - Track Style Manager Settings.lua
---  [nomain] MH - Track Style Manager Globals.lua
+--  [main] MH - Track Visuals Manager Settings.lua
+--  [nomain] MH - Track Visuals Manager Globals.lua
 --
 -- @about   Auto sets track heights, colors, and layouts.
---          for folder parents that are used only as a bus, and any divider tracks
+--          Affects folder parents that are used only as a bus, and any divider tracks
 --          Requires using the HYDRA reaper theme if you want it to change the look of your divider tracks. Otherwise you'll need to change the Layout variables to match the Track Control Panel Layout names for your theme
 ----------------------------------------
 --Setup
@@ -17,15 +17,13 @@ r = reaper
 local _, _, section_ID, cmd_ID, _, _, _ = r.get_action_context()
 r.SetToggleCommandState(section_ID, cmd_ID, 1)
 r.RefreshToolbar2(section_ID, cmd_ID)
-tsm = r.GetResourcePath() .. '/Scripts/MH Scripts/TrackStyleManager/MH - Track Style Manager Globals.lua'; if r.file_exists(tsm) then dofile(tsm); if not tsm then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Track/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 local lastActiveTime = r.time_precise()
 
 local Values = {}
 ----------------------------------------
 --User Settings
 ----------------------------------------
-local Recolor = true --set false if you don't want the script to change any of your track colors
-local RecolorTrackNameOverrides = { Video = "#FFFF00" } --If you want tracks with a specific name to have a specific color, you can set that override here
 ----------------------------------------
 -- Script Variables
 ----------------------------------------
@@ -60,7 +58,6 @@ function RgbToHex(rgb)
     return num
 end
 
-
 function SetTrackSettings(track, height, layout, lock, color)
     --mh.Msg(({r.GetTrackName(track)})[2] .. " height: " .. height .. ", Layout: " .. layout .. ", lock: " .. lock ..", Color: " .. color)
     --Check Height
@@ -82,10 +79,10 @@ function SetTrackSettings(track, height, layout, lock, color)
         r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", lock)
     end
     --Check Color
-    if Recolor then
+    if tvm.Recolor then
         --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
         local trackName = ({r.GetTrackName(track)})[2]:lower()
-        for name, newColor in pairs(tsm.TrackColorOverrides) do
+        for name, newColor in pairs(tvm.TrackColorOverrides) do
             if trackName:match(name:lower()) then
                 color = newColor
             end
@@ -119,7 +116,7 @@ function Main()
         reaper.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
-            Values = tsm.GetExtValues()
+            Values = tvm.GetExtValues()
             for i = 0, trackCount - 1 do
                 local track = r.GetTrack(0, i)
                 if track then
@@ -157,6 +154,6 @@ end
 ----------------------------------------
 --Main
 ----------------------------------------
-Values = tsm.GetExtValues()
+Values = tvm.GetExtValues()
 Main()
 r.atexit(Exit)
