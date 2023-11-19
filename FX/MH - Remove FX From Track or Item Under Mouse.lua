@@ -2,6 +2,7 @@
 -- @description Remove FX From Track or Item Under Mouse
 -- @author Max Harchik
 -- @version 1.0
+-- @provides /Functions/MH - Functions.lua
 ----------------------------------------
 --Setup
 ----------------------------------------

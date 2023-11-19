@@ -3,6 +3,7 @@
 -- @author Max Harchik
 -- @version 1.0
 -- @about Deselects all items except for the ones on the track you are mousing over. If no items on that track are selected yet it will select all items on it
+-- @provides /Functions/MH - Functions.lua
 ----------------------------------------
 --Setup
 ----------------------------------------

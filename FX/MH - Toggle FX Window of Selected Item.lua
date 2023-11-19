@@ -2,6 +2,7 @@
 -- @description Toggle FX Window of Selected Take
 -- @author Max Harchik
 -- @version 1.0
+-- @provides /Functions/MH - Functions.lua
 ----------------------------------------
 --Setup
 ----------------------------------------

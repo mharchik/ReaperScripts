@@ -4,6 +4,7 @@
 -- @version 1.0
 -- @about   This script will extend any selected items out to be their full length, and reposition them so that they do not overlap with each other. 
 --          If any selected items are from the same source file, the duplicating item will be deleted
+-- @provides /Functions/MH - Functions.lua
 ----------------------------------------
 --Setup
 ----------------------------------------

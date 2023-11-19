@@ -4,6 +4,7 @@
 -- @author Max Harchik
 -- @version 1.0
 -- @about
+-- @provides /Functions/MH - Functions.lua
 ----------------------------------------
 --User Settings
 ----------------------------------------
