@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="2f272f56268e6f62596e638b77d87cb25031dfa4">
+<index version="1" name="MH Scripts" commit="61defecfc3279e3902f73eb86518f0befff55277">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -16,13 +16,6 @@
       </version>
     </reapack>
   </category>
-  <category name="Functions">
-    <reapack name="MH - Functions.lua" type="script">
-      <version name="1.0" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3acb9adf7c6ee212d785cdbd782b9186c158bb73/Functions/MH%20-%20Functions.lua</source>
-      </version>
-    </reapack>
-  </category>
   <category name="FX">
     <reapack name="MH - Center FX Window.lua" type="script" desc="Center FX Window">
       <metadata>
@@ -33,9 +26,11 @@
 {\pard \ql \f0 \sa180 \li0 \fi0 Moves the active FX Window to the center of the Main Reaper Window\par}
 }
 ]]></description>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/FX/MH%20-%20Center%20FX%20Window.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/f220ff54968f2ec6aafa9e1db5adfe95088ac5ce/FX/MH%20-%20Center%20FX%20Window.lua</source>
+        <source file="../Functions/MH - Functions.lua">https://github.com/mharchik/ReaperScripts/raw/f220ff54968f2ec6aafa9e1db5adfe95088ac5ce/Functions/MH%20-%20Functions.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Remove FX From Track or Item Under Mouse.lua" type="script" desc="Remove FX From Track or Item Under Mouse">
@@ -121,18 +116,18 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/e0cd5c47be92b0b2c19679190058cf1d71273080/Items/MH%20-%20Show%20Full%20Source%20of%20Selected%20Items.lua</source>
       </version>
     </reapack>
-    <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items">
+    <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Item Edges">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Trims the start of any item, including fades, to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items behind it that are contiguously connected by overlapping crossfades\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Included Actions:\par}
 }
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua" type="script" desc="Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length">
@@ -163,18 +158,18 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Backward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
-    <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length">
+    <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Item Edges">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Trims the right edge of the item under your mouse cursor to the edit cursor. This will also trim the fade out up to a minimum length, at which point the fade will move with the edge of the item\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Included Actions:\par}
 }
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
       </version>
     </reapack>
   </category>
@@ -348,22 +343,20 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20Toggle%20Visibility%20of%20Muted%20Top%20Level%20Folders%20Below%20Divider%20Track%20Under%20Mouse.lua</source>
       </version>
     </reapack>
-  </category>
-  <category name="TrackStyleManager">
-    <reapack name="MH - Track Style Manager.lua" type="script" desc="Track Style Manager">
+    <reapack name="MH - Track Visuals Manager.lua" type="script" desc="Track Visuals Manager">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Auto sets track heights, colors, and layouts. for folder parents that are used only as a bus, and any divider tracks Requires using the HYDRA reaper theme if you want it to change the look of your divider tracks. Otherwise you'll need to change the Layout variables to match the Track Control Panel Layout names for your theme\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Auto sets track heights, colors, and layouts. Affects folder parents that are used only as a bus, and any divider tracks Requires using the HYDRA reaper theme if you want it to change the look of your divider tracks. Otherwise you'll need to change the Layout variables to match the Track Control Panel Layout names for your theme\par}
 }
 ]]></description>
       </metadata>
-      <version name="1.0" author="Max Harchik" time="2023-11-18T22:15:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/2f272f56268e6f62596e638b77d87cb25031dfa4/TrackStyleManager/MH%20-%20Track%20Style%20Manager.lua</source>
-        <source main="main" file="MH - Track Style Manager Settings.lua">https://github.com/mharchik/ReaperScripts/raw/2f272f56268e6f62596e638b77d87cb25031dfa4/TrackStyleManager/MH%20-%20Track%20Style%20Manager%20Settings.lua</source>
-        <source file="MH - Track Style Manager Globals.lua">https://github.com/mharchik/ReaperScripts/raw/2f272f56268e6f62596e638b77d87cb25031dfa4/TrackStyleManager/MH%20-%20Track%20Style%20Manager%20Globals.lua</source>
+      <version name="1.0" author="Max Harchik" time="2023-11-19T05:38:26Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/61defecfc3279e3902f73eb86518f0befff55277/Tracks/MH%20-%20Track%20Visuals%20Manager.lua</source>
+        <source main="main" file="MH - Track Visuals Manager Settings.lua">https://github.com/mharchik/ReaperScripts/raw/61defecfc3279e3902f73eb86518f0befff55277/Tracks/MH%20-%20Track%20Visuals%20Manager%20Settings.lua</source>
+        <source file="MH - Track Visuals Manager Globals.lua">https://github.com/mharchik/ReaperScripts/raw/61defecfc3279e3902f73eb86518f0befff55277/Tracks/MH%20-%20Track%20Visuals%20Manager%20Globals.lua</source>
       </version>
     </reapack>
   </category>
