@@ -2,6 +2,7 @@
 -- @description Center FX Window
 -- @author Max Harchik
 -- @version 1.0
+-- @provides /Functions/MH - Functions.lua
 -- @about Moves the active FX Window to the center of the Main Reaper Window
 ----------------------------------------
 --Setup

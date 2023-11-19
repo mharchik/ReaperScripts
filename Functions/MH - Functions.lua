@@ -1,7 +1,7 @@
 ---@diagnostic disable: param-type-mismatch
 ----------------------------------------
--- @provides
---   [main] .
+-- @noindex
+-- @author Max Harchik
 -- @version 1.0
 ----------------------------------------
 --Setup
