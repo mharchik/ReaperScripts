@@ -1,7 +1,9 @@
 ----------------------------------------
 -- @description Randomize Selected Items Volumes
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

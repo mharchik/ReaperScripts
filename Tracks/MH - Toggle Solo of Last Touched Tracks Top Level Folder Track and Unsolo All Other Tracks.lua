@@ -1,7 +1,9 @@
 ----------------------------------------
 -- @description Toggle Solo of Last Touched Track's Top Level Folder Track and Unsolo All Other Tracks
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

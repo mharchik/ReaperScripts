@@ -1,7 +1,10 @@
 ----------------------------------------
 -- @description Create New Track Accounting for Folder Tracks Above It
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
+
 -- @about   Creates a new track under the last selected track. If the track is at the end of a folder it will be added to that folder. 
 --          If the track is a parent that has its children hidden, it will be added at the next visible position instead.
 ----------------------------------------

@@ -3,6 +3,7 @@
 -- @description Add Track Under Mouse To Selection
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

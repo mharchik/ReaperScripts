@@ -1,8 +1,10 @@
 ----------------------------------------
 -- @description Select Items Contiguously Overlapping With Item Under Mouse
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
 -- @about Selects all items that are connected to the item under the mouse cursor by overlapping crossfades
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

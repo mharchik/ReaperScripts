@@ -1,9 +1,9 @@
 ----------------------------------------
 -- @description Move Edit Cursor to Next Item Edge or Transient on Selected Track
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
-
--- Requires SWS Extensions
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

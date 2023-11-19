@@ -1,7 +1,10 @@
 ----------------------------------------
 -- @description Mousewheel - Zoom Horizontally Dynamic
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
+
 -- @about	This script should be bound to mousewheel. 
 --			Zooms the arrange window in and out horizontally adjusting the center point based on how far you are zoomed in/out.
 --			When view is wider the zoom will focus on the center of all selected items. As zoom moves in closer, the focus will shift towards the edit cursor position.

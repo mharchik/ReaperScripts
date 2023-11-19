@@ -1,10 +1,11 @@
 ----------------------------------------
--- @description Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items
+-- @description Trim Item Edges
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
--- @about Trims the start of any item, including fades, to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items behind it that are contiguously connected by overlapping crossfades
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 
--- Requires SWS Extensions
+-- @about Trims the start of any item, including fades, to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items behind it that are contiguously connected by overlapping crossfades
 ----------------------------------------
 --Setup
 ----------------------------------------

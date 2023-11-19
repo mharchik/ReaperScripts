@@ -1,7 +1,10 @@
 ----------------------------------------
 -- @description Select Only Items on Track Under Mouse
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
+
 -- @about Deselects all items except for the ones on the track you are mousing over. If no items on that track are selected yet it will select all items on it
 ----------------------------------------
 --Setup
