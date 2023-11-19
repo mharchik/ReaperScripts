@@ -1,14 +1,9 @@
 ----------------------------------------
--- @description Randomize Selected Items
+-- @description Randomize Selected Items Volumes
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
--- @about 
---      Included Actions:
---      MH - Randomize Selected Items Pitch via Playrate
---      MH - Randomized Selected Items Volumes
--- @provides /Functions/MH - Functions.lua
--- [main] /Items/MH - Randomize Selected Items Pitch via Playrate
--- [main] /Items/MH - Randomize Selected Items Volumes.lua
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

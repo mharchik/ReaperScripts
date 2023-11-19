@@ -1,8 +1,9 @@
 ----------------------------------------
 -- @description Remove FX From Track or Item Under Mouse
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
--- @provides /Functions/MH - Functions.lua
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

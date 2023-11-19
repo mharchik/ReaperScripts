@@ -1,10 +1,10 @@
 ----------------------------------------
 -- @description Toggle FX Window of Track or Item Under Mouse
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
 -- @about 	Opens the FX Chain window of what ever item/track you're mousing over, and closes all other fx windows. 
 --			If an FX Chain window is already open, you can mouse over that window to just close without opening a new window.
--- @provides /Functions/MH - Functions.lua
 ----------------------------------------
 --Setup
 ----------------------------------------

@@ -1,7 +1,10 @@
 ----------------------------------------
 -- @description Mousewheel - Zoom Vertically Snapping to Active Folder Track
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
+
 -- @about   This script should be bound to mousewheel. 
 --          Zooms the arrange window vertically. If you are zooming into or out of a folder track, the zoom will snap to the bounds of that folder track until the full folder is in view.
 --          This script is intended to be used with your zoom preferences being set to the default "Vertical Zoom Center: Track at View Center". You can set this value in the Reaper Preferences under "Appearance > Zoom/Scroll/Offset".

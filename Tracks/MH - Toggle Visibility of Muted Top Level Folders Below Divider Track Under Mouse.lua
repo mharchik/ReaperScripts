@@ -1,7 +1,10 @@
 ----------------------------------------
 -- @description Toggle Visibility of Muted Top Level Folders Below Divider Track Under Mouse
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
+
 -- @about   Set this to a Mouse Modifier action on tracks/TCP. 
 --          When clicking on a Divider Track, the script will look below it to see if any folder tracks are visible and muted. If so they will be hidden.
 --          If no muted folder tracks are there, instead the script will unhide any folder tracks that were hidden.

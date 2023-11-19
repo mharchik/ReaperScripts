@@ -1,7 +1,10 @@
 ----------------------------------------
 -- @description Toggle Selected Tracks Solos to the Same Value or Unsolo All Tracks
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
+
 -- @about	Solos all seleted tracks, If selected tracks are a mixture of soloed and unsoloed it will solo first. 
 --			if any unselected tracks are soloed, it will unsolo those tracks
 --			If parent track is muted it will solo that as well

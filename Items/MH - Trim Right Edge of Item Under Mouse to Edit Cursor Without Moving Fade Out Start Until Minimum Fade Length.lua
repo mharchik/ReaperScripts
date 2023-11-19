@@ -1,23 +1,11 @@
 ----------------------------------------
--- @description Trim Item Edges
+-- @description Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
--- @about 
--- 		Included Actions:
---		MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua
---		MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua
--- 		MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items.lua
--- 		MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua
---
---		Actions to trim the edges of any item, including fades, to the edit cursor.
---		Slide actions will move the item to the original position of it's edge, keeping the same relative timing to all items that are contiguously connected by overlapping crossfades
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 
--- @provides 
--- 		/Functions/MH - Functions.lua
--- 		[main] /Items/MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua
--- 		[main] /Items/MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua
--- 		[main] /Items/MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items.lua
--- 		[main] /Items/MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua
+-- @about Trims the right edge of the item under your mouse cursor to the edit cursor. This will also trim the fade out up to a minimum length, at which point the fade will move with the edge of the item
 ----------------------------------------
 --Setup
 ----------------------------------------

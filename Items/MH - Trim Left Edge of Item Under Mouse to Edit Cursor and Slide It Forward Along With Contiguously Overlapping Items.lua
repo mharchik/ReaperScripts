@@ -1,25 +1,11 @@
 ----------------------------------------
 -- @description Trim Item Edges
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
--- @about 
--- 		Included Actions:
---		MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua
---		MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua
--- 		MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items.lua
--- 		MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua
---
---		Trims the edges of any item, including fades, to the edit cursor 
---		Slide actions will move the item to the original position of it's edge, keeping the same relative timing to all items that are contiguously connected by overlapping crossfades
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 
--- @provides 
--- 		/Functions/MH - Functions.lua
--- 		[main] /Items/MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua
--- 		[main] /Items/MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua
--- 		[main] /Items/MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items.lua
--- 		[main] /Items/MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua
-
--- Requires SWS Extensions
+-- @about Trims the start of any item, including fades, to the edit cursor and then moves it forward to it's previous start time, keeping the same relative timing to all items behind it that are contiguously connected by overlapping crossfades
 ----------------------------------------
 --Setup
 ----------------------------------------

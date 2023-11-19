@@ -1,7 +1,10 @@
 ----------------------------------------
 -- @description Toggle Selected Tracks Mutes to the Same Value
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
+
 -- @about Toggles all selected track mutes together. If unmuted tracks are selected it will mute first, otherwise it'll unmute.
 ----------------------------------------
 --Setup

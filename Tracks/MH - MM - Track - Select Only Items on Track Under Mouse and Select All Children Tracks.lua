@@ -1,7 +1,9 @@
 ----------------------------------------
 -- @description Mouse Modifier - Select Only Items on Track Under Mouse and Select All Children Tracks
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 ----------------------------------------
 --Setup
 ----------------------------------------

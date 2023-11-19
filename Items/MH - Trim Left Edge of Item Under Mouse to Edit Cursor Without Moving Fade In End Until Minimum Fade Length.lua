@@ -1,10 +1,11 @@
 ----------------------------------------
 -- @description Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length
+-- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
--- @about Trims the left edge of the item under your mouse cursor to the edit cursor. This will also trim the fade in up to a minimum length, at which point the fade will move with the edge of the item
+-- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 
--- Requires SWS Extensions
+-- @about Trims the left edge of the item under your mouse cursor to the edit cursor. This will also trim the fade in up to a minimum length, at which point the fade will move with the edge of the item
 ----------------------------------------
 --Setup
 ----------------------------------------
