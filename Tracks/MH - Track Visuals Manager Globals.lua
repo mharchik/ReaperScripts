@@ -15,45 +15,47 @@ tvm = {}
 tvm.ExtSection = "MH - TSM"
 
 tvm.Settings = {
---[[1]] "Divider Track Height",
---[[2]] "Divider Track Layout Name",
---[[3]] "Divider Track Color (Hex)",
---[[4]] "Folder Item Track Height",
---[[5]] "Folder Item Track Layout Name",
---[[6]] "Folder Item Track Color (Hex)",
---[[7]] "Folder Bus Track Height",
---[[8]] "Folder Bus Track Layout Name",
---[[9]] "Folder Bus Track Color (Hex)"
+--[[1]] "Divider_TrackHeight",
+--[[2]] "Divider_TrackLayout",
+--[[3]] "Divider_TrackColor",
+--[[4]] "Divider_TrackRecolor",
+--[[5]] "Folder_TrackHeight",
+--[[6]] "Folder_TrackLayout",
+--[[7]] "Folder_TrackColor",
+--[[8]] "Folder_TrackRecolor",
+--[[9]] "Bus_TrackHeight",
+--[[10]] "Bus_TrackLayout",
+--[[11]] "Bus_TrackColor",
+--[[12]] "Bus_TrackRecolor",
+--[[13]] "DividerTrackSymbol"
 }
 
 -- Default values for all settings
 tvm.Defaults = {
     [tvm.Settings[1]] = 33,
     [tvm.Settings[2]] = "A - NO CONTROL",
-    [tvm.Settings[3]] = "00FFFF",
-    [tvm.Settings[4]] = 28,
-    [tvm.Settings[5]] = "A - COLOR FULL",
-    [tvm.Settings[6]] = "4A2C69",
-    [tvm.Settings[7]] = 28,
-    [tvm.Settings[8]] = "A - COLOR FULL",
-    [tvm.Settings[9]] = "25255A"
-}
-
---If you want tracks with a specific name to have a specific color, you can set that override here
-tvm.TrackColorOverrides = {
-    Video = "#FFFF00"
+    [tvm.Settings[3]] = "0x00000001",
+    [tvm.Settings[4]] = "true",
+    [tvm.Settings[5]] = 28,
+    [tvm.Settings[6]] = "A - COLOR FULL",
+    [tvm.Settings[7]] = "0x00000001",
+    [tvm.Settings[8]] = "true",
+    [tvm.Settings[9]] = 28,
+    [tvm.Settings[10]] = "A - COLOR FULL",
+    [tvm.Settings[11]] = "0x00000001",
+    [tvm.Settings[12]] = "true",
+    [tvm.Settings[13]] = "<"
 }
 
 tvm.Recolor = true --set false if you don't want the script to change any of your track colors
-
 ----------------------------------------
 --Functions
 ----------------------------------------
-function tvm.GetExtValues()
+function tvm.GetAllExtValues()
     local ExtVals = {}
     for key, name in ipairs(tvm.Settings) do
         if not r.HasExtState(tvm.ExtSection, name) then
-            r.SetExtState(tvm.ExtSection, name, tvm.Defaults[name], true)
+            r.SetExtState(tvm.ExtSection, name, tostring(tvm.Defaults[name]), true)
             ExtVals[name] = r.GetExtState(tvm.ExtSection, name)
         else
             ExtVals[name] = r.GetExtState(tvm.ExtSection, name)
@@ -62,8 +64,37 @@ function tvm.GetExtValues()
     return ExtVals
 end
 
-function tvm.ResetExtValues()
+function tvm.SetExtValue(name, val)
+    for index, setting in ipairs(tvm.Settings) do
+        if setting == name then
+            r.SetExtState(tvm.ExtSection, name, tostring(val), true)
+        end
+    end
+end
+
+function tvm.GetExtValue(name)
+    for index, setting in ipairs(tvm.Settings) do
+        if setting == name then
+            return r.GetExtState(tvm.ExtSection, name)
+        end
+    end
+end
+
+function tvm.ResetAllExtValues()
     for i, name in pairs(tvm.Settings) do
         r.SetExtState(tvm.ExtSection, name, tvm.Defaults[name], true)
     end
 end
+
+--[[
+## Returns whether or not a track can be classified as a divider track.
+
+### returns
+**_bool_**
+]]
+function tvm.IsDividerTrack(track)
+    local _, name = r.GetTrackName(track)
+    name = string.gsub(name, " ", "")
+    return string.sub(name, 1, 1) == tvm.GetExtValue("DividerTrackSymbol")
+end
+

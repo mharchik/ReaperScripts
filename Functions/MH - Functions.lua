@@ -402,7 +402,13 @@ function mh.GetMinTrackHeights()
 end
 
 
-
+function mh.ToBool(string)
+    if string:lower() == "true" then
+        return true
+    elseif string:lower() == false then
+        return false
+    end
+end
 
 
 
