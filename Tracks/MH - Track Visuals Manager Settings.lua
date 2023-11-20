@@ -4,19 +4,32 @@
 --Setup
 ----------------------------------------
 r = reaper
-tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end
-else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
-if not mh.SWS() or not mh.JS() then mh.noundo() return end
+tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then
+    dofile(tvm); if not tvm then
+        r.ShowMessageBox(
+            "This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages",
+            "Error", 0); return
+    end
+else
+    r.ShowMessageBox(
+        "This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information",
+        "Error", 0); return
+end
+if not mh.SWS() or not mh.JS() then
+    mh.noundo()
+    return
+end
 ----------------------------------------
 --Script Variables
 ----------------------------------------
-local prevValues =  tvm.GetAllExtValues()
+local prevValues = tvm.GetAllExtValues()
 local ctx = r.ImGui_CreateContext('My script')
 --Setting font
 local verdana = r.ImGui_CreateFont('verdana', 14)
 r.ImGui_Attach(ctx, verdana)
 
 local WindowFlags = r.ImGui_WindowFlags_NoCollapse() | r.ImGui_WindowFlags_NoResize() | r.ImGui_WindowFlags_AlwaysAutoResize()
+local ColorFlags = r.ImGui_ColorEditFlags_InputRGB() | r.ImGui_ColorEditFlags_NoAlpha()
 local Layouts
 ----------------------------------------
 TrackType = {}
@@ -76,14 +89,14 @@ function TrackType:TabSettings()
         self.recolor = rec
     end
     r.ImGui_SameLine(ctx)
-    local pressed = r.ImGui_ColorButton(ctx, "color", self.color, 0, 25, 25)
+    local pressed = r.ImGui_ColorButton(ctx, "color", self.color, ColorFlags, 25, 25)
     if pressed then
         r.ImGui_OpenPopup(ctx, 'my color picker')
     end
     r.ImGui_SameLine(ctx)
     r.ImGui_Text(ctx, "Track Color")
     if r.ImGui_BeginPopup(ctx, 'my color picker') then
-        local isNewColor, color = r.ImGui_ColorPicker4(ctx, "color picker", self.color, r.ImGui_ColorEditFlags_InputRGB())
+        local isNewColor, color = r.ImGui_ColorPicker3(ctx, "color picker", self.color, ColorFlags)
         if isNewColor then
             self.color = color
         end
@@ -102,10 +115,8 @@ Folder:GetCurrentSettings("Folder")
 
 local confirm = false
 local cancel = false
-local reset = false
 local dividerSymbol = tvm.GetExtValue("DividerTrackSymbol")
 
---color = 0x00000001
 local o1 = {}
 o1["video"] = 0x00000001
 local o2 = {}
@@ -122,9 +133,9 @@ function GetLayouts()
     layouts[1] = "Global layout default"
     local i = 1
     repeat
-        local retval, name = reaper.ThemeLayout_GetLayout( "tcp", i)
+        local retval, name = reaper.ThemeLayout_GetLayout("tcp", i)
         if retval then
-            layouts[#layouts+1] = name
+            layouts[#layouts + 1] = name
         end
         i = i + 1
     until not retval
@@ -138,26 +149,34 @@ function SetAllValues(table)
 end
 
 function OverrideSettings(idx, name, color)
-    local isNewName, newName = r.ImGui_InputText(ctx, "Color Override " .. idx .. " ", name,
-        r.ImGui_InputTextFlags_CharsNoBlank())
+    local isNewName, newName = r.ImGui_InputText(ctx, "Color Override ", name, r.ImGui_InputTextFlags_CharsNoBlank())
     if isNewName then
         local newOverride = {}
         newOverride[newName] = color
         Overrides[idx] = newOverride
     end
     r.ImGui_SameLine(ctx)
-    local pressed = r.ImGui_ColorButton(ctx, "Color Override " .. idx, color, 0, 25, 25)
+    r.ImGui_PushID(ctx, "Color Override" .. idx)
+    local pressed = r.ImGui_ColorButton(ctx, "Color Override ", color, ColorFlags, 25, 25)
     if pressed then
         r.ImGui_OpenPopup(ctx, idx)
     end
     if r.ImGui_BeginPopup(ctx, idx) then
-        local isNewColor, newColor = r.ImGui_ColorPicker4(ctx, "Color Override " .. idx .. " ", color, r.ImGui_ColorEditFlags_InputRGB())
+        local isNewColor, newColor = r.ImGui_ColorPicker3(ctx, "Color Override ", color, ColorFlags)
         if isNewColor then
-            reaper.ColorFromNative(newColor)
             Overrides[idx][name] = newColor
         end
         r.ImGui_EndPopup(ctx)
     end
+    r.ImGui_PopID(ctx)
+    r.ImGui_SameLine(ctx)
+    r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 4.0, 4.0)
+    r.ImGui_PushID(ctx, "Delete Override " .. idx)
+    if r.ImGui_Button(ctx, "x", 22.0, 22.0) then
+        table.remove(Overrides, idx)
+    end
+    r.ImGui_PopID(ctx)
+    r.ImGui_PopStyleVar(ctx)
 end
 
 function Main()
@@ -195,14 +214,6 @@ function Main()
                     for name, color in pairs(override) do
                         OverrideSettings(index, name, color)
                     end
-                    r.ImGui_SameLine(ctx)
-                    r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 4.0, 4.0)
-                    r.ImGui_PushID(ctx, "Delete Override " .. index)
-                    if r.ImGui_Button(ctx, "x", 22.0, 22.0) then
-                        table.remove(Overrides, index)
-                    end
-                    r.ImGui_PopID(ctx)
-                    r.ImGui_PopStyleVar(ctx)
                 end
                 r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 4.0, 4.0)
                 if r.ImGui_Button(ctx, "+", 22.0, 22.0) then
@@ -214,10 +225,11 @@ function Main()
                 r.ImGui_EndTabItem(ctx)
             end
             if r.ImGui_BeginTabItem(ctx, 'Options') then
-                local isNew, input = r.ImGui_InputText(ctx, 'Divider Track Symbol', dividerSymbol, r.ImGui_InputTextFlags_CharsNoBlank())
+                local isNew, input = r.ImGui_InputText(ctx, 'Divider Track Symbol', dividerSymbol,
+                    r.ImGui_InputTextFlags_CharsNoBlank())
                 if isNew then
                     dividerSymbol = input
-                    tvm.SetExtValue("DividerTrackSymbol",input)
+                    tvm.SetExtValue("DividerTrackSymbol", input)
                 end
                 if r.ImGui_Button(ctx, "Reset to Defaults", 150.0, 25.0) then
                     tvm.ResetAllExtValues()
@@ -226,7 +238,7 @@ function Main()
                     Divider:GetCurrentSettings("Divider")
                     Folder:GetCurrentSettings("Folder")
                     Bus:GetCurrentSettings("Bus")
-                    dividerSymbol = tvm.GetAllExtValues("DividerTrackSymbol")
+                    dividerSymbol = tvm.GetExtValue("DividerTrackSymbol")
                 end
                 r.ImGui_EndTabItem(ctx)
             end

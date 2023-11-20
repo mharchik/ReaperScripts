@@ -79,38 +79,44 @@ function SetTrackSettings(track, height, layout, lock, color, recolor)
         r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", lock)
     end
     --Check Color
-    if recolor then
-        --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
-        local trackName = ({r.GetTrackName(track)})[2]:lower()
-        --[[
-        for name, newColor in pairs(tvm.TrackColorOverrides) do
-            if trackName:match(name:lower()) then
-                color = newColor
+    local curColor = r.GetTrackColor(track)
+    if recolor == "true" then
+        if not color then --Reset Color to Default
+            if curColor ~= 0 then
+               r.SetMediaTrackInfo_Value(track, "I_CUSTOMCOLOR", 0)
             end
-        end
-        ]]
-        --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
-        --[[
-        if color ~= 0 then
-            if trackName:match("<hidden>") then
-                local rgb = HexToRgb(color)
-                for key, value in pairs(rgb) do
-                    rgb[key] = math.floor(value * 0.5)
+        else
+            local r1, g1, b1 = r.ColorFromNative(color)
+            local newColor = r.ColorToNative(b1, g1, r1)
+            --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
+            local trackName = ({r.GetTrackName(track)})[2]:lower()
+            --[[
+            for name, newColor in pairs(tvm.TrackColorOverrides) do
+                if trackName:match(name:lower()) then
+                    color = newColor
                 end
-                color = RgbToHex(rgb)
+            end
+            ]]
+            --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
+            if color ~= 0 then
+                if trackName:match("<hidden>") then
+                    local rgb = ({r.ColorFromNative(newColor)})
+                    for key, value in ipairs(rgb) do
+                        rgb[key] = math.floor(value * 0.5)
+                    end
+                    newColor = r.ColorToNative(rgb[1], rgb[2], rgb[3])
+                end
+            end
+            --Check if we need to change color
+            local curColor = r.GetTrackColor(track)
+            if curColor ~= newColor then
+                r.SetTrackColor(track, newColor)
             end
         end
-        ]]
-        --Check if we need to change color
-        local curColor = r.GetTrackColor(track)
-        if curColor ~= color then
-            if color == 0 then --Reset Color to Default
-                r.SetMediaTrackInfo_Value(track, "I_CUSTOMCOLOR", 0)
-            else
-                local rgb = HexToRgb(color)
-                r.SetTrackColor(track, color)
-            end
-        end
+    else
+        if curColor ~= 0 then
+            r.SetMediaTrackInfo_Value(track, "I_CUSTOMCOLOR", 0)
+         end
     end
 end
 
@@ -138,7 +144,7 @@ function Main()
                                 SetTrackSettings(track, 0, Values["Folder_TrackLayout"], 0, Values["Folder_TrackColor"], Values["Folder_TrackRecolor"])
                             end
                         else --if none of the above then we'll set it all back to default
-                            SetTrackSettings(track, 0, "Global layout Default", 0, 0)
+                            SetTrackSettings(track, 0, "Global layout Default", 0, false, Values["Folder_TrackRecolor"])
                         end
                     end
                 end
