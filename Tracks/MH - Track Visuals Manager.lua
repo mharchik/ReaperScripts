@@ -18,9 +18,7 @@ local _, _, section_ID, cmd_ID, _, _, _ = r.get_action_context()
 r.SetToggleCommandState(section_ID, cmd_ID, 1)
 r.RefreshToolbar2(section_ID, cmd_ID)
 tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
-local lastActiveTime = r.time_precise()
-
-local Values = {}
+local OS = reaper.GetOS()
 ----------------------------------------
 --User Settings
 ----------------------------------------
@@ -28,35 +26,11 @@ local Values = {}
 -- Script Variables
 ----------------------------------------
 local refreshRate = 0.2
+local lastActiveTime = r.time_precise()
+local Values = {}
 ----------------------------------------
 --Functions
 ----------------------------------------
-
-function HexToRgb(num)
-    num = num:gsub("[^%x]", "") --removing all non hexidecimal characters from input
-    local rgb = {}
-    for i = 1, #num, 2 do
-        rgb[#rgb+1] = tonumber(num:sub(i, i+1), 16)
-    end
-    return rgb
-end
-
-function RgbToHex(rgb)
-    local num = ""
-    for i, val in ipairs(rgb) do
-        local hex = string.format("%x", val)
-        --making sure we have strings that are 2 characters long in the case that a value is small enough to only be 1 character
-        if #hex == 1 then
-            hex = "0" .. hex
-        end
-        if num == "" then
-            num = hex
-        else
-            num = num .. hex
-        end
-    end
-    return num
-end
 
 function SetTrackSettings(track, height, layout, lock, color, recolor)
     --mh.Msg(({r.GetTrackName(track)})[2] .. " height: " .. height .. ", Layout: " .. layout .. ", lock: " .. lock ..", Color: " .. color)
@@ -86,9 +60,11 @@ function SetTrackSettings(track, height, layout, lock, color, recolor)
                r.SetMediaTrackInfo_Value(track, "I_CUSTOMCOLOR", 0)
             end
         else
-            local r1, g1, b1 = r.ColorFromNative(color)
-            local newColor = r.ColorToNative(b1, g1, r1)
-            --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
+            if OS == "Win32" or OS == "Win64" then
+                local r1, g1, b1 = r.ColorFromNative(color)
+                color = r.ColorToNative(b1, g1, r1)
+            end
+        --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
             local trackName = ({r.GetTrackName(track)})[2]:lower()
             --[[
             for name, newColor in pairs(tvm.TrackColorOverrides) do
@@ -100,17 +76,17 @@ function SetTrackSettings(track, height, layout, lock, color, recolor)
             --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
             if color ~= 0 then
                 if trackName:match("<hidden>") then
-                    local rgb = ({r.ColorFromNative(newColor)})
+                    local rgb = ({r.ColorFromNative(color)})
                     for key, value in ipairs(rgb) do
                         rgb[key] = math.floor(value * 0.5)
                     end
-                    newColor = r.ColorToNative(rgb[1], rgb[2], rgb[3])
+                    color = r.ColorToNative(rgb[1], rgb[2], rgb[3])
                 end
             end
             --Check if we need to change color
             local curColor = r.GetTrackColor(track)
-            if curColor ~= newColor then
-                r.SetTrackColor(track, newColor)
+            if curColor ~= color then
+                r.SetTrackColor(track, color)
             end
         end
     else

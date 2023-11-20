@@ -395,9 +395,7 @@ function mh.GetMinTrackHeights()
 	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", height)
 	r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", lock)
 	r.SetMediaTrackInfo_Value(track, "B_SHOWINTCP", show)
-    
     r.PreventUIRefresh(-1)
-
     return minHeight, minRecarmHeight
 end
 
@@ -408,6 +406,32 @@ function mh.ToBool(string)
     elseif string:lower() == false then
         return false
     end
+end
+
+function mh.HexToRgb(num)
+    num = num:gsub("[^%x]", "") --removing all non hexidecimal characters from input
+    local rgb = {}
+    for i = 1, #num, 2 do
+        rgb[#rgb+1] = tonumber(num:sub(i, i+1), 16)
+    end
+    return rgb
+end
+
+function mh.RgbToHex(rgb)
+    local num = ""
+    for i, val in ipairs(rgb) do
+        local hex = string.format("%x", val)
+        --making sure we have strings that are 2 characters long in the case that a value is small enough to only be 1 character
+        if #hex == 1 then
+            hex = "0" .. hex
+        end
+        if num == "" then
+            num = hex
+        else
+            num = num .. hex
+        end
+    end
+    return num
 end
 
 
