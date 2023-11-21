@@ -1,6 +1,5 @@
 ----------------------------------------
 -- @description Delete Unused Tracks in Track Selection
--- @provides /Functions/MH - Functions.lua
 -- @author Max Harchik
 -- @version 1.0
 -- @links GitHub Repo: https://github.com/mharchik/ReaperScripts

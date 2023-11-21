@@ -11,10 +11,8 @@ mh = {}
 ----------------------------------------
 --Global Variables
 ----------------------------------------
-
 --### When this character is added to the start of a track name, that track will be treated as a divider track
 mh.DividerTrackSymbol = "<"
-
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -119,7 +117,7 @@ end
 function mh.IsDividerTrack(track)
     local _, name = r.GetTrackName(track)
     name = string.gsub(name, " ", "")
-    return string.sub(name, 1, 1) == mh.DividerTrackSymbol
+    return string.sub(name, 1, 1) == tvm.DividerTrackSymbol
 end
 
 --[[
@@ -398,7 +396,6 @@ function mh.GetMinTrackHeights()
     r.PreventUIRefresh(-1)
     return minHeight, minRecarmHeight
 end
-
 
 function mh.ToBool(string)
     if string:lower() == "true" then
