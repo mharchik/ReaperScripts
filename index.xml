@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="ca96edaa6728a3850dca338870c5760f4321a2fd">
+<index version="1" name="MH Scripts" commit="3529c30cd94deb730c5b46a0ff8e2a5ab82ea33e">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -13,6 +13,13 @@
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-17T06:11:58Z">
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/8c4a08fd4e52353e65e0ea19e18f672bd0cdd817/Automation/MH%20-%20Insert%20Pooled%20Automation%20Items%20For%20Selected%20Items%20On%20Last%20Touched%20Track.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Functions">
+    <reapack name="MH - Functions.lua" type="script">
+      <version name="1.0" author="Max Harchik" time="2023-11-21T22:52:10Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3529c30cd94deb730c5b46a0ff8e2a5ab82ea33e/Functions/MH%20-%20Functions.lua</source>
       </version>
     </reapack>
   </category>
