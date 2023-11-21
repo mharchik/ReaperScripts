@@ -319,7 +319,6 @@ function Main()
         DividerSymbol = tvm.GetExtValue("DividerSymbol")
     else
         if update then
-            mh.Msg("Updating EXT Values")
             --Updates all of our values
             Divider:SaveCurrentSettings()
             Folder:SaveCurrentSettings()
