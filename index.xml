@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="69357d3080d40bab81f16d4d7bbd54e42dcf1996">
+<index version="1" name="MH Scripts" commit="ca96edaa6728a3850dca338870c5760f4321a2fd">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -29,18 +29,23 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/f220ff54968f2ec6aafa9e1db5adfe95088ac5ce/FX/MH%20-%20Center%20FX%20Window.lua</source>
-        <source file="../Functions/MH - Functions.lua">https://github.com/mharchik/ReaperScripts/raw/f220ff54968f2ec6aafa9e1db5adfe95088ac5ce/Functions/MH%20-%20Functions.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/FX/MH%20-%20Center%20FX%20Window.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Remove FX From Track or Item Under Mouse.lua" type="script" desc="Remove FX From Track or Item Under Mouse">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d6e64781c7b12b7768d7b6087347c6aef492dd19/FX/MH%20-%20Remove%20FX%20From%20Track%20or%20Item%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/FX/MH%20-%20Remove%20FX%20From%20Track%20or%20Item%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle FX Window of Selected Item.lua" type="script" desc="Toggle FX Window of Selected Take">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-17T20:13:33Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/FX/MH%20-%20Toggle%20FX%20Window%20of%20Selected%20Item.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/FX/MH%20-%20Toggle%20FX%20Window%20of%20Selected%20Item.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle FX Window of Track or Item Under Mouse.lua" type="script" desc="Toggle FX Window of Track or Item Under Mouse">
@@ -54,19 +59,25 @@
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/FX/MH%20-%20Toggle%20FX%20Window%20of%20Track%20or%20Item%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/FX/MH%20-%20Toggle%20FX%20Window%20of%20Track%20or%20Item%20Under%20Mouse.lua</source>
       </version>
     </reapack>
   </category>
   <category name="Items">
     <reapack name="MH - Randomize Selected Items Pitch via Playrate.lua" type="script" desc="Randomize Selected Items Pitch via Playrate">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8c4a08fd4e52353e65e0ea19e18f672bd0cdd817/Items/MH%20-%20Randomize%20Selected%20Items%20Pitch%20via%20Playrate.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Randomize%20Selected%20Items%20Pitch%20via%20Playrate.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Randomize Selected Items Volumes.lua" type="script" desc="Randomize Selected Items Volumes">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8c4a08fd4e52353e65e0ea19e18f672bd0cdd817/Items/MH%20-%20Randomize%20Selected%20Items%20Volumes.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Randomize%20Selected%20Items%20Volumes.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Select Items Contiguously Overlapping With Item Under Mouse.lua" type="script" desc="Select Items Contiguously Overlapping With Item Under Mouse">
@@ -78,269 +89,180 @@
 {\pard \ql \f0 \sa180 \li0 \fi0 Selects all items that are connected to the item under the mouse cursor by overlapping crossfades\par}
 }
 ]]></description>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Select%20Items%20Contiguously%20Overlapping%20With%20Item%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Select%20Items%20Contiguously%20Overlapping%20With%20Item%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Select Items Contiguously Overlapping With Selected Items.lua" type="script" desc="Select Items Contiguously Overlapping With Selected Items">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Select%20Items%20Contiguously%20Overlapping%20With%20Selected%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Select%20Items%20Contiguously%20Overlapping%20With%20Selected%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Select Only Items on Track Under Mouse.lua" type="script" desc="Select Only Items on Track Under Mouse">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Deselects all items except for the ones on the track you are mousing over. If no items on that track are selected yet it will select all items on it\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Select%20Only%20Items%20on%20Track%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Select%20Only%20Items%20on%20Track%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Show Full Source of Selected Items.lua" type="script" desc="Show Full Source of Selected Items">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 This script will extend any selected items out to be their full length, and reposition them so that they do not overlap with each other. If any selected items are from the same source file, the duplicating item will be deleted\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-17T17:50:39Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/e0cd5c47be92b0b2c19679190058cf1d71273080/Items/MH%20-%20Show%20Full%20Source%20of%20Selected%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Show%20Full%20Source%20of%20Selected%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Item Edges">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Included Actions:\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua" type="script" desc="Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Trims the left edge of the item under your mouse cursor to the edit cursor. This will also trim the fade in up to a minimum length, at which point the fade will move with the edge of the item\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20In%20End%20Until%20Minimum%20Fade%20Length.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20In%20End%20Until%20Minimum%20Fade%20Length.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Trims the end of any item, including fades, to the edit cursor and then moves it back to it's previous end time, keeping the same relative timing to all items in front of it that are contiguously connected by overlapping crossfades\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T23:29:04Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Backward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Backward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
-    <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Item Edges">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Included Actions:\par}
-}
-]]></description>
-      </metadata>
+    <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length">
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/a199248dc7380f62f0c2f4f4eadda52b7cada06d/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
       </version>
     </reapack>
   </category>
   <category name="Navigation">
     <reapack name="MH - Mousewheel - Zoom Horizontally Dynamic.lua" type="script" desc="Mousewheel - Zoom Horizontally Dynamic">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 This script should be bound to mousewheel.\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d6e64781c7b12b7768d7b6087347c6aef492dd19/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Mousewheel - Zoom Vertically Snapping to Active Folder Track.lua" type="script" desc="Mousewheel - Zoom Vertically Snapping to Active Folder Track">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 This script should be bound to mousewheel. Zooms the arrange window vertically. If you are zooming into or out of a folder track, the zoom will snap to the bounds of that folder track until the full folder is in view. This script is intended to be used with your zoom preferences being set to the default "Vertical Zoom Center: Track at View Center". You can set this value in the Reaper Preferences under "Appearance > Zoom/Scroll/Offset". This script requires the js_ReaScriptAPI extension.\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Vertically%20Snapping%20to%20Active%20Folder%20Track.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Vertically%20Snapping%20to%20Active%20Folder%20Track.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Move Edit Cursor to Next Item Edge or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Next Item Edge or Transient on Selected Track">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-16T16:20:08Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Next%20Item%20Edge%20or%20Transient%20on%20Selected%20Track.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Next%20Item%20Edge%20or%20Transient%20on%20Selected%20Track.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Move Edit Cursor to Previous Item Edge or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Previous Item Edge or Transient on Selected Track">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-16T16:20:08Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Previous%20Item%20Edge%20or%20Transient%20on%20Selected%20Track.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Navigation/MH%20-%20Move%20Edit%20Cursor%20to%20Previous%20Item%20Edge%20or%20Transient%20on%20Selected%20Track.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks.lua" type="script" desc="Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Zooms arrange view to selected items while accounting for height locked tracks and hidden/supercollapsed tracks, and minimizing empty tracks.\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/259f55410c916ca3c2dc54585af7728ddf59951e/Navigation/MH%20-%20Toggle%20Zoom%20to%20Selected%20Items%20Ignoring%20Locked%20and%20Hidden%20Tracks.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Navigation/MH%20-%20Toggle%20Zoom%20to%20Selected%20Items%20Ignoring%20Locked%20and%20Hidden%20Tracks.lua</source>
       </version>
     </reapack>
   </category>
   <category name="Tracks">
     <reapack name="MH - Create New Track Accounting for Folder Tracks Above It.lua" type="script" desc="Create New Track Accounting for Folder Tracks Above It">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Creates a new track under the last selected track. If the track is at the end of a folder it will be added to that folder. If the track is a parent that has its children hidden, it will be added at the next visible position instead.\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8c4a08fd4e52353e65e0ea19e18f672bd0cdd817/Tracks/MH%20-%20Create%20New%20Track%20Accounting%20for%20Folder%20Tracks%20Above%20It.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Create%20New%20Track%20Accounting%20for%20Folder%20Tracks%20Above%20It.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Delete Unused Tracks in Track Selection.lua" type="script" desc="Delete Unused Tracks in Track Selection">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Looks at your selected tracks for any tracks that are unused and deletes them\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8c4a08fd4e52353e65e0ea19e18f672bd0cdd817/Tracks/MH%20-%20Delete%20Unused%20Tracks%20in%20Track%20Selection.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Delete%20Unused%20Tracks%20in%20Track%20Selection.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Disable Height Lock for All Tracks.lua" type="script" desc="Disable Track Height Lock For All Tracks">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d6e64781c7b12b7768d7b6087347c6aef492dd19/Tracks/MH%20-%20Disable%20Height%20Lock%20for%20All%20Tracks.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Disable%20Height%20Lock%20for%20All%20Tracks.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Disable Height Lock for Selected Tracks.lua" type="script" desc="Disable Track Height Lock For Selected Tracks">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d6e64781c7b12b7768d7b6087347c6aef492dd19/Tracks/MH%20-%20Disable%20Height%20Lock%20for%20Selected%20Tracks.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Disable%20Height%20Lock%20for%20Selected%20Tracks.lua</source>
       </version>
     </reapack>
     <reapack name="MH - MM - Track - Select Only Items on Track Under Mouse and Select All Children Tracks.lua" type="script" desc="Mouse Modifier - Select Only Items on Track Under Mouse and Select All Children Tracks">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20MM%20-%20Track%20-%20Select%20Only%20Items%20on%20Track%20Under%20Mouse%20and%20Select%20All%20Children%20Tracks.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20MM%20-%20Track%20-%20Select%20Only%20Items%20on%20Track%20Under%20Mouse%20and%20Select%20All%20Children%20Tracks.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Select Only Tracks Between Last Touched Track and Track Under Mouse.lua" type="script" desc="Select Only Tracks Between Last Touched Track and Track Under Mouse">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20Select%20Only%20Tracks%20Between%20Last%20Touched%20Track%20and%20Track%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Select%20Only%20Tracks%20Between%20Last%20Touched%20Track%20and%20Track%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Select Tracks Between Last Touched Track and Track Under Mouse.lua" type="script" desc="Select Tracks Between Last Touched Track and Track Under Mouse">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20Select%20Tracks%20Between%20Last%20Touched%20Track%20and%20Track%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Select%20Tracks%20Between%20Last%20Touched%20Track%20and%20Track%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selected Top Level Folder Track Mutes to the Same Value.lua" type="script" desc="Toggle Selected Top Level Folder Track Mutes to the Same Value">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8c4a08fd4e52353e65e0ea19e18f672bd0cdd817/Tracks/MH%20-%20Toggle%20Selected%20Top%20Level%20Folder%20Track%20Mutes%20to%20the%20Same%20Value.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Toggle%20Selected%20Top%20Level%20Folder%20Track%20Mutes%20to%20the%20Same%20Value.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selected Tracks Mutes to the Same Value.lua" type="script" desc="Toggle Selected Tracks Mutes to the Same Value">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Toggles all selected track mutes together. If unmuted tracks are selected it will mute first, otherwise it'll unmute.\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d6e64781c7b12b7768d7b6087347c6aef492dd19/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Mutes%20to%20the%20Same%20Value.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Mutes%20to%20the%20Same%20Value.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selected Tracks Solos to the Same Value SMART.lua" type="script" desc="Toggle Selected Tracks Solos to the Same Value or Unsolo All Tracks">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Solos all seleted tracks, If selected tracks are a mixture of soloed and unsoloed it will solo first.\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-14T07:30:31Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d6e64781c7b12b7768d7b6087347c6aef492dd19/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Solos%20to%20the%20Same%20Value%20SMART.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Toggle%20Selected%20Tracks%20Solos%20to%20the%20Same%20Value%20SMART.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selection of Track Under Mouse and Set as Last Touched Track.lua" type="script" desc="Toggle Selection of Track Under Mouse and Set as Last Touched Track">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20Toggle%20Selection%20of%20Track%20Under%20Mouse%20and%20Set%20as%20Last%20Touched%20Track.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Toggle%20Selection%20of%20Track%20Under%20Mouse%20and%20Set%20as%20Last%20Touched%20Track.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selection of Track Under Mouse.lua" type="script" desc="Toggle Selection of Track Under Mouse">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20Toggle%20Selection%20of%20Track%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Toggle%20Selection%20of%20Track%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Solo of Last Touched Tracks Top Level Folder Track and Unsolo All Other Tracks.lua" type="script" desc="Toggle Solo of Last Touched Track's Top Level Folder Track and Unsolo All Other Tracks">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/d6e64781c7b12b7768d7b6087347c6aef492dd19/Tracks/MH%20-%20Toggle%20Solo%20of%20Last%20Touched%20Tracks%20Top%20Level%20Folder%20Track%20and%20Unsolo%20All%20Other%20Tracks.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Toggle%20Solo%20of%20Last%20Touched%20Tracks%20Top%20Level%20Folder%20Track%20and%20Unsolo%20All%20Other%20Tracks.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Visibility of Muted Top Level Folders Below Divider Track Under Mouse.lua" type="script" desc="Toggle Visibility of Muted Top Level Folders Below Divider Track Under Mouse">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Set this to a Mouse Modifier action on tracks/TCP. When clicking on a Divider Track, the script will look below it to see if any folder tracks are visible and muted. If so they will be hidden. If no muted folder tracks are there, instead the script will unhide any folder tracks that were hidden. The name of the Divider Track will also be updated to signal if any tracks below it are hidden.\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Tracks/MH%20-%20Toggle%20Visibility%20of%20Muted%20Top%20Level%20Folders%20Below%20Divider%20Track%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/ca96edaa6728a3850dca338870c5760f4321a2fd/Tracks/MH%20-%20Toggle%20Visibility%20of%20Muted%20Top%20Level%20Folders%20Below%20Divider%20Track%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Track Visuals Manager.lua" type="script" desc="Track Visuals Manager">
