@@ -434,5 +434,21 @@ function mh.RgbToHex(rgb)
     return num
 end
 
+--[[
+    ## removes spaces from the start and end of a string
 
+    ### params
+    **_s: string_** : string to be modified
+]]
+function mh.TrimSpaces(s)
+    local l = 1
+    while s:sub(l, l) == ' ' do
+      l = l + 1
+    end
+    local r = s:len(s)
+    while s:sub(r, r) == ' ' do
+      r = r-1
+    end
+    return s:sub(l, r)
+end
 

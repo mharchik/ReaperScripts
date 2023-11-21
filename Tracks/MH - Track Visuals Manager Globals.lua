@@ -93,13 +93,13 @@ function tvm.SetAllExtValues(table)
 end
 
 function tvm.GetOverrides() -- Returns a table that whose values are single entry tables where key = track name, value = color
-    local oString = tvm.GetExtValue('Overrides')
-    local vals = {}
-    for value in oString:gmatch('([^,]+)') do
+    local s = tvm.GetExtValue('Overrides')
+    local overrides = {}
+    for val in s:gmatch('([^,]+)') do
         local pair = {}
         local key
         local i = 1
-        for text in value:gmatch('([^*]+)') do
+        for text in val:gmatch('([^*]+)') do
             if i == 1 then
                 key = text
             else
@@ -107,14 +107,14 @@ function tvm.GetOverrides() -- Returns a table that whose values are single entr
             end
             i = i + 1
         end
-        vals[#vals + 1] = pair
+        overrides[#overrides + 1] = pair
     end
-    return vals
+    return overrides
 end
 
-function tvm.SetOverrides(table)
+function tvm.SetOverrides(t)
     local list
-    for index, override in ipairs(table) do
+    for i, override in ipairs(t) do
         local pair
         for name, color in pairs(override) do
             pair = name .. '*' .. color
@@ -137,6 +137,6 @@ end
 function tvm.IsDividerTrack(track)
     local _, name = r.GetTrackName(track)
     name = string.gsub(name, " ", "")
-    return string.sub(name, 1, 1) == tvm.GetExtValue("DividerTrackSymbol")
+    return string.sub(name, 1, 1) == tvm.GetExtValue("DividerSymbol")
 end
 

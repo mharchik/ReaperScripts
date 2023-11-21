@@ -29,8 +29,7 @@ local Values = {}
 --Functions
 ----------------------------------------
 
-function SetTrackSettings(track, height, layout, lock, color, recolor)
-    --mh.Msg(({r.GetTrackName(track)})[2] .. " height: " .. height .. ", Layout: " .. layout .. ", lock: " .. lock ..", Color: " .. color)
+function UpdateTrackSettings(track, height, layout, lock, color, recolor)
     --Check Height
     height = tonumber(height)
     if height > 0 then
@@ -62,7 +61,7 @@ function SetTrackSettings(track, height, layout, lock, color, recolor)
             local overrides = tvm.GetOverrides()
             for index, pair in ipairs(overrides) do
                 for name, newColor in pairs(pair) do
-                    if trackName:match(name:lower()) then
+                    if trackName:match(mh.TrimSpaces(name):lower()) then
                         color = newColor
                     end
                 end
@@ -86,9 +85,9 @@ function SetTrackSettings(track, height, layout, lock, color, recolor)
         end
     else
         local curColor = r.GetTrackColor(track)
-        if curColor ~= 0 then
+        if curColor ~= 0 then -- if it's already 0 then we don't need to change it anymore
             r.SetMediaTrackInfo_Value(track, "I_CUSTOMCOLOR", 0)
-         end
+        end
     end
 end
 
@@ -115,17 +114,17 @@ function Main()
                         local numOfItems = r.CountTrackMediaItems(track)
                         local folderDepth = r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
                         if tvm.IsDividerTrack(track) then --Checking if the track is a Divider Track
-                            SetTrackSettings(track, Values["Divider_TrackHeight"], Values["Divider_TrackLayout"], 1, Values["Divider_TrackColor"], Values["Divider_TrackRecolor"])
+                            UpdateTrackSettings(track, Values["Divider_TrackHeight"], Values["Divider_TrackLayout"], 1, Values["Divider_TrackColor"], Values["Divider_TrackRecolor"])
                         elseif folderDepth == 1 and numOfItems == 0 then --Checking if the track is a parent sub mix bus
-                            SetTrackSettings(track, Values["Bus_TrackHeight"], Values["Bus_TrackLayout"], 1, Values["Bus_TrackColor"], Values["Bus_TrackRecolor"])
+                            UpdateTrackSettings(track, Values["Bus_TrackHeight"], Values["Bus_TrackLayout"], 1, Values["Bus_TrackColor"], Values["Bus_TrackRecolor"])
                         elseif folderDepth == 1 and r.GetTrackDepth(track) == 0 and numOfItems > 0 then --Checking if the track is a top level Folder Item Track
                             if r.GetMediaTrackInfo_Value(track, "I_FOLDERCOMPACT") == 2 then --if folder is fully collpased then minimize it's height and lock it
-                                SetTrackSettings(track, Values["Folder_TrackHeight"], Values["Folder_TrackLayout"], 1, Values["Folder_TrackColor"], Values["Folder_TrackRecolor"])
+                                UpdateTrackSettings(track, Values["Folder_TrackHeight"], Values["Folder_TrackLayout"], 1, Values["Folder_TrackColor"], Values["Folder_TrackRecolor"])
                             else
-                                SetTrackSettings(track, 0, Values["Folder_TrackLayout"], 0, Values["Folder_TrackColor"], Values["Folder_TrackRecolor"])
+                                UpdateTrackSettings(track, 0, Values["Folder_TrackLayout"], 0, Values["Folder_TrackColor"], Values["Folder_TrackRecolor"])
                             end
                         else --if none of the above then we'll set it all back to default
-                            SetTrackSettings(track, 0, "Global layout Default", 0, false, Values["Folder_TrackRecolor"])
+                            UpdateTrackSettings(track, 0, "Global layout Default", 0, false, Values["Folder_TrackRecolor"])
                         end
                     end
                 end

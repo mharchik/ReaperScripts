@@ -302,7 +302,7 @@ function Main()
         Divider:SaveCurrentSettings()
         Folder:SaveCurrentSettings()
         Bus:SaveCurrentSettings()
-        tvm.SetExtValue('DividerTrackSymbol', DividerSymbol)
+        tvm.SetExtValue('DividerSymbol', DividerSymbol)
         tvm.SetOverrides(Overrides)
     end
     if cancel then
