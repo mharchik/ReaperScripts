@@ -14,6 +14,7 @@ mh = {}
 
 --### When this character is added to the start of a track name, that track will be treated as a divider track
 mh.DividerTrackSymbol = "<"
+
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -394,8 +395,60 @@ function mh.GetMinTrackHeights()
 	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", height)
 	r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", lock)
 	r.SetMediaTrackInfo_Value(track, "B_SHOWINTCP", show)
-    
     r.PreventUIRefresh(-1)
-
     return minHeight, minRecarmHeight
 end
+
+
+function mh.ToBool(string)
+    if string:lower() == "true" then
+        return true
+    elseif string:lower() == false then
+        return false
+    end
+end
+
+function mh.HexToRgb(num)
+    num = num:gsub("[^%x]", "") --removing all non hexidecimal characters from input
+    local rgb = {}
+    for i = 1, #num, 2 do
+        rgb[#rgb+1] = tonumber(num:sub(i, i+1), 16)
+    end
+    return rgb
+end
+
+function mh.RgbToHex(rgb)
+    local num = ""
+    for i, val in ipairs(rgb) do
+        local hex = string.format("%x", val)
+        --making sure we have strings that are 2 characters long in the case that a value is small enough to only be 1 character
+        if #hex == 1 then
+            hex = "0" .. hex
+        end
+        if num == "" then
+            num = hex
+        else
+            num = num .. hex
+        end
+    end
+    return num
+end
+
+--[[
+    ## removes spaces from the start and end of a string
+
+    ### params
+    **_s: string_** : string to be modified
+]]
+function mh.TrimSpaces(s)
+    local l = 1
+    while s:sub(l, l) == ' ' do
+      l = l + 1
+    end
+    local r = s:len(s)
+    while s:sub(r, r) == ' ' do
+      r = r-1
+    end
+    return s:sub(l, r)
+end
+
