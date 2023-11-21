@@ -20,6 +20,7 @@ local ColorFlags = r.ImGui_ColorEditFlags_InputRGB() | r.ImGui_ColorEditFlags_No
 local confirm
 local cancel
 local reset
+local update
 
 local Layouts = {}
 local Overrides = {}
@@ -59,6 +60,7 @@ function TrackType:CreateTab()
     r.ImGui_PopID(ctx)
     if isSlider then
         self.height = val
+        update = true
     end
 
     --Track Layout Combo Box
@@ -68,6 +70,7 @@ function TrackType:CreateTab()
             local is_selected = self.selIdx == i
             if r.ImGui_Selectable(ctx, Layouts[i], is_selected) then
                 self.layout = Layouts[i]
+                update = true
             end
             if is_selected then
                 r.ImGui_SetItemDefaultFocus(ctx)
@@ -83,6 +86,7 @@ function TrackType:CreateTab()
     r.ImGui_PopID(ctx)
     if isRecolor then
         self.recolor = rec
+        update = true
     end
 
     --Color Button
@@ -100,9 +104,9 @@ function TrackType:CreateTab()
         r.ImGui_PushID(ctx, self.name)
         local isNewColor, color = r.ImGui_ColorPicker3(ctx, 'color picker', self.color, ColorFlags)
         r.ImGui_PopID(ctx)
-
         if isNewColor then
             self.color = color
+            update = true
         end
         r.ImGui_EndPopup(ctx)
     end
@@ -127,6 +131,7 @@ function CreateOverrideTab(idx, name, color)
         local newOverride = {}
         newOverride[newName] = color
         Overrides[idx] = newOverride
+        update = true
     end
     r.ImGui_SameLine(ctx)
     r.ImGui_PushID(ctx, 'ColorButtonOverride' .. idx)
@@ -140,6 +145,7 @@ function CreateOverrideTab(idx, name, color)
         local isNewColor, newColor = r.ImGui_ColorPicker3(ctx, 'Color Override ', color, ColorFlags)
         if isNewColor then
             Overrides[idx][name] = newColor
+            update = true
         end
         r.ImGui_PopID(ctx)
         r.ImGui_EndPopup(ctx)
@@ -150,6 +156,7 @@ function CreateOverrideTab(idx, name, color)
     r.ImGui_PushID(ctx, 'DeleteButton' .. idx)
     if r.ImGui_Button(ctx, 'x', 22.0, 22.0) then
         table.remove(Overrides, idx)
+        update = true
     end
     r.ImGui_PopID(ctx)
     r.ImGui_PopStyleVar(ctx)
@@ -235,6 +242,7 @@ function DrawUI()
                     local override = {}
                     override[' '] = 0
                     Overrides[#Overrides + 1] = override
+                    update = true
                 end
                 r.ImGui_PopStyleVar(ctx)
                 r.ImGui_EndTabItem(ctx)
@@ -245,10 +253,14 @@ function DrawUI()
                 local isNew, input = r.ImGui_InputText(ctx, 'Divider Track Symbol', DividerSymbol,
                     r.ImGui_InputTextFlags_CharsNoBlank())
                 if isNew then
+                    update = true
                     DividerSymbol = input
                 end
                 --Reset Defaults Button
                 reset = r.ImGui_Button(ctx, 'Reset to Defaults', 150.0, 25.0)
+                if reset then
+                    update = true
+                end
                 r.ImGui_EndTabItem(ctx)
             end
             r.ImGui_EndTabBar(ctx)
@@ -257,10 +269,17 @@ function DrawUI()
         --Confirm Button
         r.ImGui_Separator(ctx)
         confirm = r.ImGui_Button(ctx, 'Confirm', 150.0, 25.0)
+        if confirm then
+            update = true
+        end
+
 
         --Cancel Button
         r.ImGui_SameLine(ctx)
         cancel = r.ImGui_Button(ctx, 'Cancel', 150.0, 25.0)
+        if cancel then
+            update = true
+        end
 
         r.ImGui_PopStyleVar(ctx)
         r.ImGui_PopStyleVar(ctx)
@@ -288,6 +307,7 @@ function Setup()
 end
 
 function Main()
+    update = false
     local open = DrawUI()
     if reset then
         --Resets All Values to Default
@@ -298,12 +318,15 @@ function Main()
         Overrides = tvm.GetOverrides()
         DividerSymbol = tvm.GetExtValue("DividerSymbol")
     else
-        --Updates all of our values
-        Divider:SaveCurrentSettings()
-        Folder:SaveCurrentSettings()
-        Bus:SaveCurrentSettings()
-        tvm.SetExtValue('DividerSymbol', DividerSymbol)
-        tvm.SetOverrides(Overrides)
+        if update then
+            mh.Msg("Updating EXT Values")
+            --Updates all of our values
+            Divider:SaveCurrentSettings()
+            Folder:SaveCurrentSettings()
+            Bus:SaveCurrentSettings()
+            tvm.SetExtValue('DividerSymbol', DividerSymbol)
+            tvm.SetOverrides(Overrides) 
+        end
     end
     if cancel then
         UndoValues()
