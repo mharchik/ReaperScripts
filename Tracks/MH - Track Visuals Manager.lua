@@ -20,9 +20,6 @@ r.RefreshToolbar2(section_ID, cmd_ID)
 tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
 local OS = reaper.GetOS()
 ----------------------------------------
---User Settings
-----------------------------------------
-----------------------------------------
 -- Script Variables
 ----------------------------------------
 local refreshRate = 0.2
@@ -53,26 +50,25 @@ function SetTrackSettings(track, height, layout, lock, color, recolor)
         r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", lock)
     end
     --Check Color
-    local curColor = r.GetTrackColor(track)
     if recolor == "true" then
+        local curColor = r.GetTrackColor(track)
         if not color then --Reset Color to Default
-            if curColor ~= 0 then
+            if curColor ~= 0 then -- if it's already 0 then we don't need to change it anymore
                r.SetMediaTrackInfo_Value(track, "I_CUSTOMCOLOR", 0)
             end
         else
-            if OS == "Win32" or OS == "Win64" then
-                local r1, g1, b1 = r.ColorFromNative(color)
-                color = r.ColorToNative(b1, g1, r1)
-            end
-        --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
+            --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
             local trackName = ({r.GetTrackName(track)})[2]:lower()
-            --[[
-            for name, newColor in pairs(tvm.TrackColorOverrides) do
-                if trackName:match(name:lower()) then
-                    color = newColor
+            local overrides = tvm.GetOverrides()
+            for index, pair in ipairs(overrides) do
+                for name, newColor in pairs(pair) do
+                    if trackName:match(name:lower()) then
+                        color = newColor
+                    end
                 end
             end
-            ]]
+            -- Red and Blue values from ImGui color picker are switched on windows for some reason
+            color = SwapOSColors(color)
             --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
             if color ~= 0 then
                 if trackName:match("<hidden>") then
@@ -84,17 +80,26 @@ function SetTrackSettings(track, height, layout, lock, color, recolor)
                 end
             end
             --Check if we need to change color
-            local curColor = r.GetTrackColor(track)
             if curColor ~= color then
                 r.SetTrackColor(track, color)
             end
         end
     else
+        local curColor = r.GetTrackColor(track)
         if curColor ~= 0 then
             r.SetMediaTrackInfo_Value(track, "I_CUSTOMCOLOR", 0)
          end
     end
 end
+
+function SwapOSColors(rgb)
+    if OS == "Win32" or OS == "Win64" then
+        local r1, g1, b1 = r.ColorFromNative(rgb)
+        return r.ColorToNative(b1, g1, r1)
+    end
+    return rgb
+end
+
 
 function Main()
     local currentTime = r.time_precise()

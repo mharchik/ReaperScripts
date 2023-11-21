@@ -155,42 +155,6 @@ function CreateOverrideTab(idx, name, color)
     r.ImGui_PopStyleVar(ctx)
 end
 
-function GetOverrides() -- Returns a table that whose values are single entry tables where key = track name, value = color
-    local oString = tvm.GetExtValue('Overrides')
-    local vals = {}
-    for value in oString:gmatch('([^,]+)') do
-        local pair = {}
-        local key
-        local i = 1
-        for text in value:gmatch('([^*]+)') do
-            if i == 1 then
-                key = text
-            else
-                pair[key] = text
-            end
-            i = i + 1
-        end
-        vals[#vals + 1] = pair
-    end
-    return vals
-end
-
-function SetOverrides()
-    local list
-    for index, override in ipairs(Overrides) do
-        local pair
-        for name, color in pairs(override) do
-            pair = name .. '*' .. color
-        end
-        if not list then
-            list = pair
-        else
-            list = list .. ',' .. pair
-        end
-    end
-    tvm.SetExtValue('Overrides', list)
-end
-
 function GetLayouts()
     local layouts = {}
     layouts[1] = 'Global layout default'
@@ -316,7 +280,7 @@ function Setup()
     prevValues = tvm.GetAllExtValues()
 
     Layouts = GetLayouts()
-    Overrides = GetOverrides()
+    Overrides = tvm.GetOverrides()
     DividerSymbol = tvm.GetExtValue("DividerSymbol")
     Divider:GetCurrentSettings()
     Bus:GetCurrentSettings()
@@ -331,7 +295,7 @@ function Main()
         Divider:GetCurrentSettings()
         Folder:GetCurrentSettings()
         Bus:GetCurrentSettings()
-        Overrides = GetOverrides()
+        Overrides = tvm.GetOverrides()
         DividerSymbol = tvm.GetExtValue("DividerSymbol")
     else
         --Updates all of our values
@@ -339,7 +303,7 @@ function Main()
         Folder:SaveCurrentSettings()
         Bus:SaveCurrentSettings()
         tvm.SetExtValue('DividerTrackSymbol', DividerSymbol)
-        SetOverrides()
+        tvm.SetOverrides(Overrides)
     end
     if cancel then
         UndoValues()

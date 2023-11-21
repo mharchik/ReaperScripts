@@ -92,6 +92,42 @@ function tvm.SetAllExtValues(table)
     end
 end
 
+function tvm.GetOverrides() -- Returns a table that whose values are single entry tables where key = track name, value = color
+    local oString = tvm.GetExtValue('Overrides')
+    local vals = {}
+    for value in oString:gmatch('([^,]+)') do
+        local pair = {}
+        local key
+        local i = 1
+        for text in value:gmatch('([^*]+)') do
+            if i == 1 then
+                key = text
+            else
+                pair[key] = text
+            end
+            i = i + 1
+        end
+        vals[#vals + 1] = pair
+    end
+    return vals
+end
+
+function tvm.SetOverrides(table)
+    local list
+    for index, override in ipairs(table) do
+        local pair
+        for name, color in pairs(override) do
+            pair = name .. '*' .. color
+        end
+        if not list then
+            list = pair
+        else
+            list = list .. ',' .. pair
+        end
+    end
+    tvm.SetExtValue('Overrides', list)
+end
+
 --[[
 ## Returns whether or not a track can be classified as a divider track.
 
