@@ -1,6 +1,6 @@
 ---@diagnostic disable: param-type-mismatch
 ----------------------------------------
--- @noindex
+-- @provides [nomain] .
 -- @author Max Harchik
 -- @version 1.0
 ----------------------------------------
