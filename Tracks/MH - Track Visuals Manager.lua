@@ -99,7 +99,7 @@ end
 function Main()
     local currentTime = r.time_precise()
     if currentTime - lastActiveTime > refreshRate then
-        reaper.ClearConsole()
+        --reaper.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
             Values = tvm.GetAllExtValues()

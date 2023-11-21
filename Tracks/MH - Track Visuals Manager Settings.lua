@@ -4,75 +4,66 @@
 --Setup
 ----------------------------------------
 r = reaper
-tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then
-    dofile(tvm); if not tvm then
-        r.ShowMessageBox(
-            "This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages",
-            "Error", 0); return
-    end
-else
-    r.ShowMessageBox(
-        "This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information",
-        "Error", 0); return
-end
-if not mh.SWS() or not mh.JS() then
-    mh.noundo()
-    return
-end
+tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end; else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
+if not mh.SWS() or not mh.JS() then mh.noundo() return end
 ----------------------------------------
 --Script Variables
 ----------------------------------------
-local prevValues = tvm.GetAllExtValues()
-local ctx = r.ImGui_CreateContext('My script')
+local ctx = r.ImGui_CreateContext('My script') --Storing values at the very start so we can cancel and not change anything
 --Setting font
 local verdana = r.ImGui_CreateFont('verdana', 14)
 r.ImGui_Attach(ctx, verdana)
 
 local WindowFlags = r.ImGui_WindowFlags_NoCollapse() | r.ImGui_WindowFlags_NoResize() | r.ImGui_WindowFlags_AlwaysAutoResize()
 local ColorFlags = r.ImGui_ColorEditFlags_InputRGB() | r.ImGui_ColorEditFlags_NoAlpha()
-local Layouts
+
+local confirm
+local cancel
+local reset
+
+local Layouts = {}
+local Overrides = {}
+local DividerSymbol
+local prevValues
 ----------------------------------------
 TrackType = {}
 
-function TrackType:new(t)
-    t = t or {}
+function TrackType:new()
+    local t = {}
     setmetatable(t, self)
     self.__index = self
     return t
 end
 
 function TrackType:GetCurrentSettings(name)
-    self.layout = tvm.GetExtValue(name .. "_TrackLayout")
-    self.color = tonumber(tvm.GetExtValue(name .. "_TrackColor"))
-    self.recolor = mh.ToBool(tvm.GetExtValue(name .. "_TrackRecolor"))
-    self.height = tvm.GetExtValue(name .. "_TrackHeight")
+    self.layout = tvm.GetExtValue(self.name .. '_TrackLayout')
+    self.color = tonumber(tvm.GetExtValue(self.name .. '_TrackColor'))
+    self.recolor = mh.ToBool(tvm.GetExtValue(self.name .. '_TrackRecolor'))
+    self.height = tvm.GetExtValue(self.name .. '_TrackHeight')
+    self.idx = GetLayoutIndex(self.layout)
 end
 
-function TrackType:SaveCurrentSettings(name)
-    tvm.SetExtValue(name .. "_TrackLayout", self.layout)
-    tvm.SetExtValue(name .. "_TrackColor", self.color)
-    tvm.SetExtValue(name .. "_TrackRecolor", self.recolor)
-    tvm.SetExtValue(name .. "_TrackHeight", self.height)
+function TrackType:SaveCurrentSettings()
+    tvm.SetExtValue(self.name .. '_TrackLayout', self.layout)
+    tvm.SetExtValue(self.name .. '_TrackColor', self.color)
+    tvm.SetExtValue(self.name .. '_TrackRecolor', self.recolor)
+    tvm.SetExtValue(self.name .. '_TrackHeight', self.height)
+    tvm.SetExtValue(self.name .. '_TrackHeight', self.height)
+    self.idx = GetLayoutIndex(self.layout)
 end
 
-function TrackType:TabSettings()
-    local isSlider, val = r.ImGui_SliderInt(ctx, "Track Height", self.height, 1, 100, "%d", 0)
+function TrackType:CreateTab()
+    --Track Height Slider
+    r.ImGui_PushID(ctx, self.name)
+    local isSlider, val = r.ImGui_SliderInt(ctx, 'Track Height', self.height, 1, 100, '%d', 0)
+    r.ImGui_PopID(ctx)
     if isSlider then
         self.height = val
     end
-    local isValidLayout = false
-    local selIdx
-    for i, layout in ipairs(Layouts) do
-        if self.layout == layout then
-            isValidLayout = true
-            selIdx = i
-        end
-    end
-    --if saved layout is not part of your current theme then we'll default to the "default" layout
-    if not isValidLayout then
-        selIdx = 1
-    end
-    if r.ImGui_BeginCombo(ctx, 'TCP Layout', Layouts[selIdx], r.ImGui_ComboFlags_HeightLargest()) then
+
+    --Track Layout Combo Box
+    r.ImGui_PushID(ctx, self.name)
+    if r.ImGui_BeginCombo(ctx, 'TCP Layout', Layouts[self.idx], r.ImGui_ComboFlags_HeightLargest()) then
         for i, v in ipairs(Layouts) do
             local is_selected = self.selIdx == i
             if r.ImGui_Selectable(ctx, Layouts[i], is_selected) then
@@ -84,19 +75,32 @@ function TrackType:TabSettings()
         end
         r.ImGui_EndCombo(ctx)
     end
-    local isRecolor, rec = r.ImGui_Checkbox(ctx, "Recolor Tracks", self.recolor)
+    r.ImGui_PopID(ctx)
+
+    -- Recolor Check Box
+    r.ImGui_PushID(ctx, self.name)
+    local isRecolor, rec = r.ImGui_Checkbox(ctx, 'Recolor Tracks', self.recolor)
+    r.ImGui_PopID(ctx)
     if isRecolor then
         self.recolor = rec
     end
+
+    --Color Button
     r.ImGui_SameLine(ctx)
-    local pressed = r.ImGui_ColorButton(ctx, "color", self.color, ColorFlags, 25, 25)
+    r.ImGui_PushID(ctx, self.name)
+    local pressed = r.ImGui_ColorButton(ctx, 'color', self.color, ColorFlags, 25, 25)
+    r.ImGui_PopID(ctx)
     if pressed then
         r.ImGui_OpenPopup(ctx, 'my color picker')
     end
+    --Color Picker
     r.ImGui_SameLine(ctx)
-    r.ImGui_Text(ctx, "Track Color")
+    r.ImGui_Text(ctx, 'Track Color')
     if r.ImGui_BeginPopup(ctx, 'my color picker') then
-        local isNewColor, color = r.ImGui_ColorPicker3(ctx, "color picker", self.color, ColorFlags)
+        r.ImGui_PushID(ctx, self.name)
+        local isNewColor, color = r.ImGui_ColorPicker3(ctx, 'color picker', self.color, ColorFlags)
+        r.ImGui_PopID(ctx)
+
         if isNewColor then
             self.color = color
         end
@@ -105,35 +109,94 @@ function TrackType:TabSettings()
 end
 
 ----------------------------------------
-
 Divider = TrackType:new()
-Divider:GetCurrentSettings("Divider")
-Bus = TrackType:new()
-Bus:GetCurrentSettings("Bus")
+Divider.name = 'Divider'
 Folder = TrackType:new()
-Folder:GetCurrentSettings("Folder")
-
-local confirm = false
-local cancel = false
-local dividerSymbol = tvm.GetExtValue("DividerTrackSymbol")
-
-local o1 = {}
-o1["video"] = 0x00000001
-local o2 = {}
-o2["source"] = 0x006666B5
-local o3 = {}
-o3["Mic In"] = 0x00FF0000
-Overrides = { o1, o2, o3 }
-
+Folder.name = 'Folder'
+Bus = TrackType:new()
+Bus.name = 'Bus'
 ----------------------------------------
 --Functions
 ----------------------------------------
+
+function CreateOverrideTab(idx, name, color)
+    r.ImGui_PushID(ctx, 'TrackNameOverride' .. idx)
+    local isNewName, newName = r.ImGui_InputText(ctx, 'Color Override ', name, r.ImGui_InputTextFlags_None())
+    r.ImGui_PopID(ctx)
+    if isNewName then
+        local newOverride = {}
+        newOverride[newName] = color
+        Overrides[idx] = newOverride
+    end
+    r.ImGui_SameLine(ctx)
+    r.ImGui_PushID(ctx, 'ColorButtonOverride' .. idx)
+    local pressed = r.ImGui_ColorButton(ctx, 'Color Override ', color, ColorFlags, 25, 25)
+    r.ImGui_PopID(ctx)
+    if pressed then
+        r.ImGui_OpenPopup(ctx, idx)
+    end
+    if r.ImGui_BeginPopup(ctx, idx) then
+        r.ImGui_PushID(ctx, 'ColorPickerOverride' .. idx)
+        local isNewColor, newColor = r.ImGui_ColorPicker3(ctx, 'Color Override ', color, ColorFlags)
+        if isNewColor then
+            Overrides[idx][name] = newColor
+        end
+        r.ImGui_PopID(ctx)
+        r.ImGui_EndPopup(ctx)
+    end
+    --Button to Delete Override
+    r.ImGui_SameLine(ctx)
+    r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 4.0, 4.0)
+    r.ImGui_PushID(ctx, 'DeleteButton' .. idx)
+    if r.ImGui_Button(ctx, 'x', 22.0, 22.0) then
+        table.remove(Overrides, idx)
+    end
+    r.ImGui_PopID(ctx)
+    r.ImGui_PopStyleVar(ctx)
+end
+
+function GetOverrides() -- Returns a table that whose values are single entry tables where key = track name, value = color
+    local oString = tvm.GetExtValue('Overrides')
+    local vals = {}
+    for value in oString:gmatch('([^,]+)') do
+        local pair = {}
+        local key
+        local i = 1
+        for text in value:gmatch('([^*]+)') do
+            if i == 1 then
+                key = text
+            else
+                pair[key] = text
+            end
+            i = i + 1
+        end
+        vals[#vals + 1] = pair
+    end
+    return vals
+end
+
+function SetOverrides()
+    local list
+    for index, override in ipairs(Overrides) do
+        local pair
+        for name, color in pairs(override) do
+            pair = name .. '*' .. color
+        end
+        if not list then
+            list = pair
+        else
+            list = list .. ',' .. pair
+        end
+    end
+    tvm.SetExtValue('Overrides', list)
+end
+
 function GetLayouts()
     local layouts = {}
-    layouts[1] = "Global layout default"
+    layouts[1] = 'Global layout default'
     local i = 1
     repeat
-        local retval, name = reaper.ThemeLayout_GetLayout("tcp", i)
+        local retval, name = reaper.ThemeLayout_GetLayout('tcp', i)
         if retval then
             layouts[#layouts + 1] = name
         end
@@ -142,45 +205,31 @@ function GetLayouts()
     return layouts
 end
 
-function SetAllValues(table)
-    for name, value in pairs(table) do
-        tvm.SetExtValue(name, tostring(value))
-    end
-end
-
-function OverrideSettings(idx, name, color)
-    local isNewName, newName = r.ImGui_InputText(ctx, "Color Override ", name, r.ImGui_InputTextFlags_CharsNoBlank())
-    if isNewName then
-        local newOverride = {}
-        newOverride[newName] = color
-        Overrides[idx] = newOverride
-    end
-    r.ImGui_SameLine(ctx)
-    r.ImGui_PushID(ctx, "Color Override" .. idx)
-    local pressed = r.ImGui_ColorButton(ctx, "Color Override ", color, ColorFlags, 25, 25)
-    if pressed then
-        r.ImGui_OpenPopup(ctx, idx)
-    end
-    if r.ImGui_BeginPopup(ctx, idx) then
-        local isNewColor, newColor = r.ImGui_ColorPicker3(ctx, "Color Override ", color, ColorFlags)
-        if isNewColor then
-            Overrides[idx][name] = newColor
+function GetLayoutIndex(name)
+    local isValidLayout = false
+    local selIdx
+    for i, layout in ipairs(Layouts) do
+        if name == layout then
+            isValidLayout = true
+            selIdx = i
+            break
         end
-        r.ImGui_EndPopup(ctx)
     end
-    r.ImGui_PopID(ctx)
-    r.ImGui_SameLine(ctx)
-    r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 4.0, 4.0)
-    r.ImGui_PushID(ctx, "Delete Override " .. idx)
-    if r.ImGui_Button(ctx, "x", 22.0, 22.0) then
-        table.remove(Overrides, idx)
+    --if saved layout is not part of your current theme then we'll default to the 'default' layout
+    if not isValidLayout then
+        selIdx = 1
     end
-    r.ImGui_PopID(ctx)
-    r.ImGui_PopStyleVar(ctx)
+    return selIdx
 end
 
-function Main()
-    Layouts = GetLayouts()
+function UndoValues()
+    for name, value in pairs(prevValues) do
+        r.SetExtState(tvm.ExtSection, name, value, true)
+    end
+end
+
+--Main function for creating all of our UI
+function DrawUI()
     r.ImGui_PushFont(ctx, verdana)
     r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_WindowRounding(), 5.0)
     r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_WindowPadding(), 10.0, 10.0)
@@ -192,67 +241,63 @@ function Main()
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ItemSpacing(), 1, 8)
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_PopupRounding(), 10.0)
         if r.ImGui_BeginTabBar(ctx, 'TrackTypes', r.ImGui_TabBarFlags_Reorderable()) then
+            --Divider Tab
             if r.ImGui_BeginTabItem(ctx, 'Divider') then
-                Divider:TabSettings()
-                Divider:SaveCurrentSettings("Divider")
+                Divider:CreateTab()
                 r.ImGui_EndTabItem(ctx)
             end
-            if r.ImGui_BeginTabItem(ctx, 'Folder Bus') then
-                Bus:TabSettings()
-                Bus:SaveCurrentSettings("Bus")
-                r.ImGui_EndTabItem(ctx)
-            end
+            --Folder Tab
             if r.ImGui_BeginTabItem(ctx, 'Folder Items') then
-                Folder:TabSettings()
-                Folder:SaveCurrentSettings("Folder")
+                Folder:CreateTab()
                 r.ImGui_EndTabItem(ctx)
             end
+            --Bus Tab
+            if r.ImGui_BeginTabItem(ctx, 'Folder Bus') then
+                Bus:CreateTab()
+                r.ImGui_EndTabItem(ctx)
+            end
+            --Overrides Tab
             if r.ImGui_BeginTabItem(ctx, 'Overrides') then
-                r.ImGui_Text(ctx, "Track Name Color Overrides")
+                r.ImGui_Text(ctx, 'Track Name Color Overrides')
                 r.ImGui_Separator(ctx)
                 for index, override in ipairs(Overrides) do
                     for name, color in pairs(override) do
-                        OverrideSettings(index, name, color)
+                        CreateOverrideTab(index, name, color)
                     end
                 end
+                --New Override Button
                 r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 4.0, 4.0)
-                if r.ImGui_Button(ctx, "+", 22.0, 22.0) then
+                if r.ImGui_Button(ctx, '+', 22.0, 22.0) then
                     local override = {}
-                    override[" "] = 0x00000001
+                    override[' '] = 0
                     Overrides[#Overrides + 1] = override
                 end
                 r.ImGui_PopStyleVar(ctx)
                 r.ImGui_EndTabItem(ctx)
             end
+            --Options Tab
             if r.ImGui_BeginTabItem(ctx, 'Options') then
-                local isNew, input = r.ImGui_InputText(ctx, 'Divider Track Symbol', dividerSymbol,
+                --Divider Track Symbol
+                local isNew, input = r.ImGui_InputText(ctx, 'Divider Track Symbol', DividerSymbol,
                     r.ImGui_InputTextFlags_CharsNoBlank())
                 if isNew then
-                    dividerSymbol = input
-                    tvm.SetExtValue("DividerTrackSymbol", input)
+                    DividerSymbol = input
                 end
-                if r.ImGui_Button(ctx, "Reset to Defaults", 150.0, 25.0) then
-                    tvm.ResetAllExtValues()
-                    local vals = tvm.GetAllExtValues()
-                    SetAllValues(vals)
-                    Divider:GetCurrentSettings("Divider")
-                    Folder:GetCurrentSettings("Folder")
-                    Bus:GetCurrentSettings("Bus")
-                    dividerSymbol = tvm.GetExtValue("DividerTrackSymbol")
-                end
+                --Reset Defaults Button
+                reset = r.ImGui_Button(ctx, 'Reset to Defaults', 150.0, 25.0)
                 r.ImGui_EndTabItem(ctx)
             end
             r.ImGui_EndTabBar(ctx)
         end
-        r.ImGui_Separator(ctx)
 
-        if r.ImGui_Button(ctx, "Confirm", 150.0, 25.0) then
-            confirm = true
-        end
+        --Confirm Button
+        r.ImGui_Separator(ctx)
+        confirm = r.ImGui_Button(ctx, 'Confirm', 150.0, 25.0)
+
+        --Cancel Button
         r.ImGui_SameLine(ctx)
-        if r.ImGui_Button(ctx, "Cancel", 150.0, 25.0) then
-            cancel = true
-        end
+        cancel = r.ImGui_Button(ctx, 'Cancel', 150.0, 25.0)
+
         r.ImGui_PopStyleVar(ctx)
         r.ImGui_PopStyleVar(ctx)
         r.ImGui_PopStyleVar(ctx)
@@ -263,12 +308,46 @@ function Main()
     r.ImGui_PopStyleVar(ctx)
     r.ImGui_PopStyleVar(ctx)
     r.ImGui_PopFont(ctx)
-    if confirm then
-        local vals = tvm.GetAllExtValues()
-        SetAllValues(vals)
-    elseif cancel then
-        SetAllValues(prevValues)
-    elseif open and not confirm and not cancel then
+    return open
+end
+
+--Runs once at script startup. Reads and stores all the settings from disk that we'll need later.
+function Setup()
+    prevValues = tvm.GetAllExtValues()
+
+    Layouts = GetLayouts()
+    Overrides = GetOverrides()
+    DividerSymbol = tvm.GetExtValue("DividerSymbol")
+    Divider:GetCurrentSettings()
+    Bus:GetCurrentSettings()
+    Folder:GetCurrentSettings()
+end
+
+function Main()
+    local open = DrawUI()
+    if reset then
+        --Resets All Values to Default
+        tvm.ResetAllExtValues()
+        Divider:GetCurrentSettings()
+        Folder:GetCurrentSettings()
+        Bus:GetCurrentSettings()
+        Overrides = GetOverrides()
+        DividerSymbol = tvm.GetExtValue("DividerSymbol")
+    else
+        --Updates all of our values
+        Divider:SaveCurrentSettings()
+        Folder:SaveCurrentSettings()
+        Bus:SaveCurrentSettings()
+        tvm.SetExtValue('DividerTrackSymbol', DividerSymbol)
+        SetOverrides()
+    end
+    if cancel then
+        UndoValues()
+        open = false
+    elseif confirm then
+       open = false
+    end
+    if open then
         r.defer(Main)
     end
 end
@@ -276,4 +355,5 @@ end
 ----------------------------------------
 --Main
 ----------------------------------------
+Setup()
 Main()

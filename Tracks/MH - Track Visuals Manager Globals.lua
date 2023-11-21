@@ -27,7 +27,8 @@ tvm.Settings = {
 --[[10]] "Bus_TrackLayout",
 --[[11]] "Bus_TrackColor",
 --[[12]] "Bus_TrackRecolor",
---[[13]] "DividerTrackSymbol"
+--[[13]] "DividerSymbol",
+--[[14]] "Overrides"
 }
 
 -- Default values for all settings
@@ -44,10 +45,9 @@ tvm.Defaults = {
     [tvm.Settings[10]] = "A - COLOR FULL",
     [tvm.Settings[11]] = "0x00000001",
     [tvm.Settings[12]] = "true",
-    [tvm.Settings[13]] = "<"
+    [tvm.Settings[13]] = "<",
+    [tvm.Settings[14]] = ""
 }
-
-tvm.Recolor = true --set false if you don't want the script to change any of your track colors
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -83,6 +83,12 @@ end
 function tvm.ResetAllExtValues()
     for i, name in pairs(tvm.Settings) do
         r.SetExtState(tvm.ExtSection, name, tvm.Defaults[name], true)
+    end
+end
+
+function tvm.SetAllExtValues(table)
+    for name, value in pairs(table) do
+        r.SetExtState(tvm.ExtSection, name, value, true)
     end
 end
 
