@@ -4,21 +4,8 @@
 --Setup
 ----------------------------------------
 r = reaper
-tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then
-    dofile(tvm); if not tvm then
-        r.ShowMessageBox(
-        'This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages',
-            'Error', 0); return
-    end;
-else
-    r.ShowMessageBox(
-    'This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information',
-        'Error', 0); return
-end
-if not mh.SWS() then
-    mh.noundo()
-    return
-end
+tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end; else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
+if not mh.SWS() and not tvm.ImGui() then mh.noundo() return end
 ----------------------------------------
 --Script Variables
 ----------------------------------------
@@ -243,7 +230,7 @@ function DrawUI()
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FrameRounding(), 3.0)
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 10.0, 4.0)
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ItemSpacing(), 10, 10)
-        r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_PopupRounding(), 10.0)
+        r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_PopupRounding(), 5.0)
         --Tab Bar
         if r.ImGui_BeginTabBar(ctx, 'TrackTypes', r.ImGui_TabBarFlags_Reorderable()) then
             r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ItemInnerSpacing(), 9, 5)

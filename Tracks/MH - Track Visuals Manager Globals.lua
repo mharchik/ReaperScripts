@@ -142,3 +142,11 @@ function tvm.IsDividerTrack(track)
     return string.sub(name, 1, 1) == tvm.GetExtValue("DividerSymbol")
 end
 
+function tvm.ImGui ()
+    if not r.ImGui_GetVersion then
+        r.ShowMessageBox("Please install the ReaImGui extension via Reapack before trying to run this script.", "Error", 0)
+        return false
+    else
+        return true
+    end
+end
