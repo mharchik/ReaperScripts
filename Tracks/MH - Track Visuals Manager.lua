@@ -95,10 +95,6 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
     end
 end
 
-function GetValues()
-
-end
-
 function SwapOSColors(rgb)
     if OS == "Win32" or OS == "Win64" then
         local r1, g1, b1 = r.ColorFromNative(rgb)
@@ -106,7 +102,6 @@ function SwapOSColors(rgb)
     end
     return rgb
 end
-
 
 function Main()
     local currentTime = r.time_precise()

@@ -253,9 +253,7 @@ function DrawUI()
             end
             r.ImGui_EndTabBar(ctx)
             r.ImGui_PopStyleVar(ctx)
-
         end
-
         --Overrides Section
         reaper.ImGui_Spacing(ctx)
         r.ImGui_Separator(ctx)
@@ -291,7 +289,6 @@ function DrawUI()
             DividerSymbol = input
             update = true
         end
-
         --Reset Defaults Button
         r.ImGui_SameLine(ctx)
         reset = r.ImGui_Button(ctx, 'Reset all to Defaults', 140.0, 22.0)
