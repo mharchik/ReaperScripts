@@ -18,11 +18,11 @@ local _, _, section_ID, cmd_ID, _, _, _ = r.get_action_context()
 r.SetToggleCommandState(section_ID, cmd_ID, 1)
 r.RefreshToolbar2(section_ID, cmd_ID)
 tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
-local OS = reaper.GetOS()
+local OS = r.GetOS()
 ----------------------------------------
 -- Script Variables
 ----------------------------------------
-local refreshRate = 0.2
+local refreshRate = 0.1
 local lastActiveTime = r.time_precise()
 local Values = {}
 ----------------------------------------
@@ -61,8 +61,12 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
             local overrides = tvm.GetOverrides()
             for index, pair in ipairs(overrides) do
                 for name, newColor in pairs(pair) do
-                    if trackName:match(mh.TrimSpaces(name):lower()) then
-                        color = newColor
+                    local newName = mh.TrimSpaces(name):lower()
+                    --doing a quick check to make sure the name isn't empty after we removed all the spaces from it
+                    if #newName > 0  then
+                        if trackName:match(newName) then
+                            color = newColor
+                        end
                     end
                 end
             end
@@ -91,6 +95,10 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
     end
 end
 
+function GetValues()
+
+end
+
 function SwapOSColors(rgb)
     if OS == "Win32" or OS == "Win64" then
         local r1, g1, b1 = r.ColorFromNative(rgb)
@@ -103,7 +111,7 @@ end
 function Main()
     local currentTime = r.time_precise()
     if currentTime - lastActiveTime > refreshRate then
-        --reaper.ClearConsole()
+        --r.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
             Values = tvm.GetAllExtValues()
