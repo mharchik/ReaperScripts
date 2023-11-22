@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="b3bfea613c40e0c91d378640c0e89cb35c2789ce">
+<index version="1" name="MH Scripts" commit="6711e0da097615ebbe502635b5c2911b5b91d798">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -332,31 +332,13 @@
   </category>
   <category name="Utility">
     <reapack name="MH - Center Window by Name.lua" type="script" desc="Center Window by Name">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Moves a window to the center of the main Reaper window\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Utility/MH%20-%20Center%20Window%20by%20Name.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/6711e0da097615ebbe502635b5c2911b5b91d798/Utility/MH%20-%20Center%20Window%20by%20Name.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Actions Window.lua" type="script" desc="Toggle Actions Window">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Toggles open and close the Actions Window with the same key command\par}
-}
-]]></description>
-      </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/3d01fc95138f49a3a28e82e23cca3497a4df2ba0/Utility/MH%20-%20Toggle%20Actions%20Window.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/6711e0da097615ebbe502635b5c2911b5b91d798/Utility/MH%20-%20Toggle%20Actions%20Window.lua</source>
       </version>
     </reapack>
   </category>
