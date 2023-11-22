@@ -40,7 +40,6 @@ function TrackType:new()
 end
 
 function TrackType:GetCurrentSettings()
-    mh.Msg(self.name)
     self.layout = tvm.GetExtValue(self.name .. '_TrackLayout')
     self.color = tonumber(tvm.GetExtValue(self.name .. '_TrackColor'))
     self.recolor = mh.ToBool(tvm.GetExtValue(self.name .. '_TrackRecolor'))
