@@ -5,7 +5,7 @@
 ----------------------------------------
 r = reaper
 mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
-if not mh.SWS() and not mh.ImGui() then mh.noundo() return end
+if not mh.ImGui() then return end
 ----------------------------------------
 --Script Variables
 ----------------------------------------
@@ -14,8 +14,7 @@ local ctx = r.ImGui_CreateContext('My script') --Storing values at the very star
 local verdana = r.ImGui_CreateFont('verdana', 14)
 r.ImGui_Attach(ctx, verdana)
 
-local WindowFlags = r.ImGui_WindowFlags_NoCollapse() | r.ImGui_WindowFlags_NoResize() |
-r.ImGui_WindowFlags_AlwaysAutoResize()
+local WindowFlags = r.ImGui_WindowFlags_NoCollapse() | r.ImGui_WindowFlags_NoResize() | r.ImGui_WindowFlags_AlwaysAutoResize()
 local ColorFlags = r.ImGui_ColorEditFlags_InputRGB() | r.ImGui_ColorEditFlags_NoAlpha()
 local DividerFlags =  r.ImGui_InputTextFlags_AlwaysOverwrite() |  r.ImGui_InputTextFlags_CharsNoBlank() |  reaper.ImGui_InputTextFlags_AutoSelectAll()
 
@@ -133,7 +132,7 @@ function CreateOverrideTab(idx, name, color)
         name = ''
     end
     r.ImGui_PushID(ctx, 'TrackNameOverride' .. idx)
-    local isNewName, newName = r.ImGui_InputText(ctx, '', name, r.ImGui_InputTextFlags_None())
+    local isNewName, newName = r.ImGui_InputText(ctx, '', name, r.ImGui_InputTextFlags_EnterReturnsTrue())
     r.ImGui_PopID(ctx)
     if isNewName then
         --Doing some string swapping to make sure we don't store an empty string
@@ -214,10 +213,30 @@ function GetLayoutIndex(name)
     return selIdx
 end
 
+--Undoes any changes made to the values since the script has been run
 function UndoValues()
     for name, value in pairs(prevValues) do
         r.SetExtState(tvm.ExtSection, name, value, true)
     end
+end
+
+--Resets All Values to Default
+function ResetValues()
+    tvm.ResetAllExtValues()
+    Divider:GetCurrentSettings()
+    Folder:GetCurrentSettings()
+    Bus:GetCurrentSettings()
+    Overrides = tvm.GetOverrides()
+    DividerSymbol = tvm.GetExtValue('DividerSymbol')
+end
+
+--Updates all of our values
+function StoreValues()
+    Divider:SaveCurrentSettings()
+    Folder:SaveCurrentSettings()
+    Bus:SaveCurrentSettings()
+    tvm.SetExtValue('DividerSymbol', DividerSymbol)
+    tvm.SetOverrides(Overrides)
 end
 
 --Main function for creating all of our UI
@@ -328,25 +347,12 @@ function Setup()
 end
 
 function Main()
-    update = false
+    update = false --set this to false each frame so we can check again if there have been any values updated.
     local open = DrawUI()
     if reset then
-        --Resets All Values to Default
-        tvm.ResetAllExtValues()
-        Divider:GetCurrentSettings()
-        Folder:GetCurrentSettings()
-        Bus:GetCurrentSettings()
-        Overrides = tvm.GetOverrides()
-        DividerSymbol = tvm.GetExtValue('DividerSymbol')
-    else
-        if update then
-            --Updates all of our values
-            Divider:SaveCurrentSettings()
-            Folder:SaveCurrentSettings()
-            Bus:SaveCurrentSettings()
-            tvm.SetExtValue('DividerSymbol', DividerSymbol)
-            tvm.SetOverrides(Overrides)
-        end
+        ResetValues()
+    elseif update then
+        StoreValues()
     end
     if cancel then
         UndoValues()

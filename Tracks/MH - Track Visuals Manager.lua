@@ -36,6 +36,10 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
         if curHeight ~= height then
             r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', height)
         end
+    elseif height == 0 then
+        if r.GetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE') ~= 0 then
+            r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', 0)
+        end
     end
     --Check Layout
     local curLayout = ({r.GetSetMediaTrackInfo_String(track, 'P_TCP_LAYOUT', '', false)})[2]
@@ -108,6 +112,7 @@ function Main()
         --r.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
+            r.PreventUIRefresh(1)
             Values = tvm.GetAllExtValues()
             for i = 0, trackCount - 1 do
                 local track = r.GetTrack(0, i)
@@ -131,6 +136,7 @@ function Main()
                     end
                 end
             end
+            r.PreventUIRefresh(-1)
             r.TrackList_AdjustWindows(true)
         end
         lastActiveTime = currentTime
