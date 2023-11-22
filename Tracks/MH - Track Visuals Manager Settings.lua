@@ -4,8 +4,8 @@
 --Setup
 ----------------------------------------
 r = reaper
-tvm = r.GetResourcePath() .. '/Scripts/MH Scripts/Tracks/MH - Track Visuals Manager Globals.lua'; if r.file_exists(tvm) then dofile(tvm); if not tvm then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end; else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
-if not mh.SWS() and not tvm.ImGui() then mh.noundo() return end
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
+if not mh.SWS() and not mh.ImGui() then mh.noundo() return end
 ----------------------------------------
 --Script Variables
 ----------------------------------------
@@ -28,6 +28,7 @@ local Layouts = {}
 local Overrides = {}
 local DividerSymbol
 local prevValues
+local defaultOverrideColor = 16711680
 ----------------------------------------
 TrackType = {}
 
@@ -39,6 +40,7 @@ function TrackType:new()
 end
 
 function TrackType:GetCurrentSettings()
+    mh.Msg(self.name)
     self.layout = tvm.GetExtValue(self.name .. '_TrackLayout')
     self.color = tonumber(tvm.GetExtValue(self.name .. '_TrackColor'))
     self.recolor = mh.ToBool(tvm.GetExtValue(self.name .. '_TrackRecolor'))
@@ -57,7 +59,7 @@ end
 
 function TrackType:CreateTab()
     --Track Height Slider
-    r.ImGui_PushID(ctx, self.name)
+    r.ImGui_PushID(ctx, self.name .. ' slider')
     local isSlider, val = r.ImGui_SliderInt(ctx, 'Track Height', self.height, 1, 100, '%d', 0)
     r.ImGui_PopID(ctx)
     if isSlider then
@@ -66,7 +68,7 @@ function TrackType:CreateTab()
     end
 
     --Track Layout Combo Box
-    r.ImGui_PushID(ctx, self.name)
+    r.ImGui_PushID(ctx, self.name .. ' comboBox')
     if r.ImGui_BeginCombo(ctx, 'Track Layout', Layouts[self.idx], r.ImGui_ComboFlags_HeightLargest()) then
         for i, v in ipairs(Layouts) do
             local is_selected = self.selIdx == i
@@ -83,8 +85,8 @@ function TrackType:CreateTab()
     r.ImGui_PopID(ctx)
 
     r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ItemSpacing(), 70, 10)
-    -- Recolor Check Box
-    r.ImGui_PushID(ctx, self.name)
+    --Recolor Check Box
+    r.ImGui_PushID(ctx, self.name .. 'checkbox')
     local isRecolor, rec = r.ImGui_Checkbox(ctx, ' Recolor Tracks   ', self.recolor)
     r.ImGui_PopID(ctx)
     if isRecolor then
@@ -93,7 +95,7 @@ function TrackType:CreateTab()
     end
     --Color Button
     r.ImGui_SameLine(ctx)
-    r.ImGui_PushID(ctx, self.name)
+    r.ImGui_PushID(ctx, self.name .. 'button')
     local pressed = r.ImGui_ColorButton(ctx, 'color', self.color, ColorFlags, 22, 22)
     r.ImGui_PopID(ctx)
     if pressed then
@@ -104,7 +106,7 @@ function TrackType:CreateTab()
     r.ImGui_Text(ctx, 'Track Color')
     --Color Picker
     if r.ImGui_BeginPopup(ctx, 'my color picker') then
-        r.ImGui_PushID(ctx, self.name)
+        r.ImGui_PushID(ctx, self.name .. 'colorPicker')
         local isNewColor, color = r.ImGui_ColorPicker3(ctx, 'color picker', self.color, ColorFlags)
         r.ImGui_PopID(ctx)
         if isNewColor then
@@ -129,14 +131,14 @@ Bus.name = 'Bus'
 function CreateOverrideTab(idx, name, color)
     --Doing some string swapping to make sure we don't store an empty string
     if name == tvm.emptyOverrideName then
-        name = ""
+        name = ''
     end
     r.ImGui_PushID(ctx, 'TrackNameOverride' .. idx)
     local isNewName, newName = r.ImGui_InputText(ctx, '', name, r.ImGui_InputTextFlags_None())
     r.ImGui_PopID(ctx)
     if isNewName then
         --Doing some string swapping to make sure we don't store an empty string
-        if newName == "" then
+        if newName == '' then
             newName = tvm.emptyOverrideName
         end
         local newOverride = {}
@@ -156,7 +158,7 @@ function CreateOverrideTab(idx, name, color)
         local isNewColor, newColor = r.ImGui_ColorPicker3(ctx, 'Color Override', color, ColorFlags)
         if isNewColor then
             --Doing some string swapping to make sure we don't store an empty string
-            if name == "" then
+            if name == '' then
                 name = tvm.emptyOverrideName
             end
             Overrides[idx][name] = newColor
@@ -248,7 +250,7 @@ function DrawUI()
             end
             r.ImGui_SetNextItemWidth(ctx, 100)
             if r.ImGui_BeginTabItem(ctx, 'Dividers') then
-                Folder:CreateTab()
+                Divider:CreateTab()
                 r.ImGui_EndTabItem(ctx)
             end
             r.ImGui_EndTabBar(ctx)
@@ -269,7 +271,7 @@ function DrawUI()
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ButtonTextAlign(), 0.6, 0.45)
         if r.ImGui_Button(ctx, '+', 22.0, 22.0) then
             local override = {}
-            override[tvm.emptyOverrideName] = 1
+            override[tvm.emptyOverrideName] = defaultOverrideColor
             Overrides[#Overrides + 1] = override
             update = true
         end
@@ -278,7 +280,7 @@ function DrawUI()
         --Options Section
         r.ImGui_Separator(ctx)
         --Divider Track Symbol
-        r.ImGui_PushID(ctx, "DividerSymbol")
+        r.ImGui_PushID(ctx, 'DividerSymbol')
         reaper.ImGui_SetNextItemWidth(ctx, 28)
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 9.0, 5.0)
         local isNew, input = r.ImGui_InputText(ctx, ' Divider Track Symbol ', DividerSymbol, DividerFlags)
@@ -320,7 +322,7 @@ function Setup()
     prevValues = tvm.GetAllExtValues()
     Layouts = GetLayouts()
     Overrides = tvm.GetOverrides()
-    DividerSymbol = tvm.GetExtValue("DividerSymbol")
+    DividerSymbol = tvm.GetExtValue('DividerSymbol')
     Divider:GetCurrentSettings()
     Bus:GetCurrentSettings()
     Folder:GetCurrentSettings()
@@ -336,7 +338,7 @@ function Main()
         Folder:GetCurrentSettings()
         Bus:GetCurrentSettings()
         Overrides = tvm.GetOverrides()
-        DividerSymbol = tvm.GetExtValue("DividerSymbol")
+        DividerSymbol = tvm.GetExtValue('DividerSymbol')
     else
         if update then
             --Updates all of our values

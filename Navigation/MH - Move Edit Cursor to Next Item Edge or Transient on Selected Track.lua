@@ -7,8 +7,8 @@
 --Setup
 ----------------------------------------
 r = reaper
-local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+local scriptName = ({ r.get_action_context() })[2]:match('([^/\\_]+)%.[Ll]ua$')
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 if not mh.SWS() then mh.noundo() return end
 ----------------------------------------
 --User Settings
@@ -28,17 +28,17 @@ function MoveCursorForward(track, cursorPos)
             local itemStart, itemEnd = mh.GetItemSize(item)
             if cursorPos >= itemStart and cursorPos < itemEnd and didMove == false then
                 if not ShouldSelectItem and not mh.IsFolderItem(item) then
-                    r.Main_OnCommand(r.NamedCommandLookup("_SWS_SAVEALLSELITEMS1"), 0) -- Calls Action: "SWS: Save selected item(s)"
+                    r.Main_OnCommand(r.NamedCommandLookup('_SWS_SAVEALLSELITEMS1'), 0) -- Calls Action: 'SWS: Save selected item(s)'
                 elseif mh.IsFolderItem(item) and not ShouldSelectFolderItem then
-                    r.Main_OnCommand(r.NamedCommandLookup("_SWS_SAVEALLSELITEMS1"), 0) -- Calls Action: "SWS: Save selected item(s)"
+                    r.Main_OnCommand(r.NamedCommandLookup('_SWS_SAVEALLSELITEMS1'), 0) -- Calls Action: 'SWS: Save selected item(s)'
                 end
                 r.SetMediaItemSelected(item, true)
-                local length = r.GetMediaItemInfo_Value(item, "D_LENGTH")
+                local length = r.GetMediaItemInfo_Value(item, 'D_LENGTH')
                 local take = r.GetActiveTake(item)
-                local offSet = r.GetMediaItemTakeInfo_Value(take, "D_STARTOFFS")
+                local offSet = r.GetMediaItemTakeInfo_Value(take, 'D_STARTOFFS')
                 local source = r.GetMediaItemTake_Source(take)
                 local sLength, isSeconds = r.GetMediaSourceLength(source)
-                r.Main_OnCommand("40375", 0) --Calls Action "Item navigation: Move cursor to next transient in items"
+                r.Main_OnCommand('40375', 0) --Calls Action 'Item navigation: Move cursor to next transient in items'
                 --checking if we're passing by the start of the source. If so stop there first.
                 if offSet < 0 then
                     if cursorPos < itemStart - offSet and r.GetCursorPosition() > itemStart - offSet then
@@ -53,9 +53,9 @@ function MoveCursorForward(track, cursorPos)
                 end
                 didMove = true
                 if not ShouldSelectItem and not mh.IsFolderItem(item) then
-                    r.Main_OnCommand(r.NamedCommandLookup("_SWS_RESTALLSELITEMS1"), 0) -- Calls Action: "SWS: Restore saved selected item(s)"
+                    r.Main_OnCommand(r.NamedCommandLookup('_SWS_RESTALLSELITEMS1'), 0) -- Calls Action: 'SWS: Restore saved selected item(s)'
                 elseif mh.IsFolderItem(item) and not ShouldSelectFolderItem then
-                    r.Main_OnCommand(r.NamedCommandLookup("_SWS_RESTALLSELITEMS1"), 0) -- Calls Action: "SWS: Restore saved selected item(s)"
+                    r.Main_OnCommand(r.NamedCommandLookup('_SWS_RESTALLSELITEMS1'), 0) -- Calls Action: 'SWS: Restore saved selected item(s)'
                 end
             elseif cursorPos < itemStart and didMove == false then
                 if ShouldSelectItem and not mh.IsFolderItem(item) then

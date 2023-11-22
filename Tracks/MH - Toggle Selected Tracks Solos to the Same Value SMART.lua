@@ -11,20 +11,20 @@
 --Setup
 ----------------------------------------
 r = reaper
-local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+local scriptName = ({ r.get_action_context() })[2]:match('([^/\\_]+)%.[Ll]ua$')
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
 function SetSelectedTrackSolos(selTrackCount, solo)
 	for i = 0, selTrackCount - 1 do
 		local selTrack = r.GetSelectedTrack(0, i)
-		r.SetMediaTrackInfo_Value(selTrack, "I_SOLO", solo)
+		r.SetMediaTrackInfo_Value(selTrack, 'I_SOLO', solo)
 		local selTrackDepth = r.GetTrackDepth(selTrack)
 		while selTrackDepth > 0 do
 			selTrack = r.GetParentTrack(selTrack)
-			if r.GetMediaTrackInfo_Value(selTrack, "B_MUTE") == 1 then
-				r.SetMediaTrackInfo_Value(selTrack, "I_SOLO", solo)
+			if r.GetMediaTrackInfo_Value(selTrack, 'B_MUTE') == 1 then
+				r.SetMediaTrackInfo_Value(selTrack, 'I_SOLO', solo)
 			end
 			selTrackDepth = r.GetTrackDepth(selTrack)
 		end
@@ -35,7 +35,7 @@ function SetAllTrackSolos(solo)
 	local trackCount = r.CountTracks(0)
 	for i = 0, trackCount - 1 do
 		local selTrack = r.GetTrack(0, i)
-		r.SetMediaTrackInfo_Value(selTrack, "I_SOLO", solo)
+		r.SetMediaTrackInfo_Value(selTrack, 'I_SOLO', solo)
 	end
 end
 
@@ -46,7 +46,7 @@ function Main()
 	if selTrackCount == 0 then return end
 	for i = 0, selTrackCount - 1 do
 		local selTrack = r.GetSelectedTrack(0, i)
-		local trackSoloState = r.GetMediaTrackInfo_Value(selTrack, "I_SOLO")
+		local trackSoloState = r.GetMediaTrackInfo_Value(selTrack, 'I_SOLO')
 		if trackSoloState == 0 then
 			isAnySelTrackUnsolo = true
 		else
@@ -67,7 +67,7 @@ function Main()
 	for i = 0, trackCount - 1 do
 		local ignoreTrack = false
 		local track = r.GetTrack(0, i)
-		local trackSoloState = r.GetMediaTrackInfo_Value(track, "I_SOLO")
+		local trackSoloState = r.GetMediaTrackInfo_Value(track, 'I_SOLO')
 		if trackSoloState > 0 then
 			--if the track is selected or a parent of a selected track, we don't need to check it
 			for key, selTrack in ipairs(soloSelTracks) do
@@ -82,7 +82,7 @@ function Main()
 	end
 	if isAnySelTrackUnsolo or isAnyOtherTrackSolo then
 		SetAllTrackSolos(0)
-		SetSelectedTrackSolos(selTrackCount, 2) --2 sets "Solo In Place" which will retain any sends you have active on the track
+		SetSelectedTrackSolos(selTrackCount, 2) --2 sets 'Solo In Place' which will retain any sends you have active on the track
 	else
 		SetAllTrackSolos(0)
 	end

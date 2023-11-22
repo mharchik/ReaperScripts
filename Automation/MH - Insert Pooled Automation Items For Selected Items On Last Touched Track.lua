@@ -3,14 +3,14 @@
 -- @author Max Harchik
 -- @version 1.0
 -- @about   Creates automation items for all selected items on the last selected track. 
---          Automation items will be created on the selected envelope, unless there is no active automation lane in which case it will open up the automation lane for "Volume" and create automation items there.
+--          Automation items will be created on the selected envelope, unless there is no active automation lane in which case it will open up the automation lane for 'Volume' and create automation items there.
 --          Only one automation item will be created for groups of items that are overlapping, spanning their combined length
 ----------------------------------------
 --Setup
 ----------------------------------------
 r = reaper
-local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+local scriptName = ({ r.get_action_context() })[2]:match('([^/\\_]+)%.[Ll]ua$')
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -26,7 +26,7 @@ function GetPoolID()
                 local aiCount = r.CountAutomationItems(env)
                 if aiCount > 0 then
                     for k = 0, aiCount - 1 do
-                        local usedPool = r.GetSetAutomationItemInfo(env, k, "D_POOL_ID", 0, false)
+                        local usedPool = r.GetSetAutomationItemInfo(env, k, 'D_POOL_ID', 0, false)
                         if usedPool >= pool then
                             pool = usedPool + 1
                         end
@@ -115,8 +115,8 @@ function Main()
         local itemsEnd
         local itemsLength
         for j, item in ipairs(itemGroup) do
-            local itemLeftEdge = r.GetMediaItemInfo_Value(item, "D_POSITION")
-            local itemRightEdge = r.GetMediaItemInfo_Value(item, "D_LENGTH") + itemLeftEdge
+            local itemLeftEdge = r.GetMediaItemInfo_Value(item, 'D_POSITION')
+            local itemRightEdge = r.GetMediaItemInfo_Value(item, 'D_LENGTH') + itemLeftEdge
             if not itemsStart then
                 itemsStart = itemLeftEdge
             elseif itemsStart > itemLeftEdge then
@@ -135,7 +135,7 @@ function Main()
         end
         local autoItem = r.InsertAutomationItem(env, pool, itemsStart, itemsLength)
         r.InsertEnvelopePointEx(env, autoItem, itemsStart, envValue, 0, 0, false, false)
-        r.GetSetAutomationItemInfo(env, autoItem, "D_LOOPSRC", 0, true)
+        r.GetSetAutomationItemInfo(env, autoItem, 'D_LOOPSRC', 0, true)
     end
 end
 

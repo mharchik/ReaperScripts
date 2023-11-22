@@ -6,16 +6,17 @@
 
 -- @about   This script should be bound to mousewheel. 
 --          Zooms the arrange window vertically. If you are zooming into or out of a folder track, the zoom will snap to the bounds of that folder track until the full folder is in view.
---          This script is intended to be used with your zoom preferences being set to the default "Vertical Zoom Center: Track at View Center". You can set this value in the Reaper Preferences under "Appearance > Zoom/Scroll/Offset".
+--          This script is intended to be used with your zoom preferences being set to the default 'Vertical Zoom Center: Track at View Center'. You can set this value in the Reaper Preferences under 'Appearance > Zoom/Scroll/Offset'.
 --          This script requires the js_ReaScriptAPI extension.
 ----------------------------------------
 --Setup
 ----------------------------------------
 r = reaper
 local val = ({ r.get_action_context() })[7] --Must be first in the script to correctly get the mousewheel direction
-local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
-if not r.HasExtState(scriptName, "firstrun") then r.SetExtState(scriptName, "firstrun", "true", true) r.ShowMessageBox("This script is intended to be used with the zoom preferences set to the default 'Vertical zoom center: Track at view center'. \n\n You can set this value in the REAPER Preferences under 'Appearance > Zoom/Scroll/Offset'", "Script Info", 0) end
+local scriptName = ({ r.get_action_context() })[2]:match('([^/\\_]+)%.[Ll]ua$')
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 
+    'Error', 0); return end
+if not r.HasExtState(scriptName, 'firstrun') then r.SetExtState(scriptName, 'firstrun', 'true', true) r.ShowMessageBox('This script is intended to be used with the zoom preferences set to the default "Vertical zoom center: Track at view center". \n\n You can set this value in the REAPER Preferences under "Appearance > Zoom/Scroll/Offset"', 'Script Info', 0) end
 if not mh.JS() then mh.noundo() return end
 ----------------------------------------
 --User Settings
@@ -41,10 +42,10 @@ function Zoom()
 end
 
 function ScrollToPosition(arrangeView, pTCPY)
-    local retval, pos, _, _, _, _ = r.JS_Window_GetScrollInfo(arrangeView, "v")
+    local retval, pos, _, _, _, _ = r.JS_Window_GetScrollInfo(arrangeView, 'v')
     local newScroll = pTCPY + pos
     if retval then
-        r.JS_Window_SetScrollPos(arrangeView, "v", newScroll)
+        r.JS_Window_SetScrollPos(arrangeView, 'v', newScroll)
     end
 end
 
@@ -52,8 +53,8 @@ function GetCenterTrack(left, top, right, bottom)
     local track = r.GetLastTouchedTrack()
     local IsTrackVisible = false
     if track then
-        local tcpy = r.GetMediaTrackInfo_Value(track, "I_TCPY")
-        local tcph = r.GetMediaTrackInfo_Value(track, "I_TCPH")
+        local tcpy = r.GetMediaTrackInfo_Value(track, 'I_TCPY')
+        local tcph = r.GetMediaTrackInfo_Value(track, 'I_TCPH')
         if tcpy >= 0 and tcpy - tcph <= bottom then
             IsTrackVisible = true
         end
@@ -78,9 +79,9 @@ end
 function GetFolderEndTracks(track)
     local retval = false
     local pRetval, parentTrack, cRetval, lastChildTrack
-    if r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 and r.GetTrackDepth(track) == 0 then
+    if r.GetMediaTrackInfo_Value(track, 'I_FOLDERDEPTH') == 1 and r.GetTrackDepth(track) == 0 then
         parentTrack = track
-        local nextTrack = r.GetTrack(0, r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER"))
+        local nextTrack = r.GetTrack(0, r.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER'))
 
         cRetval, lastChildTrack = mh.GetLastChildTrack(nextTrack)
     else
@@ -102,7 +103,7 @@ function Main()
     local isFolder, firstTrack, lastTrack
     if track then
         isFolder, firstTrack, lastTrack = GetFolderEndTracks(track)
-        local folderState = r.GetMediaTrackInfo_Value(firstTrack, "I_FOLDERCOMPACT")
+        local folderState = r.GetMediaTrackInfo_Value(firstTrack, 'I_FOLDERCOMPACT')
         if folderState == 2 then --if the track is fully collapsed we'll pre
             isFolder = true
         end
@@ -111,8 +112,8 @@ function Main()
     if isFolder then
         --if we're already outside the folder track before we even zoom, don't let it scroll
         local canScrollUp, canScrollDown = true, true
-        local firstTrackTopEdge = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
-        local lastTrackBottomEdge = r.GetMediaTrackInfo_Value(lastTrack, "I_TCPY") + r.GetMediaTrackInfo_Value(lastTrack, "I_TCPH")
+        local firstTrackTopEdge = r.GetMediaTrackInfo_Value(firstTrack, 'I_TCPY')
+        local lastTrackBottomEdge = r.GetMediaTrackInfo_Value(lastTrack, 'I_TCPY') + r.GetMediaTrackInfo_Value(lastTrack, 'I_TCPH')
         --disabling scroll changes after zooming in for some edge case situations
         if IsZoomIn() then
             if firstTrackTopEdge < 0 then
@@ -124,8 +125,8 @@ function Main()
         end
         Zoom()
         --check if we should scroll
-        firstTrackTopEdge = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
-        lastTrackBottomEdge = r.GetMediaTrackInfo_Value(lastTrack, "I_TCPY") + r.GetMediaTrackInfo_Value(lastTrack, "I_TCPH")
+        firstTrackTopEdge = r.GetMediaTrackInfo_Value(firstTrack, 'I_TCPY')
+        lastTrackBottomEdge = r.GetMediaTrackInfo_Value(lastTrack, 'I_TCPY') + r.GetMediaTrackInfo_Value(lastTrack, 'I_TCPH')
         if IsZoomIn() then
             if firstTrackTopEdge <= 0 and lastTrackBottomEdge <= screenBottomEdge then
                 if canScrollDown then

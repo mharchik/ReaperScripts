@@ -11,12 +11,12 @@ r = reaper
 local _, _, section_ID, cmd_ID, _, _, _ = r.get_action_context()
 r.SetToggleCommandState(section_ID, cmd_ID, 1)
 r.RefreshToolbar2(section_ID, cmd_ID)
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 if not mh.SWS() or not mh.JS() then mh.noundo() return end
 ----------------------------------------
 --User Settings
 ----------------------------------------
-local WINDOW_NAME = "DancerWindow" --Type the name of the window you'd like to center here
+local WINDOW_NAME = 'DancerWindow' --Type the name of the window you'd like to center here
 ----------------------------------------
 --Script Variables
 ----------------------------------------
@@ -26,7 +26,7 @@ local lastActiveTime = r.time_precise()
 local lastWinCheckTime = r.time_precise()
 
 local win, mLeft, mTop, mRight, mBottom, left, top, right, bottom, width, height
-local DancerNames = {"Baba+Background", "Keke+Background", "Me+Background", "Jiji+Background", "Fofo+Background"}
+local DancerNames = {'Baba+Background', 'Keke+Background', 'Me+Background', 'Jiji+Background', 'Fofo+Background'}
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -34,7 +34,7 @@ local DancerNames = {"Baba+Background", "Keke+Background", "Me+Background", "Jij
 function RandomizeDancer()
   math.randomseed(os.time() * 100)
   local index = math.random(#DancerNames)
-  r.SetExtState( "REAPER-Dancer", "LastDancer", DancerNames[index], true)
+  r.SetExtState( 'REAPER-Dancer', 'LastDancer', DancerNames[index], true)
 end
 
 function Setup()
@@ -42,7 +42,7 @@ function Setup()
     if window then
         r.JS_Window_Destroy(win)
     else
-        r.Main_OnCommand(r.NamedCommandLookup("_PELORI_DANCER_OPENWINDOW"), 0)
+        r.Main_OnCommand(r.NamedCommandLookup('_PELORI_DANCER_OPENWINDOW'), 0)
     window = r.JS_Window_Find(WINDOW_NAME, false)
     end
   return window

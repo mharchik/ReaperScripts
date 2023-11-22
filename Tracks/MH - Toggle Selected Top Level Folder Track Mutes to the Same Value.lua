@@ -7,8 +7,8 @@
 --Setup
 ----------------------------------------
 r = reaper
-local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+local scriptName = ({ r.get_action_context() })[2]:match('([^/\\_]+)%.[Ll]ua$')
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -59,7 +59,7 @@ function ToggleTrackMutes()
 	if selTrackCount == 0 then return end
 	for i = 0, selTrackCount - 1 do
 		local selTrack = r.GetSelectedTrack(0, i)
-		local trackMuteState = r.GetMediaTrackInfo_Value(selTrack, "B_MUTE")
+		local trackMuteState = r.GetMediaTrackInfo_Value(selTrack, 'B_MUTE')
 		if trackMuteState == 0 then
 			isAnyTrackUnmuted = true
 			break
@@ -75,7 +75,7 @@ end
 function SetTrackMutes(selTrackCount, mute)
 	for i = 0, selTrackCount - 1 do
 		local selTrack = r.GetSelectedTrack(0, i)
-		r.SetMediaTrackInfo_Value(selTrack, "B_MUTE", mute)
+		r.SetMediaTrackInfo_Value(selTrack, 'B_MUTE', mute)
 	end
 end
 

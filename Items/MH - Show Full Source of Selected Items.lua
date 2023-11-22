@@ -10,8 +10,8 @@
 --Setup
 ----------------------------------------
 r = reaper
-local scriptName = ({ r.get_action_context() })[2]:match("([^/\\_]+)%.[Ll]ua$")
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+local scriptName = ({ r.get_action_context() })[2]:match('([^/\\_]+)%.[Ll]ua$')
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 ----------------------------------------
 --Script Variables
 ----------------------------------------
@@ -30,12 +30,12 @@ function ShowItemSource(item, track, pos)
         end
     end
     if isNewSource then
-        local itemStart = r.GetMediaItemInfo_Value(item, "D_POSITION")
+        local itemStart = r.GetMediaItemInfo_Value(item, 'D_POSITION')
         local length = r.GetMediaSourceLength(source)
-        r.SetMediaItemTakeInfo_Value(take,"D_STARTOFFS", 0)
+        r.SetMediaItemTakeInfo_Value(take,'D_STARTOFFS', 0)
         r.SetMediaItemLength(item, length, false)
         if itemStart <= pos then
-            r.SetMediaItemInfo_Value( item, "D_POSITION", pos + 1 )
+            r.SetMediaItemInfo_Value( item, 'D_POSITION', pos + 1 )
             itemStart = pos + 1
         end
         return true, itemStart + length, source
@@ -55,7 +55,7 @@ function Main()
     local tracksLastPos = {}
     for index, item in ipairs(items) do
         local track = r.GetMediaItemTrack(item)
-        local num = r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
+        local num = r.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER')
         --storing seperate end points for each track. If an item is overlapping with a previous item it will be moved to the end of that item.
         if not tracksLastPos[num] then
             tracksLastPos[num] = 0

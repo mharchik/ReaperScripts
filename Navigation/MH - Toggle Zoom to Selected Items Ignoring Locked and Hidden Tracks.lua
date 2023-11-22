@@ -9,7 +9,7 @@
 --Setup
 ----------------------------------------
 r = reaper
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox("This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages", "Error", 0); return end else r.ShowMessageBox("This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information", "Error", 0); return end
+mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 if not mh.SWS() or not mh.JS() then mh.noundo() return end
 ----------------------------------------
 --User Settings
@@ -23,10 +23,10 @@ local scaledTracks = {} --stores references to all of the tracks that will have 
 local unscaledTracks = {} --stores references to all of the tracks that are height locked or will be set to the minium height
 local scaledEnv = {} --tracks the envelope lanes that will have their heights changed when zooming in
 local unscaledEnv = {} --tracks the envelope lanes that won't be changed when zooming in
-local envZoomScale = mh.settings("envvzoomscale"); if not envZoomScale then envZoomScale = 0.5 end
+local envZoomScale = r.get_config_var_string('envvzoomscale'); if not envZoomScale then envZoomScale = 0.5 end
 local minHeight
 local minRecarmHeight
-local spacerHeight = mh.settings("trackgapmax"); if not spacerHeight then spacerHeight = 16 end
+local spacerHeight = r.get_config_var_string('trackgapmax'); if not spacerHeight then spacerHeight = 16 end
 local numOfSpacers = 0
 ----------------------------------------
 --Functions
@@ -37,20 +37,20 @@ function GetTracks()
 	local selItemCount = r.CountSelectedMediaItems()
 	local firstItem = r.GetSelectedMediaItem(0, 0)
 	local firstTrack = r.GetMediaItem_Track(firstItem)
-	local firstTrackNum = r.GetMediaTrackInfo_Value(firstTrack, "IP_TRACKNUMBER")
+	local firstTrackNum = r.GetMediaTrackInfo_Value(firstTrack, 'IP_TRACKNUMBER')
 	local lastItem = r.GetSelectedMediaItem(0, selItemCount - 1)
 	local lastTrack = r.GetMediaItem_Track(lastItem)
-	local lastTrackNum = r.GetMediaTrackInfo_Value(lastTrack, "IP_TRACKNUMBER")
+	local lastTrackNum = r.GetMediaTrackInfo_Value(lastTrack, 'IP_TRACKNUMBER')
 
 	--check each track to see what settings it has that affect what height we can zoom it to
 	for i = 0, lastTrackNum - firstTrackNum do
 		local track = r.GetTrack(0, firstTrackNum + i - 1)
-		local trackHeight = r.GetMediaTrackInfo_Value(track, "I_TCPH")
-		local isLocked = r.GetMediaTrackInfo_Value(track, "B_HEIGHTLOCK")
-		local isRecArm = r.GetMediaTrackInfo_Value(track, "I_RECARM")
+		local trackHeight = r.GetMediaTrackInfo_Value(track, 'I_TCPH')
+		local isLocked = r.GetMediaTrackInfo_Value(track, 'B_HEIGHTLOCK')
+		local isRecArm = r.GetMediaTrackInfo_Value(track, 'I_RECARM')
 		local numItems = r.CountTrackMediaItems(track)
-		local isVisible = r.GetMediaTrackInfo_Value(track, "B_SHOWINTCP")
-		if r.GetMediaTrackInfo_Value(track, "I_SPACER") == 1 then
+		local isVisible = r.GetMediaTrackInfo_Value(track, 'B_SHOWINTCP')
+		if r.GetMediaTrackInfo_Value(track, 'I_SPACER') == 1 then
 			if i > 0 then --ignores spacer if its at the very top of the selection, since we'll just be scrolling down past it anyways
 				numOfSpacers = numOfSpacers + 1
 			end
@@ -73,9 +73,9 @@ function GetTracks()
 			local ignoreEnvs = 0
 			for j = 0, numEnvs - 1 do
 				local env = r.GetTrackEnvelope(track, j)
-				local envTCPY = r.GetEnvelopeInfo_Value(env, "I_TCPY")
-				local envTCPH = r.GetEnvelopeInfo_Value(env, "I_TCPH")
-				local envTCPH_Used = r.GetEnvelopeInfo_Value(env, "I_TCPH_USED")
+				local envTCPY = r.GetEnvelopeInfo_Value(env, 'I_TCPY')
+				local envTCPH = r.GetEnvelopeInfo_Value(env, 'I_TCPH')
+				local envTCPH_Used = r.GetEnvelopeInfo_Value(env, 'I_TCPH_USED')
 				if envTCPH > envTCPY or envTCPH_Used == 0 then --if envTCPH > envTCPY that means the envelope is being displayed in the media lane and we don't need to scale it.
 					ignoreEnvs = ignoreEnvs + 1
 				end
@@ -183,14 +183,14 @@ function SetTrackHeights(newHeight)
 	for track, savedHeight in pairs(scaledTracks) do
 		--if we didn't save any height with the tracks earlier we can safely scale, or if the height we saved is less than the height we're scaling too, then we can scale the track height safely
 		if savedHeight == 0 or savedHeight <= newHeight then
-			r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", newHeight)
+			r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', newHeight)
 		else --otherwise we need to fall back to the saved height
-			r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", savedHeight)
+			r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', savedHeight)
 		end
 	end
 	--setting the heights of all of our unscaled tracks. locked tracks will just be set to the same height they're currently at, and unlocked tracks will be set to the minimume height.
 	for track, savedHeight in pairs(unscaledTracks) do
-		r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", savedHeight)
+		r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', savedHeight)
 	end
 end
 
@@ -204,7 +204,7 @@ end
 
 --Checking if zoom wil actually move our view by any significant amount.
 function DecideIfShouldZoom(firstTrack, newTrackHeight, newStart, newEnd)
-	local tcpy = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY") --grabbing the position of the top track in our selection
+	local tcpy = r.GetMediaTrackInfo_Value(firstTrack, 'I_TCPY') --grabbing the position of the top track in our selection
 	local curStart, curEnd = r.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	--checking if the current start and end are close to what we would zoom to, if the top track is already at the top of the arrange view. If all of that is already true then we don't need to zoom in again and we'll zoom out instead later
 	if CheckIfNumsAreClose(curStart, newStart) and CheckIfNumsAreClose(curEnd, newEnd) and CheckIfNumsAreClose(tcpy, 0) then
@@ -218,19 +218,19 @@ function ZoomIn(firstTrack, zoomStart, zoomEnd, itemsStart)
 	--Zoom the arrange view to our new start and end
 	r.GetSet_ArrangeView2(0, true, 0, 0, zoomStart, zoomEnd)
 	--find the top track and scroll the arrange view down to the top of it
-	local tcpy = r.GetMediaTrackInfo_Value(firstTrack, "I_TCPY")
+	local tcpy = r.GetMediaTrackInfo_Value(firstTrack, 'I_TCPY')
 	local arrangeView = r.JS_Window_FindChildByID(r.GetMainHwnd(), 1000)
-	local retval, pos, _, _, _, _ = r.JS_Window_GetScrollInfo(arrangeView, "v")
+	local retval, pos, _, _, _, _ = r.JS_Window_GetScrollInfo(arrangeView, 'v')
 	local newScroll = tcpy + pos
 	if retval then
-		r.JS_Window_SetScrollPos(arrangeView, "v", newScroll)
+		r.JS_Window_SetScrollPos(arrangeView, 'v', newScroll)
 	end
 	--Moving edit cursor to start of items as well
 	r.SetEditCurPos(itemsStart, false, false)
 end
 
 function ZoomOut()
-	r.Main_OnCommandEx(r.NamedCommandLookup("_SWS_UNDOZOOM"), 1, 0) -- calls action "View: Restore previous zoom/scroll position"
+	r.Main_OnCommandEx(r.NamedCommandLookup('_SWS_UNDOZOOM'), 1, 0) -- calls action 'View: Restore previous zoom/scroll position'
 end
 
 function CheckIfNumsAreClose(x, y)

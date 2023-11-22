@@ -1,6 +1,6 @@
 ---@diagnostic disable: param-type-mismatch
 ----------------------------------------
--- @provides [main] .
+-- @provides [nomain] .
 -- @author Max Harchik
 -- @version 1.0
 ----------------------------------------
@@ -11,9 +11,7 @@ mh = {}
 ----------------------------------------
 --Global Variables
 ----------------------------------------
---### When this character is added to the start of a track name, that track will be treated as a divider track
-mh.DividerTrackSymbol = "<"
-----------------------------------------
+    ----------------------------------------
 --Functions
 ----------------------------------------
 
@@ -24,13 +22,13 @@ mh.DividerTrackSymbol = "<"
 **_t: number_** : current version of the script that is installed
 ]]
 function mh.version()
-    local file = io.open((r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'):gsub('\\', '/'), "r")
-    local vers_header = "-- @version "
+    local file = io.open((r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'):gsub('\\', '/'), 'r')
+    local vers_header = '-- @version '
     io.input(file)
     local t = 0
     for line in io.lines() do
         if line:find(vers_header) then
-            t = line:gsub(vers_header, "")
+            t = line:gsub(vers_header, '')
             break
         end
     end
@@ -42,22 +40,22 @@ end
 ## Gets current reaper settings
 
 ### params
-**_settingName: string_** : the name of the setting your checking.
+**str: string_** : the name of the setting your checking.
 
 ### returns
 **_val: number_** : value of the setting your checking.
 ]]
-function mh.settings(settingName)
-    local settings = io.open((r.GetResourcePath() .. '/reaper.ini'):gsub('\\', '/'), "r")
-    io.input(settings)
+function mh.settings(str)
+    local ini = io.open(reaper.get_ini_file(), 'r')
+    io.input(ini)
     local val
     for line in io.lines() do
-        if line:find(settingName) then
-            val = line:gsub(settingName .. "=", "")
+        if line:find(str) then
+            val = line:gsub(str .. '=', '')
             break
         end
     end
-    io.close(settings)
+    io.close(ini)
     return val
 end
 
@@ -69,7 +67,7 @@ end
 **_msg: any_** : text to print
 ]]
 function mh.Msg(msg)
-    r.ShowConsoleMsg(tostring(msg) .. "\n")
+    r.ShowConsoleMsg(tostring(msg) .. '\n')
 end
 
 --## Used to exit scripts early without creating an undo point.
@@ -79,14 +77,14 @@ end
 
 
 --[[
-## Checks If you have the js_ReaScriptAPI Installed
+## Checks If you have the js_ReaScriptAPI Extension Installed
 
 ### returns
 **_bool_**
 ]]
 function mh.JS()
     if not r.JS_ReaScriptAPI_Version then
-        r.ShowMessageBox("Please install the js_ReaScriptAPI extension via Reapack before trying to run this script.", "Error", 0)
+        r.ShowMessageBox('Please install the js_ReaScriptAPI extension via Reapack before trying to run this script.', 'Error', 0)
         return false
     else
         return true
@@ -94,14 +92,14 @@ function mh.JS()
 end
 
 --[[
-## Checks If you have the SWS Extensions Installed
+## Checks If you have the SWS Extension Installed
 
 ### returns
 **_bool_**
 ]]
 function mh.SWS()
     if not r.CF_GetSWSVersion then
-        r.ShowMessageBox("Please install the SWS extensions before trying to run this script.", "Error", 0)
+        r.ShowMessageBox('Please install the SWS extensions before trying to run this script.', 'Error', 0)
         return false
     else
         return true
@@ -109,15 +107,18 @@ function mh.SWS()
 end
 
 --[[
-## Returns whether or not a track can be classified as a divider track.
+## Checks If you have the ReaImGui Extension Installed
 
 ### returns
 **_bool_**
 ]]
-function mh.IsDividerTrack(track)
-    local _, name = r.GetTrackName(track)
-    name = string.gsub(name, " ", "")
-    return string.sub(name, 1, 1) == tvm.DividerTrackSymbol
+function mh.ImGui ()
+    if not r.ImGui_GetVersion then
+        r.ShowMessageBox('Please install the ReaImGui extension via Reapack before trying to run this script.', 'Error', 0)
+        return false
+    else
+        return true
+    end
 end
 
 --[[
@@ -130,7 +131,7 @@ end
 **_bool_**
 ]]
 function mh.IsFolderItem(item)
-    if ({r.GetSetMediaItemInfo_String(item, "P_EXT:nvk_item_type", "", 0)})[2] == "folder" then
+    if ({r.GetSetMediaItemInfo_String(item, 'P_EXT:nvk_item_type', '', 0)})[2] == 'folder' then
         return true
     end
     return false
@@ -151,14 +152,14 @@ function mh.GetTopParentTrack(track)
     local depth = r.GetTrackDepth(track)
     if depth > 0 then
         --get track index of the track above the track passed in
-        local trackIdx = r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER") - 2
+        local trackIdx = r.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER') - 2
         while depth > 0 do
             track = r.GetTrack(0, trackIdx)
             depth = r.GetTrackDepth(track)
             trackIdx = trackIdx - 1
         end
         return 2, track
-    elseif r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH") == 1 then
+    elseif r.GetMediaTrackInfo_Value(track, 'I_FOLDERDEPTH') == 1 then
         return 1, track
     else
         return 0, track
@@ -179,10 +180,10 @@ end
 function mh.GetLastChildTrack(track)
     local childTrack
     local depth = r.GetTrackDepth(track)
-    local folderDepth = r.GetMediaTrackInfo_Value(track, "I_FOLDERDEPTH")
+    local folderDepth = r.GetMediaTrackInfo_Value(track, 'I_FOLDERDEPTH')
     if depth > 0 or folderDepth == 1 then
         --get track index of the track below the track passed in
-        local trackIdx = r.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER")
+        local trackIdx = r.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER')
         repeat
             childTrack = r.GetTrack(0, trackIdx)
             if childTrack then
@@ -211,8 +212,8 @@ end
 **_itemLength: double_** : The length of the item in seconds.
 ]]
 function mh.GetItemSize(item)
-    local itemStart = r.GetMediaItemInfo_Value(item, "D_POSITION")
-    local itemLength = r.GetMediaItemInfo_Value(item, "D_LENGTH")
+    local itemStart = r.GetMediaItemInfo_Value(item, 'D_POSITION')
+    local itemLength = r.GetMediaItemInfo_Value(item, 'D_LENGTH')
     local itemEnd = itemLength + itemStart
     return itemStart, itemEnd, itemLength
 end
@@ -236,11 +237,11 @@ function mh.GetVisibleSelectedItemsSize()
         for i = 0, selItemCount - 1 do
             local item = r.GetSelectedMediaItem(0, i)
             local track = r.GetMediaItem_Track(item)
-            local trackHeight = r.GetMediaTrackInfo_Value(track, "I_TCPH")
-            local isVisible = r.GetMediaTrackInfo_Value(track, "B_SHOWINTCP")
+            local trackHeight = r.GetMediaTrackInfo_Value(track, 'I_TCPH')
+            local isVisible = r.GetMediaTrackInfo_Value(track, 'B_SHOWINTCP')
             if trackHeight > 0 and isVisible then
-                local itemLeftEdge = r.GetMediaItemInfo_Value(item, "D_POSITION")
-                local itemRightEdge = r.GetMediaItemInfo_Value(item, "D_LENGTH") + itemLeftEdge
+                local itemLeftEdge = r.GetMediaItemInfo_Value(item, 'D_POSITION')
+                local itemRightEdge = r.GetMediaItemInfo_Value(item, 'D_LENGTH') + itemLeftEdge
                 if not itemsStart then
                     itemsStart = itemLeftEdge
                 elseif itemsStart > itemLeftEdge then
@@ -374,31 +375,31 @@ function mh.GetMinTrackHeights()
 	local track = r.GetTrack(0,0)
 	if not track then return end
 	--get track current settings
-	local height = r.GetMediaTrackInfo_Value(track, "I_TCPH")
-	local recarm = r.GetMediaTrackInfo_Value(track, "I_RECARM")
-	local show = r.GetMediaTrackInfo_Value(track, "B_SHOWINTCP")
-	local lock = r.GetMediaTrackInfo_Value(track, "B_HEIGHTLOCK")
+	local height = r.GetMediaTrackInfo_Value(track, 'I_TCPH')
+	local recarm = r.GetMediaTrackInfo_Value(track, 'I_RECARM')
+	local show = r.GetMediaTrackInfo_Value(track, 'B_SHOWINTCP')
+	local lock = r.GetMediaTrackInfo_Value(track, 'B_HEIGHTLOCK')
 	--set track record armed to get its minimum recarm height
-	r.SetMediaTrackInfo_Value(track, "B_SHOWINTCP", 1)
-	r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", 0)
-	r.SetMediaTrackInfo_Value(track, "I_RECARM", 1)
-	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", 1)
-	minRecarmHeight = r.GetMediaTrackInfo_Value(track, "I_TCPH")
+	r.SetMediaTrackInfo_Value(track, 'B_SHOWINTCP', 1)
+	r.SetMediaTrackInfo_Value(track, 'B_HEIGHTLOCK', 0)
+	r.SetMediaTrackInfo_Value(track, 'I_RECARM', 1)
+	r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', 1)
+	minRecarmHeight = r.GetMediaTrackInfo_Value(track, 'I_TCPH')
 	--unarm and get it's actual minimum height
-	r.SetMediaTrackInfo_Value(track, "I_RECARM", 0)
-	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", 1)
-	minHeight = r.GetMediaTrackInfo_Value(track, "I_TCPH")
+	r.SetMediaTrackInfo_Value(track, 'I_RECARM', 0)
+	r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', 1)
+	minHeight = r.GetMediaTrackInfo_Value(track, 'I_TCPH')
 	--reset values
-	r.SetMediaTrackInfo_Value(track, "I_RECARM", recarm)
-	r.SetMediaTrackInfo_Value(track, "I_HEIGHTOVERRIDE", height)
-	r.SetMediaTrackInfo_Value(track, "B_HEIGHTLOCK", lock)
-	r.SetMediaTrackInfo_Value(track, "B_SHOWINTCP", show)
+	r.SetMediaTrackInfo_Value(track, 'I_RECARM', recarm)
+	r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', height)
+	r.SetMediaTrackInfo_Value(track, 'B_HEIGHTLOCK', lock)
+	r.SetMediaTrackInfo_Value(track, 'B_SHOWINTCP', show)
     r.PreventUIRefresh(-1)
     return minHeight, minRecarmHeight
 end
 
 function mh.ToBool(string)
-    if string:lower() == "true" then
+    if string:lower() == 'true' then
         return true
     elseif string:lower() == false then
         return false
@@ -406,7 +407,7 @@ function mh.ToBool(string)
 end
 
 function mh.HexToRgb(num)
-    num = num:gsub("[^%x]", "") --removing all non hexidecimal characters from input
+    num = num:gsub('[^%x]', '') --removing all non hexidecimal characters from input
     local rgb = {}
     for i = 1, #num, 2 do
         rgb[#rgb+1] = tonumber(num:sub(i, i+1), 16)
@@ -415,14 +416,14 @@ function mh.HexToRgb(num)
 end
 
 function mh.RgbToHex(rgb)
-    local num = ""
+    local num = ''
     for i, val in ipairs(rgb) do
-        local hex = string.format("%x", val)
+        local hex = string.format('%x', val)
         --making sure we have strings that are 2 characters long in the case that a value is small enough to only be 1 character
         if #hex == 1 then
-            hex = "0" .. hex
+            hex = '0' .. hex
         end
-        if num == "" then
+        if num == '' then
             num = hex
         else
             num = num .. hex
@@ -449,3 +450,142 @@ function mh.TrimSpaces(s)
     return s:sub(l, r)
 end
 
+
+----------------------------------------
+-- Track Visuals Manager Globals
+----------------------------------------
+tvm = {}
+
+tvm.ExtSection = 'MH - TSM'
+
+tvm.Settings = {
+--[[1]] 'Divider_TrackHeight',
+--[[2]] 'Divider_TrackLayout',
+--[[3]] 'Divider_TrackColor',
+--[[4]] 'Divider_TrackRecolor',
+--[[5]] 'Folder_TrackHeight',
+--[[6]] 'Folder_TrackLayout',
+--[[7]] 'Folder_TrackColor',
+--[[8]] 'Folder_TrackRecolor',
+--[[9]] 'Bus_TrackHeight',
+--[[10]] 'Bus_TrackLayout',
+--[[11]] 'Bus_TrackColor',
+--[[12]] 'Bus_TrackRecolor',
+--[[13]] 'DividerSymbol',
+--[[14]] 'Overrides'
+}
+
+-- Default values for all settings
+tvm.Defaults = {
+    [tvm.Settings[1]] = 40,
+    [tvm.Settings[2]] = 'A - NO CONTROL',
+    [tvm.Settings[3]] = '65508',
+    [tvm.Settings[4]] = 'true',
+    [tvm.Settings[5]] = 28,
+    [tvm.Settings[6]] = 'A - COLOR FULL',
+    [tvm.Settings[7]] = '65420',
+    [tvm.Settings[8]] = 'true',
+    [tvm.Settings[9]] = 28,
+    [tvm.Settings[10]] = 'A - COLOR FULL',
+    [tvm.Settings[11]] = '36095',
+    [tvm.Settings[12]] = 'true',
+    [tvm.Settings[13]] = '<',
+    [tvm.Settings[14]] = 'Video*16776960'
+}
+
+tvm.emptyOverrideName = 'tvm_override_empty_name'
+----------------------------------------
+--Track Visuals Manager Functions
+----------------------------------------
+function tvm.GetAllExtValues()
+    local ExtVals = {}
+    for key, name in ipairs(tvm.Settings) do
+        if not r.HasExtState(tvm.ExtSection, name) then
+            r.SetExtState(tvm.ExtSection, name, tostring(tvm.Defaults[name]), true)
+            ExtVals[name] = r.GetExtState(tvm.ExtSection, name)
+        else
+            ExtVals[name] = r.GetExtState(tvm.ExtSection, name)
+        end
+    end
+    return ExtVals
+end
+
+function tvm.SetExtValue(name, val)
+    for index, setting in ipairs(tvm.Settings) do
+        if setting == name then
+            r.SetExtState(tvm.ExtSection, name, tostring(val), true)
+        end
+    end
+end
+
+function tvm.GetExtValue(name)
+    for index, setting in ipairs(tvm.Settings) do
+        if setting == name then
+            return r.GetExtState(tvm.ExtSection, name)
+        end
+    end
+end
+
+function tvm.ResetAllExtValues()
+    for i, name in pairs(tvm.Settings) do
+        r.SetExtState(tvm.ExtSection, name, tvm.Defaults[name], true)
+    end
+end
+
+function tvm.SetAllExtValues(table)
+    for name, value in pairs(table) do
+        r.SetExtState(tvm.ExtSection, name, value, true)
+    end
+end
+
+function tvm.GetOverrides() -- Returns a table that whose values are single entry tables where key = track name, value = color
+    local s = tvm.GetExtValue('Overrides')
+    local overrides = {}
+    for val in s:gmatch('([^,]+)') do
+        local pair = {}
+        local key
+        local i = 1
+        for text in val:gmatch('([^*]+)') do
+            if i == 1 then
+                key = text
+            else
+                pair[key] = text
+            end
+            i = i + 1
+        end
+        overrides[#overrides + 1] = pair
+    end
+    return overrides
+end
+
+function tvm.SetOverrides(t)
+    local list
+    for i, override in ipairs(t) do
+        local pair
+        for name, color in pairs(override) do
+            pair = name .. '*' .. color
+        end
+        if not list then
+            list = pair
+        else
+            list = list .. ',' .. pair
+        end
+    end
+    tvm.SetExtValue('Overrides', list)
+end
+
+--[[
+## Returns whether or not a track can be classified as a divider track.
+
+### returns
+**_bool_**
+]]
+function tvm.IsDividerTrack(track)
+    local _, name = r.GetTrackName(track)
+    name = string.gsub(name, ' ', '')
+    return string.sub(name, 1, 1) == tvm.GetExtValue('DividerSymbol')
+end
+
+----------------------------------------
+
+----------------------------------------
