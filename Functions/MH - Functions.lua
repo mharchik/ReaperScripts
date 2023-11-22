@@ -456,7 +456,9 @@ end
 ----------------------------------------
 tvm = {}
 
-tvm.ExtSection = 'MH - TSM'
+tvm.ExtSection = 'MH_TSM'
+tvm.ExtTrack = 'MH_TSM_TrackType'
+tvm.EmptyName = 'tvm_override_empty_name'
 
 tvm.Settings = {
 --[[1]] 'Divider_TrackHeight',
@@ -493,7 +495,6 @@ tvm.Defaults = {
     [tvm.Settings[14]] = 'Video*16776960'
 }
 
-tvm.emptyOverrideName = 'tvm_override_empty_name'
 ----------------------------------------
 --Track Visuals Manager Functions
 ----------------------------------------

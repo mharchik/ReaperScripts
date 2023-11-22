@@ -21,26 +21,14 @@ local OS = r.GetOS()
 ----------------------------------------
 -- Script Variables
 ----------------------------------------
-local refreshRate = 0.1
-local lastActiveTime = r.time_precise()
+local RefreshRate = 0.1
+local LastActiveTime = r.time_precise()
 local Values = {}
 ----------------------------------------
 --Functions
 ----------------------------------------
 
 function UpdateTrackSettings(track, height, layout, lock, color, recolor)
-    --Check Height
-    height = tonumber(height)
-    if height > 0 then
-        local curHeight = r.GetMediaTrackInfo_Value(track, 'I_TPCH')
-        if curHeight ~= height then
-            r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', height)
-        end
-    elseif height == 0 then
-        if r.GetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE') ~= 0 then
-            r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', 0)
-        end
-    end
     --Check Layout
     local curLayout = ({r.GetSetMediaTrackInfo_String(track, 'P_TCP_LAYOUT', '', false)})[2]
     if curLayout ~= layout then
@@ -51,12 +39,28 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
     if curLock ~= lock then
         r.SetMediaTrackInfo_Value(track, 'B_HEIGHTLOCK', lock)
     end
+    
+    --Only change our height override if the track is/was locked
+    if lock == 1 or curLock == 1 then
+        --Check Height
+        height = tonumber(height)
+        if height > 0 then
+            local curHeight = r.GetMediaTrackInfo_Value(track, 'I_TPCH')
+            if curHeight ~= height then
+                r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', height)
+            end
+        elseif height == 0 then
+            if r.GetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE') ~= 0 then
+                r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', 0)
+            end
+        end
+    end
     --Check Color
-    if recolor == 'true' then
+    if recolor then
         local curColor = r.GetTrackColor(track)
         if not color then --Reset Color to Default
             if curColor ~= 0 then -- if it's already 0 then we don't need to change it anymore
-               r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
+                r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
             end
         else
             --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
@@ -108,7 +112,7 @@ end
 
 function Main()
     local currentTime = r.time_precise()
-    if currentTime - lastActiveTime > refreshRate then
+    if currentTime - LastActiveTime > RefreshRate then
         --r.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
@@ -120,26 +124,30 @@ function Main()
                     if r.GetMediaTrackInfo_Value(track, 'I_TCPH') > 0 then --only update visuals on tracks that are actually visible
                         local numOfItems = r.CountTrackMediaItems(track)
                         local folderDepth = r.GetMediaTrackInfo_Value(track, 'I_FOLDERDEPTH')
-                        if tvm.IsDividerTrack(track) then --Checking if the track is a Divider Track
-                            UpdateTrackSettings(track, Values['Divider_TrackHeight'], Values['Divider_TrackLayout'], 1, Values['Divider_TrackColor'], Values['Divider_TrackRecolor'])
-                        elseif folderDepth == 1 and numOfItems == 0 then --Checking if the track is a parent sub mix bus
-                            UpdateTrackSettings(track, Values['Bus_TrackHeight'], Values['Bus_TrackLayout'], 1, Values['Bus_TrackColor'], Values['Bus_TrackRecolor'])
+                        --Checking if track is a Divider Track
+                        if  tvm.IsDividerTrack(track) then --Checking if the track is a Divider Track
+                            UpdateTrackSettings(track, Values['Divider_TrackHeight'], Values['Divider_TrackLayout'], 1, Values['Divider_TrackColor'], mh.ToBool(Values['Divider_TrackRecolor']))
+                        --Checking if track is a folder item track    
                         elseif folderDepth == 1 and r.GetTrackDepth(track) == 0 and numOfItems > 0 then --Checking if the track is a top level Folder Item Track
                             if r.GetMediaTrackInfo_Value(track, 'I_FOLDERCOMPACT') == 2 then --if folder is fully collpased then minimize it's height and lock it
-                                UpdateTrackSettings(track, Values['Folder_TrackHeight'], Values['Folder_TrackLayout'], 1, Values['Folder_TrackColor'], Values['Folder_TrackRecolor'])
+                                UpdateTrackSettings(track, Values['Folder_TrackHeight'], Values['Folder_TrackLayout'], 1, Values['Folder_TrackColor'], mh.ToBool(Values['Folder_TrackRecolor']))
                             else
-                                UpdateTrackSettings(track, 0, Values['Folder_TrackLayout'], 0, Values['Folder_TrackColor'], Values['Folder_TrackRecolor'])
+                                UpdateTrackSettings(track, 0, Values['Folder_TrackLayout'], 0, Values['Folder_TrackColor'], mh.ToBool(Values['Folder_TrackRecolor']))
                             end
+
+                        --Checking if track is a sub folder bus track
+                        elseif folderDepth == 1 and numOfItems == 0 then --Checking if the track is a parent sub mix bus
+                            UpdateTrackSettings(track, Values['Bus_TrackHeight'], Values['Bus_TrackLayout'], 1, Values['Bus_TrackColor'], mh.ToBool(Values['Bus_TrackRecolor']))
                         else --if none of the above then we'll set it all back to default
-                            UpdateTrackSettings(track, 0, 'Global layout Default', 0, false, Values['Folder_TrackRecolor'])
+                            UpdateTrackSettings(track, 0, 'Global layout Default', 0, false)
                         end
                     end
                 end
+                r.PreventUIRefresh(-1)
             end
-            r.PreventUIRefresh(-1)
             r.TrackList_AdjustWindows(true)
         end
-        lastActiveTime = currentTime
+        LastActiveTime = currentTime
     end
     r.defer(Main)
 end

@@ -127,8 +127,8 @@ Bus.name = 'Bus'
 ----------------------------------------
 
 function CreateOverrideTab(idx, name, color)
-    --Doing some string swapping to make sure we don't store an empty string
-    if name == tvm.emptyOverrideName then
+    --Doing some string swapping so that we can display an empty input box without storing and empty string
+    if name == tvm.EmptyName then
         name = ''
     end
     r.ImGui_PushID(ctx, 'TrackNameOverride' .. idx)
@@ -137,7 +137,7 @@ function CreateOverrideTab(idx, name, color)
     if isNewName then
         --Doing some string swapping to make sure we don't store an empty string
         if newName == '' then
-            newName = tvm.emptyOverrideName
+            newName = tvm.EmptyName
         end
         local newOverride = {}
         newOverride[newName] = color
@@ -157,7 +157,7 @@ function CreateOverrideTab(idx, name, color)
         if isNewColor then
             --Doing some string swapping to make sure we don't store an empty string
             if name == '' then
-                name = tvm.emptyOverrideName
+                name = tvm.EmptyName
             end
             Overrides[idx][name] = newColor
             update = true
@@ -289,7 +289,7 @@ function DrawUI()
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ButtonTextAlign(), 0.6, 0.45)
         if r.ImGui_Button(ctx, '+', 22.0, 22.0) then
             local override = {}
-            override[tvm.emptyOverrideName] = defaultOverrideColor
+            override[tvm.EmptyName] = defaultOverrideColor
             Overrides[#Overrides + 1] = override
             update = true
         end

@@ -23,10 +23,10 @@ local scaledTracks = {} --stores references to all of the tracks that will have 
 local unscaledTracks = {} --stores references to all of the tracks that are height locked or will be set to the minium height
 local scaledEnv = {} --tracks the envelope lanes that will have their heights changed when zooming in
 local unscaledEnv = {} --tracks the envelope lanes that won't be changed when zooming in
-local envZoomScale = r.get_config_var_string('envvzoomscale'); if not envZoomScale then envZoomScale = 0.5 end
+local envZoomScale = r.SNM_GetDoubleConfigVar('envvzoomscale', 0); if not envZoomScale then envZoomScale = 0.5 end
 local minHeight
 local minRecarmHeight
-local spacerHeight = r.get_config_var_string('trackgapmax'); if not spacerHeight then spacerHeight = 16 end
+local spacerHeight = r.SNM_GetIntConfigVar('trackgapmax', 0); if not spacerHeight then spacerHeight = 16 end
 local numOfSpacers = 0
 ----------------------------------------
 --Functions
