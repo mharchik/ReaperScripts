@@ -6,24 +6,14 @@
 -- @version 1.0
 -- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 
---TODO 
---Fix Duplicate Track names
+--TODO
 --Fix Media Item getting renamed to add '-imported' at the end of the file if it already exists in your audio files folder
---Have it not import media that it can't find, and then print an error if there were any missing files
 ----------------------------------------
 --Setup
 ----------------------------------------
 r = reaper
-local scriptName = ({ r.get_action_context() })[2]:match('([^/\\_]+)%.[Ll]ua$')
-mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua'; 
-if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
-if not mh.SWS() or not mh.JS() then mh.noundo() return end
-----------------------------------------
---User Settings
-----------------------------------------   
-local path
-local audiopath
-----------------------------------------
+local scriptName = ({r.get_action_context()})[2]:match('([^/\\_]+)%.[Ll]ua$')
+----------------------------------------    
 --Script Variables
 ----------------------------------------
 local ClipsSect = 'O N L I N E  C L I P S  I N  S E S S I O N'
@@ -33,18 +23,35 @@ local TrackNumInfo = '# OF AUDIO TRACKS:'
 local ClipsNumInfo = '# OF AUDIO CLIPS:'
 local FilesNumInfo = '# OF AUDIO FILES:'
 local FramesInfo = 'TIMECODE FORMAT:'
+local TimecodeOffsetInfo ='SESSION START TIMECODE:'
+local TimecodeOffset
+local RppStartTime = 60
 local NumOfTracks
 local Framerate
 
 local Clips = {}
 local Tracks = {}
+local TrackNames = {}
 local Markers = {}
+local FailedFiles = {}
 
-local extension_list = "Text file (.txt)\0*.txt\0\0"
-
+local path
+local audiopath
 ----------------------------------------
 --Functions
 ----------------------------------------
+
+function ExtensionChecker()
+    if not r.CF_GetSWSVersion then
+        r.ShowMessageBox('SWS extension is missing!\n\nPlease install it before trying to run this script.', 'Error', 0)
+        return false
+    elseif not r.JS_ReaScriptAPI_Version then
+        r.ShowMessageBox('js_ReaScriptAPI extension is missing!\n\nPlease install it via Reapack before trying to run this script.', 'Error', 0)
+        return false
+    else
+        return true
+    end
+end
 
 function ReadFile()
     local file = io.open(path:gsub('\\', '/'), 'r')
@@ -57,14 +64,13 @@ function ReadFile()
     local curTrackName
     local curTrackCount = 0
     local i = 1
-    local tSectEmptyCount = 0
     for line in io.lines() do
         if line:find(TrackNumInfo) then
-           NumOfTracks = line:gsub(TrackNumInfo .. '\t+', '')
-           for j = 1, NumOfTracks do
-            local track = {}
-            Tracks[#Tracks+1] = track
-           end
+            NumOfTracks = line:gsub(TrackNumInfo .. '\t+', '')
+            for j = 1, NumOfTracks do
+                local track = {}
+                Tracks[#Tracks + 1] = track
+            end
         elseif line:find(ClipsNumInfo) then
             NumOfClips = line:gsub(ClipsNumInfo .. '\t+', '')
         elseif line:find(FilesNumInfo) then
@@ -72,6 +78,8 @@ function ReadFile()
         elseif line:find(FramesInfo) then
             Framerate = line:gsub(FramesInfo .. '\t+', '')
             Framerate = Framerate:gsub(' Frame', '')
+        elseif line:find(TimecodeOffsetInfo) then
+            TimecodeOffset = line:gsub(TimecodeOffsetInfo .. '\t+', '')
         elseif line:find(ClipsSect) then
             clipsSectStart = i
             isClipsSect = true
@@ -82,16 +90,18 @@ function ReadFile()
         end
 
         --Store Clips/File Name info
-        if isClipsSect and i >= clipsSectStart + 2 then
-            local clip = ''
+        if isClipsSect and i > clipsSectStart + 1 then -- +1 to skip the "Filenames" line
+            local clip
             if #line > 0 then
+                local j = 1
                 for val in line:gmatch('([^\t]+)') do
                     val = TrimCharacer(val, " ")
-                    if clip == '' then
+                    if j == 1 then
                         clip = val
-                    else
+                    elseif j == 2 then
                         Clips[clip] = val
                     end
+                    j = j + 1
                 end
             else
                 isClipsSect = false
@@ -99,58 +109,55 @@ function ReadFile()
         end
         --Store Track Info
         if isTracksSect then
-            if not (#line > 0)  then
-                tSectEmptyCount = tSectEmptyCount + 1
+            if line:find('TRACK NAME:') then
+                curTrackName = line:gsub('TRACK NAME:\t+', '')
+                curTrackCount = curTrackCount + 1
+                TrackNames[#TrackNames+1] = curTrackName
             end
-            if tSectEmptyCount < NumOfTracks * 2 then
-                if line:find('TRACK NAME:') then
-                    curTrackName = line:gsub('TRACK NAME:\t+', '')
-                    curTrackCount = curTrackCount + 1
-                end
-                if (line:sub(1,1)):match('%d') then
-                    local j = 1
-                    local clip
-                    local startTime
-                    local endTime
-                    for val in line:gmatch('([^\t]+)') do
-                        val = TrimCharacer(val, " ")
-                        if j == 3 then
-                            clip = val
-                        elseif j == 4 then
-                            startTime = val
-                        elseif j == 5 then
-                            endTime = val
-                        end
-                        j = j + 1
+            if (line:sub(1, 1)):match('1') then
+                local j = 1
+                local clipName
+                local startTime
+                local mute
+                for val in line:gmatch('([^\t]+)') do
+                    val = TrimCharacer(val, " ")
+                    if j == 3 then
+                        clipName = val
+                    elseif j == 4 then
+                        startTime = val
+                    elseif j == 7 then
+                        mute = val
                     end
-                    local clipInfo = {}
-                    clipInfo[1] = curTrackName
-                    clipInfo[2] = clip
-                    clipInfo[3] = startTime
-                    clipInfo[4] = endTime
-                    table.insert(Tracks[curTrackCount],clipInfo)
+                    j = j + 1
                 end
+                local clipInfo = {}
+                clipInfo[1] = curTrackCount
+                clipInfo[2] = clipName
+                clipInfo[3] = startTime
+                clipInfo[4] = mute
+                table.insert(Tracks[curTrackCount], clipInfo)
             end
         end
         --Store Marker Info
         if isMarkerSect then
+            isTracksSect = false
             if #line > 0 then
-                if (line:sub(1,1)):match('%d') then
+                if (line:sub(1, 1)):match('%d') then
                     local j = 1
                     local time
                     local text
                     for val in line:gmatch('([^\t]+)') do
                         val = TrimCharacer(val, " ")
                         if j == 2 then
-                         time = val
+                            time = val
                         elseif j == 5 then
-                         text = val
+                            text = val
                         end
                         j = j + 1
                     end
                     local marker = {}
                     marker[time] = text
-                    Markers[#Markers+1] = marker
+                    Markers[#Markers + 1] = marker
                 end
             else
                 isMarkerSect = false
@@ -172,19 +179,20 @@ function TimecodeToPos(tc)
         elseif i == 3 then
             pos = pos + val
         elseif i == 4 then
-            pos = pos + val/Framerate
+            pos = pos + val / Framerate
         end
-        i = i +1
+        i = i + 1
     end
     return pos
 end
 
 function CreateMarkers()
+    local offset = TimecodeToPos(TimecodeOffset)
     local i = 1
     for index, marker in ipairs(Markers) do
         for time, name in pairs(marker) do
             local pos = TimecodeToPos(time)
-            reaper.AddProjectMarker( 0, false, pos, 0, name, i )
+            reaper.AddProjectMarker(0, false, pos - offset + RppStartTime, 0, name, i)
             i = i + 1
         end
     end
@@ -199,57 +207,56 @@ function GetClipName(clip)
 end
 
 function CreateTracks()
+    for idx, name in ipairs(TrackNames) do 
+        reaper.InsertTrackAtIndex(idx - 1, false) -- need to -1 the index since it starts at 1 instead of 0
+        local track = reaper.GetTrack(0, idx - 1)
+        reaper.GetSetMediaTrackInfo_String(track, 'P_NAME', name, true)
+    end
+end
+
+function ImportMedia()
+    local offset = TimecodeToPos(TimecodeOffset)
     for i, track in ipairs(Tracks) do
         for j, trackInfo in ipairs(track) do
-            local startPos, endPos
+            local startPos, mute
             local filename
             local selTrack
-            local trackIdx = 0
+            local trackIdx
             for k, val in ipairs(trackInfo) do
                 if k == 1 then
-                    local trackCount = r.CountTracks(0)
-                    local doesTrackExist = false
-                    if trackCount > 0 then
-                        for l = 0, trackCount - 1 do
-                            local nextTrack = r.GetTrack(0, l)
-                            if ({r.GetTrackName(nextTrack)})[2] == val then
-                                doesTrackExist = true
-                                selTrack = nextTrack
-                                r.SetOnlyTrackSelected(selTrack)
-                            end
-                        end
-                    end
-                    if not doesTrackExist then
-                        reaper.InsertTrackAtIndex( trackIdx, false )
-                        selTrack = reaper.GetTrack(0, trackIdx)
-                        r.SetOnlyTrackSelected(selTrack)
-                        reaper.GetSetMediaTrackInfo_String( selTrack, 'P_NAME', val, true )
-                        trackIdx = trackIdx + 1
-                    end
-                    --GetTracks
+                    trackIdx = val - 1 -- need to -1 the index since it starts at 1 instead of 0
+                    selTrack = r.GetTrack(0, trackIdx)
+                    r.SetOnlyTrackSelected(selTrack)
                 elseif k == 2 then
                     filename = GetClipName(val)
                 elseif k == 3 then
                     startPos = TimecodeToPos(val)
                 elseif k == 4 then
-                    endPos = TimecodeToPos(val)
+                    mute = val
                 end
             end
-            reaper.InsertMedia((audiopath .. '/' .. filename):gsub('\\', '/'), 0)
-            local itemCount = r.CountMediaItems(0)
-            if itemCount > 0 then
-                for l = 0, itemCount - 1 do
-                    local item = r.GetMediaItem(0, l)
-                    local take = r.GetActiveTake(item)
-                    local name = r.GetTakeName(take)
-                    if name == filename then
-                        r.MoveMediaItemToTrack( item, selTrack )
-                        r.SetMediaItemPosition( item, startPos, false)
-                        break
+            local file = (audiopath .. '/' .. filename):gsub('\\', '/')
+            if reaper.file_exists(file) then
+                reaper.InsertMedia(file, 0)
+                local itemCount = r.CountMediaItems(0)
+                if itemCount > 0 then
+                    for l = 0, itemCount - 1 do
+                        local item = r.GetMediaItem(0, l)
+                        local take = r.GetActiveTake(item)
+                        local name = r.GetTakeName(take)
+                        if name == filename then
+                            r.MoveMediaItemToTrack(item, selTrack)
+                            r.SetMediaItemPosition(item, startPos - offset + RppStartTime, false)
+                            if mute:match('Muted') then
+                                r.SetMediaItemInfo_Value(item, 'B_MUTE', 1)
+                            end
+                            break
+                        end
                     end
                 end
+            else
+                FailedFiles[#FailedFiles+1] = file
             end
-
         end
     end
 end
@@ -257,30 +264,51 @@ end
 function TrimCharacer(s, char)
     local l = 1
     while s:sub(l, l) == char do
-      l = l + 1
+        l = l + 1
     end
     local r = s:len(s)
     while s:sub(r, r) == char do
-      r = r-1
+        r = r - 1
     end
     return s:sub(l, r)
 end
 
+function PrintFailedFiles()
+    if #FailedFiles > 0 then
+        local allpaths = ""
+        for i, file in ipairs(FailedFiles) do
+            allpaths = allpaths .. file .. '\n\n'
+        end
+        r.ShowMessageBox('Failed to import some files! Please ensure that they actually exist in the audio folder', 'Error', 0)
+        r.ShowConsoleMsg('Missing files: \n\n' .. allpaths)
+    end
+end
+
 function Main()
-    local isFile, fileNames = reaper.JS_Dialog_BrowseForOpenFiles('Select Session Text File', '', '', extension_list, false)
+    if not ExtensionChecker() then return end
+    r.SetEditCurPos(0, true, true)
+    local isFile, fileNames = reaper.JS_Dialog_BrowseForOpenFiles('Select Session Text File', '', '', "Text file (.txt)\0*.txt\0\0", false)
     if isFile == 0 then return end
     local isFolder, folder = reaper.JS_Dialog_BrowseForFolder( 'Selecte Folder With Audio Files to Import', '' )
     if isFolder == 0 then return end
     path = fileNames
     audiopath = folder
-    ReadFile()
-    CreateTracks()
-    CreateMarkers()
+    local trackCount = r.CountTracks(0)
+    if trackCount == 0 then
+        ReadFile()
+        CreateTracks()
+        ImportMedia()
+        CreateMarkers()
+        PrintFailedFiles()
+    else
+        r.ShowMessageBox('Please make sure your session is completely empty and has 0 tracks before running this script', 'Error', 0)
+    end
 end
 
 ----------------------------------------
 --Main
 ----------------------------------------
+r.ClearConsole()
 r.PreventUIRefresh(1)
 r.Undo_BeginBlock()
 Main()
