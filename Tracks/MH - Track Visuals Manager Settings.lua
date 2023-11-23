@@ -286,7 +286,7 @@ function DrawUI()
         end
         --New Override Button
         r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_FramePadding(), 1.0, 1.0)
-        r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ButtonTextAlign(), 0.6, 0.45)
+        r.ImGui_PushStyleVar(ctx, r.ImGui_StyleVar_ButtonTextAlign(), 0.5, 0.45)
         if r.ImGui_Button(ctx, '+', 22.0, 22.0) then
             local override = {}
             override[tvm.EmptyName] = defaultOverrideColor
@@ -311,7 +311,7 @@ function DrawUI()
         end
         --Reset Defaults Button
         r.ImGui_SameLine(ctx)
-        reset = r.ImGui_Button(ctx, 'Reset all to Defaults', 140.0, 22.0)
+        reset = r.ImGui_Button(ctx, 'Reset all to Defaults', 140.0, 25.0)
         if reset then
             update = true
         end
