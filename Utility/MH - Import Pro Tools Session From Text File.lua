@@ -188,12 +188,10 @@ end
 
 function CreateMarkers()
     local offset = TimecodeToPos(TimecodeOffset)
-    local i = 1
-    for index, marker in ipairs(Markers) do
+    for i, marker in ipairs(Markers) do
         for time, name in pairs(marker) do
             local pos = TimecodeToPos(time)
             reaper.AddProjectMarker(0, false, pos - offset + RppStartTime, 0, name, i)
-            i = i + 1
         end
     end
 end
@@ -286,7 +284,7 @@ end
 
 function Main()
     if not ExtensionChecker() then return end
-    r.SetEditCurPos(0, true, true)
+    r.SetEditCurPos(0, false, false)
     local isFile, fileNames = reaper.JS_Dialog_BrowseForOpenFiles('Select Session Text File', '', '', "Text file (.txt)\0*.txt\0\0", false)
     if isFile == 0 then return end
     local isFolder, folder = reaper.JS_Dialog_BrowseForFolder( 'Selecte Folder With Audio Files to Import', '' )
@@ -298,6 +296,7 @@ function Main()
         ReadFile()
         CreateTracks()
         ImportMedia()
+        r.SetEditCurPos(RppStartTime, true, true)
         CreateMarkers()
         PrintFailedFiles()
     else
