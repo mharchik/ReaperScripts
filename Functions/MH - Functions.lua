@@ -11,7 +11,7 @@ mh = {}
 ----------------------------------------
 --Global Variables
 ----------------------------------------
-    ----------------------------------------
+----------------------------------------
 --Functions
 ----------------------------------------
 
@@ -290,7 +290,6 @@ function mh.CheckIfItemsOverlap(item1, item2)
     end
     return false
 end
-
 
 --[[
 ## Selects all items that are overlapping with the input item, as well as any items overlapping those items, and so on.
