@@ -27,31 +27,34 @@ local Values = {}
 ----------------------------------------
 --Functions
 ----------------------------------------
-
 function UpdateTrackSettings(track, height, layout, lock, color, recolor)
+    local didChange = false
     --Check Layout
     local curLayout = ({r.GetSetMediaTrackInfo_String(track, 'P_TCP_LAYOUT', '', false)})[2]
     if curLayout ~= layout then
         r.GetSetMediaTrackInfo_String(track, 'P_TCP_LAYOUT', layout, true)
+        didChange = true
     end
     --Check Height Lock
     local curLock = r.GetMediaTrackInfo_Value(track, 'B_HEIGHTLOCK')
     if curLock ~= lock then
         r.SetMediaTrackInfo_Value(track, 'B_HEIGHTLOCK', lock)
+        didChange = true
     end
-    
     --Only change our height override if the track is/was locked
     if lock == 1 or curLock == 1 then
         --Check Height
         height = tonumber(height)
         if height > 0 then
-            local curHeight = r.GetMediaTrackInfo_Value(track, 'I_TPCH')
+            local curHeight = r.GetMediaTrackInfo_Value(track, 'I_TCPH')
             if curHeight ~= height then
                 r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', height)
+                didChange = true
             end
         elseif height == 0 then
             if r.GetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE') ~= 0 then
                 r.SetMediaTrackInfo_Value(track, 'I_HEIGHTOVERRIDE', 0)
+                didChange = true
             end
         end
     end
@@ -61,6 +64,7 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
         if not color then --Reset Color to Default
             if curColor ~= 0 then -- if it's already 0 then we don't need to change it anymore
                 r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
+                didChange = true
             end
         else
             --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
@@ -80,25 +84,29 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
             -- Red and Blue values from ImGui color picker are switched on windows for some reason
             color = SwapOSColors(color)
             --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
-            if color ~= 0 then
-                if trackName:match('<hidden>') then
-                    local rgb = ({r.ColorFromNative(color)})
-                    for key, value in ipairs(rgb) do
-                        rgb[key] = math.floor(value * 0.5)
-                    end
-                    color = r.ColorToNative(rgb[1], rgb[2], rgb[3])
+            if trackName:match('<hidden>') then
+                local rgb = ({r.ColorFromNative(color)})
+                for key, value in ipairs(rgb) do
+                    rgb[key] = math.floor(value * 0.5)
                 end
+                color = r.ColorToNative(rgb[1], rgb[2], rgb[3])
             end
             --Check if we need to change color
-            if curColor ~= color then
+            if curColor ~= color + 16777216 then
                 r.SetTrackColor(track, color)
+                didChange = true
             end
         end
     else
-        local curColor = r.GetTrackColor(track)
-        if curColor ~= 0 then -- if it's already 0 then we don't need to change it anymore
+        if r.GetTrackColor(track) ~= 0 then -- if it's already 0 then we don't need to change it anymore
             r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
+            didChange = true
         end
+    end
+    --Only refresh arrange view if we actually changed anything
+    if didChange then
+        mh.Msg('refresh')
+        r.TrackList_AdjustWindows(true)
     end
 end
 
@@ -113,7 +121,7 @@ end
 function Main()
     local currentTime = r.time_precise()
     if currentTime - LastActiveTime > RefreshRate then
-        --r.ClearConsole()
+        r.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
             r.PreventUIRefresh(1)
@@ -125,7 +133,7 @@ function Main()
                         local numOfItems = r.CountTrackMediaItems(track)
                         local folderDepth = r.GetMediaTrackInfo_Value(track, 'I_FOLDERDEPTH')
                         --Checking if track is a Divider Track
-                        if  tvm.IsDividerTrack(track) then --Checking if the track is a Divider Track
+                        if tvm.IsDividerTrack(track) then --Checking if the track is a Divider Track
                             UpdateTrackSettings(track, Values['Divider_TrackHeight'], Values['Divider_TrackLayout'], 1, Values['Divider_TrackColor'], mh.ToBool(Values['Divider_TrackRecolor']))
                         --Checking if track is a folder item track    
                         elseif folderDepth == 1 and r.GetTrackDepth(track) == 0 and numOfItems > 0 then --Checking if the track is a top level Folder Item Track
@@ -134,7 +142,6 @@ function Main()
                             else
                                 UpdateTrackSettings(track, 0, Values['Folder_TrackLayout'], 0, Values['Folder_TrackColor'], mh.ToBool(Values['Folder_TrackRecolor']))
                             end
-
                         --Checking if track is a sub folder bus track
                         elseif folderDepth == 1 and numOfItems == 0 then --Checking if the track is a parent sub mix bus
                             UpdateTrackSettings(track, Values['Bus_TrackHeight'], Values['Bus_TrackLayout'], 1, Values['Bus_TrackColor'], mh.ToBool(Values['Bus_TrackRecolor']))
@@ -145,7 +152,6 @@ function Main()
                 end
                 r.PreventUIRefresh(-1)
             end
-            r.TrackList_AdjustWindows(true)
         end
         LastActiveTime = currentTime
     end
