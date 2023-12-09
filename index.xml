@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="83e04c75b6646ee1403d5064a0232d0e0af0c242">
+<index version="1" name="MH Scripts" commit="dcd456c29775a4d4508b16c20f1a4ede242834d5">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -19,7 +19,7 @@
   <category name="Functions">
     <reapack name="MH - Functions.lua" type="script">
       <version name="1.0" author="Max Harchik" time="2023-11-21T22:52:10Z">
-        <source>https://github.com/mharchik/ReaperScripts/raw/397fbfff89944e111f73a39f227a173392bbf9a5/Functions/MH%20-%20Functions.lua</source>
+        <source>https://github.com/mharchik/ReaperScripts/raw/7ea09942d5080c45d708363db941dea3a2d4568f/Functions/MH%20-%20Functions.lua</source>
       </version>
     </reapack>
   </category>
@@ -76,7 +76,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-12-07T16:59:49Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/83e04c75b6646ee1403d5064a0232d0e0af0c242/Items/MH%20-%20Fade%20In%20Item%20Under%20Mouse%20to%20Edit%20Cursor.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Items/MH%20-%20Fade%20In%20Item%20Under%20Mouse%20to%20Edit%20Cursor.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Fade Out Item Under Mouse From Edit Cursor.lua" type="script" desc="Fade Out Item Under Mouse From Edit Cursor">
@@ -84,7 +84,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-12-07T16:59:49Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/83e04c75b6646ee1403d5064a0232d0e0af0c242/Items/MH%20-%20Fade%20Out%20Item%20Under%20Mouse%20From%20Edit%20Cursor.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Items/MH%20-%20Fade%20Out%20Item%20Under%20Mouse%20From%20Edit%20Cursor.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Randomize Selected Items Pitch via Playrate.lua" type="script" desc="Randomize Selected Items Pitch via Playrate">
@@ -115,7 +115,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Items/MH%20-%20Select%20Items%20Contiguously%20Overlapping%20With%20Item%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Items/MH%20-%20Select%20Items%20Contiguously%20Overlapping%20With%20Item%20Under%20Mouse.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Select Items Contiguously Overlapping With Selected Items.lua" type="script" desc="Select Items Contiguously Overlapping With Selected Items">
@@ -142,12 +142,20 @@
         <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Items/MH%20-%20Show%20Full%20Source%20of%20Selected%20Items.lua</source>
       </version>
     </reapack>
+    <reapack name="MH - Toggle Mute for Selected Items to the Same Value.lua" type="script" desc="Toggle Mute for Selected Items to the Same Value">
+      <metadata>
+        <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
+      </metadata>
+      <version name="1.0" author="Max Harchik" time="2023-12-09T18:24:32Z">
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/65713af95c1ae0d4847d61e8944d4bc461916ae3/Items/MH%20-%20Toggle%20Mute%20for%20Selected%20Items%20to%20the%20Same%20Value.lua</source>
+      </version>
+    </reapack>
     <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Item Edges">
       <metadata>
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Forward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length.lua" type="script" desc="Trim Left Edge of Item Under Mouse to Edit Cursor Without Moving Fade In End Until Minimum Fade Length">
@@ -155,7 +163,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20In%20End%20Until%20Minimum%20Fade%20Length.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Items/MH%20-%20Trim%20Left%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20In%20End%20Until%20Minimum%20Fade%20Length.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor and Slide It Backward Along With Contiguously Overlapping Items">
@@ -163,7 +171,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T23:29:04Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Backward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20and%20Slide%20It%20Backward%20Along%20With%20Contiguously%20Overlapping%20Items.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length.lua" type="script" desc="Trim Right Edge of Item Under Mouse to Edit Cursor Without Moving Fade Out Start Until Minimum Fade Length">
@@ -171,7 +179,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Items/MH%20-%20Trim%20Right%20Edge%20of%20Item%20Under%20Mouse%20to%20Edit%20Cursor%20Without%20Moving%20Fade%20Out%20Start%20Until%20Minimum%20Fade%20Length.lua</source>
       </version>
     </reapack>
   </category>
@@ -181,7 +189,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/dcd456c29775a4d4508b16c20f1a4ede242834d5/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Horizontally%20Dynamic.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Mousewheel - Zoom Vertically Snapping to Active Folder Track.lua" type="script" desc="Mousewheel - Zoom Vertically Snapping to Active Folder Track">
@@ -189,7 +197,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T21:26:53Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Vertically%20Snapping%20to%20Active%20Folder%20Track.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/8bd85158b1374001944ebab3ae396559e151f5c2/Navigation/MH%20-%20Mousewheel%20-%20Zoom%20Vertically%20Snapping%20to%20Active%20Folder%20Track.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Move Edit Cursor to Next Item Edge or Transient on Selected Track.lua" type="script" desc="Move Edit Cursor to Next Item Edge or Transient on Selected Track">
@@ -341,8 +349,8 @@
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-19T05:38:26Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/397fbfff89944e111f73a39f227a173392bbf9a5/Tracks/MH%20-%20Track%20Visuals%20Manager.lua</source>
-        <source main="main" file="MH - Track Visuals Manager Settings.lua">https://github.com/mharchik/ReaperScripts/raw/397fbfff89944e111f73a39f227a173392bbf9a5/Tracks/MH%20-%20Track%20Visuals%20Manager%20Settings.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/dcd456c29775a4d4508b16c20f1a4ede242834d5/Tracks/MH%20-%20Track%20Visuals%20Manager.lua</source>
+        <source main="main" file="MH - Track Visuals Manager Settings.lua">https://github.com/mharchik/ReaperScripts/raw/dcd456c29775a4d4508b16c20f1a4ede242834d5/Tracks/MH%20-%20Track%20Visuals%20Manager%20Settings.lua</source>
       </version>
     </reapack>
   </category>
