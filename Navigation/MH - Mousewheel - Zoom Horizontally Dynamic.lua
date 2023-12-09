@@ -5,9 +5,10 @@
 -- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 
 -- @about	This script should be bound to mousewheel. 
---			Zooms the arrange window in and out horizontally adjusting the center point based on how far you are zoomed in/out.
---			When view is wider the zoom will focus on the center of all selected items. As zoom moves in closer, the focus will shift towards the edit cursor position.
---			If no items are selected zoom will default to focusing on the edit cursor.
+--			Zooms the arrange window in and out horizontally, adjusting the center point based on how far you are zoomed in/out.
+--			When view is wider the zoom will focus on the center of either the active time selection, or of all onscreen selected items. 
+--			As zoom moves in closer, the focus will shift towards the edit cursor position.
+--			If there are no item/time selections, the zoom will default to always focusing on the edit cursor.
 ----------------------------------------
 --Setup
 ----------------------------------------
@@ -20,40 +21,47 @@ if not r.HasExtState(scriptName, 'firstrun') then r.SetExtState(scriptName, 'fir
 --User Settings
 ----------------------------------------
 local ZoomAmount = 3   --Higher values increase the strength of the zoom in/out
-local CursorOffsetAmount = 50 --(0-100) This affects how far to the left the edit cursor will shift when focused on it. 0 will be the default center of the screen, while 100 will be full to the left edge of the screen 
+local CursorOffsetAmount = 40 --(0-100) This affects how far to the left the edit cursor will shift when focused on it. 0 will be the default center of the screen, while 100 will be full to the left edge of the screen 
 ----------------------------------------
 --Functions
 ----------------------------------------
 
 --Changes the zoom center point based on how close you're zooming in.
-function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
-	local farCenter
-	local centerLength
+function FindZoomCenter()
+	local cursorPos = r.GetCursorPosition()
+	local focus
+	local focusLength
 	--getting the positions and lengths of the different elements of the arrange view
 	local curStart, curEnd = r.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	local arrlength = curEnd - curStart
-	local itemsLength = itemsEnd - itemsStart
-	local itemsCenter = (itemsStart + itemsEnd) / 2
+	--getting the size of any selected items
+	local itemsLength, itemsCenter = 0, 0
+	local retval, itemsStart, itemsEnd = mh.GetVisibleSelectedItemsSize()
+	if retval then
+		itemsLength = itemsEnd - itemsStart
+		itemsCenter = (itemsStart + itemsEnd) / 2
+	end
+	--getting the size of any time selection
 	local timeSelStart, timeSelEnd = r.GetSet_LoopTimeRange(false, false, 0, 0, false)
 	local timeSelLength = timeSelEnd - timeSelStart
 	local timeSelCenter = (timeSelEnd + timeSelStart)/2
 	local curOffset = GetCursorOffset()
 	--Setting the center of our zoom point based on what exists/is on screen. Priority is Time selection > Item Selection > Edit Cursor > Center of View
 	if timeSelCenter > curStart and timeSelCenter < curEnd then
-		farCenter = timeSelCenter
-		centerLength = timeSelLength
+		focus = timeSelCenter
+		focusLength = timeSelLength
 	elseif itemsCenter > curStart and itemsCenter < curEnd then
-		farCenter = itemsCenter
-		centerLength = itemsLength
+		focus = itemsCenter
+		focusLength = itemsLength
 	elseif cursorPos > curStart and cursorPos < curEnd then
-		farCenter = cursorPos
-		centerLength = arrlength
+		focus = cursorPos
+		focusLength = arrlength
 	else
-		farCenter = curStart + arrlength/2
-		centerLength = arrlength
+		focus = curStart + arrlength/2
+		focusLength = arrlength
 	end
 	--zoomBias will be the scaling amount that the zoom shifts from our zoomed out target to our edit cursor. 
-	local zoomBias = (1 - centerLength/ arrlength) * 2
+	local zoomBias = (1 - focusLength/ arrlength) * 2
 	--some vaguely questionable math above but this clamps the value so that we can reliably scale our final output
 	if zoomBias > 1 then
 		zoomBias = 1
@@ -61,7 +69,7 @@ function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
 		zoomBias = 0
 	end
 	-- Centering the view on the cursor plus the scaled distance to our zoomed out center point. We also add the cursor offset which is scaled opposite from the zoomedOutCenter so that it only starts affecting our positioning when zooming in on the actual edit cursor
- 	local center = cursorPos + (farCenter - cursorPos) * zoomBias + curOffset * (1 - zoomBias)
+ 	local center = cursorPos + (focus - cursorPos) * zoomBias + curOffset * (1 - zoomBias)
 	return center
 end
 
@@ -92,17 +100,10 @@ function GetCursorOffset()
 end
 
 function Main()
-	local cursorPos = r.GetCursorPosition()
-	local retval, itemsStart, itemsEnd = mh.GetVisibleSelectedItemsSize()
-	if retval then
-		Zoom()
-		local zoomCenter = FindZoomCenter(itemsStart, itemsEnd, cursorPos)
-		MoveToNewCenter(zoomCenter)
-	else
-		Zoom()
-		local cursorOffset = GetCursorOffset()
-		MoveToNewCenter(cursorPos + cursorOffset)
-	end
+
+	Zoom()
+	local zoomCenter = FindZoomCenter()
+	MoveToNewCenter(zoomCenter)
 	mh.noundo()
 end
 

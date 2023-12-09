@@ -1,3 +1,4 @@
+---@diagnostic disable: param-type-mismatch
 ----------------------------------------
 -- @noindex
 -- @description Import Pro Tools Session From Text File

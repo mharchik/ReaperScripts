@@ -105,7 +105,6 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
     end
     --Only refresh arrange view if we actually changed anything
     if didChange then
-        mh.Msg('refresh')
         r.TrackList_AdjustWindows(true)
     end
 end
