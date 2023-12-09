@@ -19,7 +19,7 @@ if not r.HasExtState(scriptName, 'firstrun') then r.SetExtState(scriptName, 'fir
 ----------------------------------------
 --User Settings
 ----------------------------------------
-local ZoomAmount = 2   --Higher values increase the strength of the zoom in/out
+local ZoomAmount = 3   --Higher values increase the strength of the zoom in/out
 local CursorOffsetAmount = 50 --(0-100) This affects how far to the left the edit cursor will shift when focused on it. 0 will be the default center of the screen, while 100 will be full to the left edge of the screen 
 ----------------------------------------
 --Functions
@@ -27,33 +27,33 @@ local CursorOffsetAmount = 50 --(0-100) This affects how far to the left the edi
 
 --Changes the zoom center point based on how close you're zooming in.
 function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
-	local zoomedOutCenter
-	local zoomCenterLength
+	local farCenter
+	local centerLength
 	--getting the positions and lengths of the different elements of the arrange view
 	local curStart, curEnd = r.GetSet_ArrangeView2(0, false, 0, 0, 0, 0)
 	local arrlength = curEnd - curStart
 	local itemsLength = itemsEnd - itemsStart
 	local itemsCenter = (itemsStart + itemsEnd) / 2
-	local timeStart, timeSelEnd = r.GetSet_LoopTimeRange(false, false, 0, 0, false)
-	local timeLength = timeSelEnd - timeStart
-	local timeCenter = (timeSelEnd + timeStart)/2
-	local cursorOffset = GetCursorOffset()
+	local timeSelStart, timeSelEnd = r.GetSet_LoopTimeRange(false, false, 0, 0, false)
+	local timeSelLength = timeSelEnd - timeSelStart
+	local timeSelCenter = (timeSelEnd + timeSelStart)/2
+	local curOffset = GetCursorOffset()
 	--Setting the center of our zoom point based on what exists/is on screen. Priority is Time selection > Item Selection > Edit Cursor > Center of View
-	if timeCenter > curStart and timeCenter < curEnd then
-		zoomedOutCenter = timeCenter
-		zoomCenterLength = timeLength
+	if timeSelCenter > curStart and timeSelCenter < curEnd then
+		farCenter = timeSelCenter
+		centerLength = timeSelLength
 	elseif itemsCenter > curStart and itemsCenter < curEnd then
-		zoomedOutCenter = itemsCenter
-		zoomCenterLength = itemsLength
+		farCenter = itemsCenter
+		centerLength = itemsLength
 	elseif cursorPos > curStart and cursorPos < curEnd then
-		zoomedOutCenter = cursorPos
-		zoomCenterLength = arrlength
+		farCenter = cursorPos
+		centerLength = arrlength
 	else
-		zoomedOutCenter = curStart + arrlength/2
-		zoomCenterLength = arrlength
+		farCenter = curStart + arrlength/2
+		centerLength = arrlength
 	end
 	--zoomBias will be the scaling amount that the zoom shifts from our zoomed out target to our edit cursor. 
-	local zoomBias = (1 - zoomCenterLength/ arrlength) * 2
+	local zoomBias = (1 - centerLength/ arrlength) * 2
 	--some vaguely questionable math above but this clamps the value so that we can reliably scale our final output
 	if zoomBias > 1 then
 		zoomBias = 1
@@ -61,7 +61,7 @@ function FindZoomCenter(itemsStart, itemsEnd, cursorPos)
 		zoomBias = 0
 	end
 	-- Centering the view on the cursor plus the scaled distance to our zoomed out center point. We also add the cursor offset which is scaled opposite from the zoomedOutCenter so that it only starts affecting our positioning when zooming in on the actual edit cursor
- 	local center = cursorPos + (zoomedOutCenter - cursorPos) * zoomBias + cursorOffset * (1 - zoomBias)
+ 	local center = cursorPos + (farCenter - cursorPos) * zoomBias + curOffset * (1 - zoomBias)
 	return center
 end
 

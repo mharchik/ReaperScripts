@@ -21,7 +21,7 @@ if not mh.JS() then mh.noundo() return end
 ----------------------------------------
 --User Settings
 ----------------------------------------
-local ZoomAmount = 2    --Higher values increase the strength of the zoom in/out
+local ZoomAmount = 3    --Higher values increase the strength of the zoom in/out
 ----------------------------------------
 --Functions
 ----------------------------------------

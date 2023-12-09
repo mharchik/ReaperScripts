@@ -49,7 +49,8 @@ end
 function Main()
 	r.Main_OnCommand(r.NamedCommandLookup('_SWS_SAVEALLSELITEMS1'),0) -- Calls Action: 'SWS: Save selected item(s)'
 	r.SelectAllMediaItems(0, false)
-	local item = r.BR_ItemAtMouseCursor()
+    local x, y = r.GetMousePosition()
+    local item = r.GetItemFromPoint(x, y, true)
 	if not item then
 		r.Main_OnCommand(r.NamedCommandLookup('_SWS_RESTALLSELITEMS1'),0) -- Calls Action: 'SWS: Restore saved selected item(s)'
 		mh.noundo()

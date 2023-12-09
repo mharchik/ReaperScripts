@@ -20,7 +20,8 @@ local MIN_FADE_LENGTH = 0.016666667 --currently set to 1 frame at 60 fps
 --Functions
 ----------------------------------------
 function Main()
-    local item = r.BR_ItemAtMouseCursor()
+    local x, y = r.GetMousePosition()
+    local item = r.GetItemFromPoint(x, y, true)
     if not item then return end
     local editPos = r.GetCursorPosition()
     local itemStart, itemEnd = mh.GetItemSize(item)

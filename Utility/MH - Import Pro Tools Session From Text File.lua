@@ -1,13 +1,8 @@
----@diagnostic disable: param-type-mismatch
 ----------------------------------------
 -- @noindex
 -- @description Import Pro Tools Session From Text File
 -- @author Max Harchik
 -- @version 1.0
--- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
-
---TODO
---Fix Media Item getting renamed to add '-imported' at the end of the file if it already exists in your audio files folder
 ----------------------------------------
 --Setup
 ----------------------------------------
@@ -233,27 +228,29 @@ function ImportMedia()
                     mute = val
                 end
             end
-            local file = (audiopath .. '/' .. filename):gsub('\\', '/')
-            if reaper.file_exists(file) then
-                reaper.InsertMedia(file, 0)
-                local itemCount = r.CountMediaItems(0)
-                if itemCount > 0 then
-                    for l = 0, itemCount - 1 do
-                        local item = r.GetMediaItem(0, l)
-                        local take = r.GetActiveTake(item)
-                        local name = r.GetTakeName(take)
-                        if name == filename then
-                            r.MoveMediaItemToTrack(item, selTrack)
-                            r.SetMediaItemPosition(item, startPos - offset + RppStartTime, false)
-                            if mute:match('Muted') then
-                                r.SetMediaItemInfo_Value(item, 'B_MUTE', 1)
+            if filename then
+                local file = (audiopath .. '/' .. filename):gsub('\\', '/')
+                if reaper.file_exists(file) then
+                    reaper.InsertMedia(file, 0)
+                    local itemCount = r.CountMediaItems(0)
+                    if itemCount > 0 then
+                        for l = 0, itemCount - 1 do
+                            local item = r.GetMediaItem(0, l)
+                            local take = r.GetActiveTake(item)
+                            local name = r.GetTakeName(take)
+                            if name == filename then
+                                r.MoveMediaItemToTrack(item, selTrack)
+                                r.SetMediaItemPosition(item, startPos - offset + RppStartTime, false)
+                                if mute:match('Muted') then
+                                    r.SetMediaItemInfo_Value(item, 'B_MUTE', 1)
+                                end
+                                break
                             end
-                            break
                         end
                     end
+                else
+                    FailedFiles[#FailedFiles+1] = file
                 end
-            else
-                FailedFiles[#FailedFiles+1] = file
             end
         end
     end
@@ -287,7 +284,7 @@ function Main()
     r.SetEditCurPos(0, false, false)
     local isFile, fileNames = reaper.JS_Dialog_BrowseForOpenFiles('Select Session Text File', '', '', "Text file (.txt)\0*.txt\0\0", false)
     if isFile == 0 then return end
-    local isFolder, folder = reaper.JS_Dialog_BrowseForFolder( 'Selecte Folder With Audio Files to Import', '' )
+    local isFolder, folder = reaper.JS_Dialog_BrowseForFolder( 'Select Folder With Audio Files to Import', '' )
     if isFolder == 0 then return end
     path = fileNames
     audiopath = folder

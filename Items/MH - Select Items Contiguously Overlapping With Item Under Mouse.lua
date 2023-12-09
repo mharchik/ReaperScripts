@@ -15,7 +15,8 @@ if not mh.SWS() then mh.noundo() return end
 --Functions
 ----------------------------------------
 function Main()
-	local item = r.BR_ItemAtMouseCursor()
+    local x, y = r.GetMousePosition()
+    local item = r.GetItemFromPoint(x, y, true)
 	if not item then return end
 	r.SetMediaItemSelected(item, true)
 	mh.GetOverlappingItems(item, true)
