@@ -30,8 +30,8 @@ local TrackNames = {}
 local Markers = {}
 local FailedFiles = {}
 
-local path
-local audiopath
+local TxtPath
+local AudioFolderPath
 ----------------------------------------
 --Functions
 ----------------------------------------
@@ -49,7 +49,7 @@ function ExtensionChecker()
 end
 
 function ReadFile()
-    local file = io.open(path:gsub('\\', '/'), 'r')
+    local file = io.open(TxtPath:gsub('\\', '/'), 'r')
     io.input(file)
 
     local clipsSectStart
@@ -229,7 +229,7 @@ function ImportMedia()
                 end
             end
             if filename then
-                local file = (audiopath .. '/' .. filename):gsub('\\', '/')
+                local file = (AudioFolderPath .. '/' .. filename):gsub('\\', '/')
                 if reaper.file_exists(file) then
                     reaper.InsertMedia(file, 0)
                     local itemCount = r.CountMediaItems(0)
@@ -282,12 +282,12 @@ end
 function Main()
     if not ExtensionChecker() then return end
     r.SetEditCurPos(0, false, false)
-    local isFile, fileNames = reaper.JS_Dialog_BrowseForOpenFiles('Select Session Text File', '', '', "Text file (.txt)\0*.txt\0\0", false)
+    local isFile, file = reaper.JS_Dialog_BrowseForOpenFiles('Select Session Text File', '', '', "Text file (.txt)\0*.txt\0\0", false)
     if isFile == 0 then return end
     local isFolder, folder = reaper.JS_Dialog_BrowseForFolder( 'Select Folder With Audio Files to Import', '' )
     if isFolder == 0 then return end
-    path = fileNames
-    audiopath = folder
+    TxtPath = file
+    AudioFolderPath = folder
     local trackCount = r.CountTracks(0)
     if trackCount == 0 then
         ReadFile()
