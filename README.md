@@ -8,7 +8,7 @@ Many scripts include more specific information on their functionality in their h
 # Installation:
 You can install these scripts by using ReaPack. From inside Reaper go to the menu: _Extension > ReaPack > Import Repositories..._ and copy and past the link below into the dialogue box.
 
-`https://github.com/mharchik/seaperscripts/raw/main/index.xml`
+`https://github.com/mharchik/reaperscripts/raw/main/index.xml`
  
 For more information on how to use these scripts please check out https://www.maxharchik.com/reaper. Thanks! :)
 
