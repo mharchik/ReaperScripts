@@ -27,6 +27,7 @@ For more information on how to use these scripts please check out https://www.ma
 * MH - Fade Out Item Under Mouse From Edit Cursor
 * MH - Randomize Selected Items Pitch via Playrate
 * MH - Randomize Selected Items Volumes
+* MH - Reverse Selected Items Including Fades
 * MH - Select Items Contiguously Overlapping With Item Under Mouse
 * MH - Select Items Contiguously Overlapping With Selected Items
 * MH - Select Only Items on Track Under Mouse
