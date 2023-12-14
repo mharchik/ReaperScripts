@@ -1,5 +1,5 @@
 ----------------------------------------
--- @description Reverse Selected Items
+-- @description Reverse Selected Items Including Fades
 -- @author Max Harchik
 -- @version 1.0
 -- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
@@ -28,7 +28,7 @@ function Main()
         r.SetMediaItemInfo_Value(item, 'D_FADEOUTLEN', inLength)
         r.SetMediaItemInfo_Value(item, 'D_FADEOUTDIR', inCurve * -1)
     end
-    reaper.Main_OnCommand(41051, 0)
+    r.Main_OnCommand(41051, 0)
 end
 
 ----------------------------------------
