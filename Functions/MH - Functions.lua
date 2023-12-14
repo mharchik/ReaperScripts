@@ -405,6 +405,14 @@ function mh.ToBool(string)
     end
 end
 
+function mh.InvertBool(b)
+    if b then
+        return false
+    else
+        return true
+    end
+end
+
 function mh.HexToRgb(num)
     num = num:gsub('[^%x]', '') --removing all non hexidecimal characters from input
     local rgb = {}
