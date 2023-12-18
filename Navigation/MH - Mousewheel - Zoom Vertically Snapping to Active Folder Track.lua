@@ -62,7 +62,7 @@ function GetCenterTrack(left, top, right, bottom)
     --if we can't see the selected track, we'll default back to the track at the center of the arrange window
     if not IsTrackVisible then
         local x = left
-        local y = (top + bottom) / 2
+        local y = math.floor((top + bottom) / 2)
         local centerTrack
         while not centerTrack and x <= right do
             centerTrack = r.GetTrackFromPoint(x, y)
