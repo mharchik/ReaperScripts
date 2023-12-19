@@ -37,12 +37,12 @@ local function bool_to_number(value)
     return value and 1 or 0
   end
 
-local is_new_value,filename,section_ID,cmd_ID,mode,resolution,val = reaper.get_action_context()
+local _,_,section_ID,cmd_ID,_,_,_ = reaper.get_action_context()
 
 local UNDO_STATE_FX = 2 -- track/master fx
 
 local name = ({reaper.get_action_context()})[2]:match("([^/\\_]+).lua$")
-local fxIndex = tonumber(name:match("FX (%d+)"))
+local fxIndex = 4
 local mode = ({Bypass=false, Unbypass=true})[name:match('^(%w+)')]
 
 if fxIndex then
