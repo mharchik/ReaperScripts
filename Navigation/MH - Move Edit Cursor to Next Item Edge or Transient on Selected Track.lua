@@ -74,6 +74,7 @@ end
 
 function Main()
     local track = r.GetLastTouchedTrack()
+    if not track then mh.noundo() return end
     local cursorPos = r.GetCursorPosition()
     MoveCursorForward(track, cursorPos)
 end
