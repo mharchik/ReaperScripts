@@ -33,7 +33,10 @@ local DancerNames = {'Baba+Background', 'Keke+Background', 'Me+Background', 'Jij
 
 function RandomizeDancer()
   math.randomseed(os.time() * 100)
-  local index = math.random(#DancerNames)
+  local index
+  while not index or r.GetExtState('REAPER-Dancer', 'LastDancer') == DancerNames[index] do
+    index = math.random(#DancerNames)
+  end
   r.SetExtState( 'REAPER-Dancer', 'LastDancer', DancerNames[index], true)
 end
 
