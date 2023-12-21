@@ -43,27 +43,30 @@ function SelectFolderItemChildren(track, selItems)
     local depth = r.GetTrackDepth(track)
     local trackNum = r.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER')
     local nextDepth = depth + 1
-    while nextDepth > depth do
-        local nextTrack = r.GetTrack(0, trackNum)
-        nextDepth = r.GetTrackDepth(nextTrack)
-        local nextTrackItemCount = r.CountTrackMediaItems(nextTrack)
-        if nextTrackItemCount > 0 then
-            for j = 0, nextTrackItemCount - 1 do
-                local nextItem = r.GetTrackMediaItem(nextTrack, j)
-                local nextItemStart, nextItemEnd = mh.GetItemSize(nextItem)
-                for k = 1, #selItems do
-                    local folderItemStart, folderItemEnd = mh.GetItemSize(selItems[k])
-                    if nextItemStart >= folderItemStart and nextItemStart <= folderItemEnd then
-                        r.SetMediaItemSelected(nextItem, true)
-                        mh.GetOverlappingItems(nextItem)
-                    elseif nextItemStart <= folderItemStart and nextItemEnd >= folderItemStart then
-                        r.SetMediaItemSelected(nextItem, true)
-                        mh.GetOverlappingItems(nextItem)
+    local nextTrack = track
+    while nextTrack and nextDepth > depth do
+        nextTrack = r.GetTrack(0, trackNum)
+        if nextTrack then
+            nextDepth = r.GetTrackDepth(nextTrack)
+            local nextTrackItemCount = r.CountTrackMediaItems(nextTrack)
+            if nextTrackItemCount > 0 then
+                for j = 0, nextTrackItemCount - 1 do
+                    local nextItem = r.GetTrackMediaItem(nextTrack, j)
+                    local nextItemStart, nextItemEnd = mh.GetItemSize(nextItem)
+                    for k = 1, #selItems do
+                        local folderItemStart, folderItemEnd = mh.GetItemSize(selItems[k])
+                        if nextItemStart >= folderItemStart and nextItemStart <= folderItemEnd then
+                            r.SetMediaItemSelected(nextItem, true)
+                            mh.GetOverlappingItems(nextItem)
+                        elseif nextItemStart <= folderItemStart and nextItemEnd >= folderItemStart then
+                            r.SetMediaItemSelected(nextItem, true)
+                            mh.GetOverlappingItems(nextItem)
+                        end
                     end
                 end
             end
+            trackNum = trackNum + 1
         end
-        trackNum = trackNum + 1
     end
 end
 
