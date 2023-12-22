@@ -120,7 +120,7 @@ end
 function Main()
     local currentTime = r.time_precise()
     if currentTime - LastActiveTime > RefreshRate then
-        r.ClearConsole()
+        --r.ClearConsole()
         local trackCount = r.CountTracks(0)
         if trackCount > 0 then
             r.PreventUIRefresh(1)
