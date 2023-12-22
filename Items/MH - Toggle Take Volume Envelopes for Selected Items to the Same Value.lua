@@ -12,6 +12,10 @@ mh = r.GetResourcePath() .. '/Scripts/MH Scripts/Functions/MH - Functions.lua';
 if r.file_exists(mh) then dofile(mh); if not mh or mh.version() < 1.0 then r.ShowMessageBox('This script requires a newer version of the MH Scripts repositiory!\n\n\nPlease resync from the above menu:\n\nExtensions > ReaPack > Synchronize Packages', 'Error', 0); return end else r.ShowMessageBox('This script requires the full MH Scripts repository!\n\nPlease visit github.com/mharchik/ReaperScripts for more information', 'Error', 0); return end
 if not mh.SWS() then mh.noundo() return end
 ----------------------------------------
+--User Settings
+----------------------------------------
+local IgnoreFolderItems = true
+----------------------------------------
 --Functions
 ----------------------------------------
 function Main()
@@ -21,7 +25,7 @@ function Main()
     local folderItems = {}
     for i = 0, itemCount - 1 do
         local item = r.GetSelectedMediaItem(0, i)
-        if mh.IsFolderItem(item) then
+        if mh.IsFolderItem(item) and IgnoreFolderItems then
             folderItems[#folderItems+1] = item
         else
             local take = r.GetActiveTake(item)
@@ -34,7 +38,8 @@ function Main()
             end
         end
     end
-    if #folderItems > 0 then
+
+    if #folderItems > 0 and IgnoreFolderItems then
         for i = 1, #folderItems do
             r.SetMediaItemSelected(folderItems[i], false)
         end
@@ -44,7 +49,7 @@ function Main()
     else
         r.Main_OnCommand(reaper.NamedCommandLookup('_S&M_TAKEENVSHOW1'), 0) --Calls Action 'SWS/S&M: Show take volume envelope'
     end
-    if #folderItems > 0 then
+    if #folderItems > 0 and IgnoreFolderItems then
         for i = 1, #folderItems do
             r.SetMediaItemSelected(folderItems[i], true)
         end
@@ -54,7 +59,7 @@ end
 ----------------------------------------
 --Main
 ----------------------------------------
-r.ClearConsole()
+--r.ClearConsole()
 r.PreventUIRefresh(1)
 r.Undo_BeginBlock()
 Main()
