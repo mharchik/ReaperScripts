@@ -18,15 +18,25 @@ function Main()
     local itemCount = r.CountSelectedMediaItems(0)
     if itemCount == 0 then mh.noundo() return end
     local isVisible = false
+    local folderItems = {}
     for i = 0, itemCount - 1 do
         local item = r.GetSelectedMediaItem(0, i)
-        local take = r.GetActiveTake(item)
-        local env = reaper.GetTakeEnvelopeByName(take, 'Volume')
-        if env then
-            local brEnv = reaper.BR_EnvAlloc( env, false )
-            if ({reaper.BR_EnvGetProperties(brEnv)})[2] then
-                isVisible = true
+        if mh.IsFolderItem(item) then
+            folderItems[#folderItems+1] = item
+        else
+            local take = r.GetActiveTake(item)
+            local env = reaper.GetTakeEnvelopeByName(take, 'Volume')
+            if env then
+                local brEnv = reaper.BR_EnvAlloc( env, false )
+                if ({reaper.BR_EnvGetProperties(brEnv)})[2] then
+                    isVisible = true
+                end
             end
+        end
+    end
+    if #folderItems > 0 then
+        for i = 1, #folderItems do
+            r.SetMediaItemSelected(folderItems[i], false)
         end
     end
     if isVisible then
@@ -34,12 +44,17 @@ function Main()
     else
         r.Main_OnCommand(reaper.NamedCommandLookup('_S&M_TAKEENVSHOW1'), 0) --Calls Action 'SWS/S&M: Show take volume envelope'
     end
+    if #folderItems > 0 then
+        for i = 1, #folderItems do
+            r.SetMediaItemSelected(folderItems[i], true)
+        end
+    end
 end
 
 ----------------------------------------
 --Main
 ----------------------------------------
---r.ClearConsole()
+r.ClearConsole()
 r.PreventUIRefresh(1)
 r.Undo_BeginBlock()
 Main()
