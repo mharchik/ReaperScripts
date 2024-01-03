@@ -55,11 +55,11 @@ function CheckForCrossfades(item)
 		local nextItem = r.GetTrackMediaItem(track, i)
 		if nextItem ~= item then
 			local nextItemStart, nextItemEnd  = mh.GetItemSize(nextItem)
-			if itemStart < nextItemEnd and itemStart > nextItemStart then
-				local fadeLen = nextItemEnd - itemStart
-				r.SetMediaItemInfo_Value(item, "D_FADEINLEN", fadeLen)
-				r.SetMediaItemInfo_Value(item, "C_FADEINSHAPE", 1)
-				r.SetMediaItemInfo_Value(nextItem, "D_FADEOUTLEN", fadeLen)
+			if itemEnd > nextItemStart and itemEnd < nextItemEnd then
+				local fadeLen = itemEnd - nextItemStart
+				r.SetMediaItemInfo_Value(item, "D_FADEOUTLEN", fadeLen)
+				r.SetMediaItemInfo_Value(item, "C_FADEOUTSHAPE", 1)
+				r.SetMediaItemInfo_Value(nextItem, "D_FADEINLEN", fadeLen)
 				r.SetMediaItemInfo_Value(nextItem, "C_FADEOUTSHAPE", 1)
 			end
 		end
@@ -76,19 +76,18 @@ function Main()
 		mh.noundo()
 		return
 	end
+	SelectOverlappingGroupOfItemsAfterItem(item)
 	--Trim Item to edit cursor only if edit cursor is actually overlapping item
 	local editPos = r.GetCursorPosition()
-	local itemStart, ItemEnd = mh.GetItemSize(item)
-	if editPos <= itemStart then mh.noundo() return end
-	local fadeLength = r.GetMediaItemInfo_Value(item, 'D_FADEINLEN')
+	local itemStart, itemEnd = mh.GetItemSize(item)
+	if editPos >= itemEnd then mh.noundo() return end
+	local fadeLength = r.GetMediaItemInfo_Value(item, 'D_FADEOUTLEN')
     if fadeLength > 0 then
-        local newFadeLength = fadeLength - (editPos - itemStart)
-        r.SetMediaItemInfo_Value(item, 'D_FADEINLEN', newFadeLength)
+        local newFadeLength = fadeLength - (itemEnd - editPos)
+        r.SetMediaItemInfo_Value(item, 'D_FADEOUTLEN', newFadeLength)
     end
-	r.BR_SetItemEdges(item, editPos, ItemEnd)
-	local moveAmount = itemStart - editPos
-	r.SetMediaItemSelected(item, true)
-	SelectOverlappingGroupOfItemsAfterItem(item)
+	r.BR_SetItemEdges(item, itemStart, editPos)
+	local moveAmount = editPos - itemEnd
 	--Move all selected items forward
 	local selItemCount = r.CountSelectedMediaItems()
 	for i = 0, selItemCount - 1 do
@@ -97,7 +96,8 @@ function Main()
 		r.SetMediaItemPosition(nextItem, nextItemStart + moveAmount, false)
 	end
 	CheckForCrossfades(item)
-	r.SetEditCurPos(itemStart, false, false)
+	r.SetMediaItemSelected(item, true)
+	--r.SetEditCurPos(itemStart, false, false)
 end
 
 --------------------

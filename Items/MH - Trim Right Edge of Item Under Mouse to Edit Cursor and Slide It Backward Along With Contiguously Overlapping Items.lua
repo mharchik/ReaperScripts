@@ -46,6 +46,26 @@ function SelectOverlappingGroupOfItemsBeforeItem(item)
 	end
 end
 
+function CheckForCrossfades(item)
+	local itemStart, itemEnd  = mh.GetItemSize(item)
+	local track = r.GetMediaItem_Track(item)
+	local itemCount = r.CountTrackMediaItems(track)
+	if itemCount == 0 then return end
+	for i = 0, itemCount - 1 do
+		local nextItem = r.GetTrackMediaItem(track, i)
+		if nextItem ~= item then
+			local nextItemStart, nextItemEnd  = mh.GetItemSize(nextItem)
+			if itemEnd > nextItemStart and itemEnd < nextItemEnd then
+				local fadeLen = itemEnd - nextItemStart
+				r.SetMediaItemInfo_Value(item, "D_FADEOUTLEN", fadeLen)
+				r.SetMediaItemInfo_Value(item, "C_FADEOUTSHAPE", 1)
+				r.SetMediaItemInfo_Value(nextItem, "D_FADEINLEN", fadeLen)
+				r.SetMediaItemInfo_Value(nextItem, "C_FADEOUTSHAPE", 1)
+			end
+		end
+	end
+end
+
 function Main()
 	r.Main_OnCommand(r.NamedCommandLookup('_SWS_SAVEALLSELITEMS1'),0) -- Calls Action: 'SWS: Save selected item(s)'
 	r.SelectAllMediaItems(0, false)
@@ -74,6 +94,7 @@ function Main()
 		local nextItemStart = mh.GetItemSize(nextItem)
 		r.SetMediaItemPosition(nextItem, nextItemStart - moveAmount, false)
 	end
+	CheckForCrossfades(item)
 	r.SetEditCurPos(itemEnd, false, false)
 end
 
