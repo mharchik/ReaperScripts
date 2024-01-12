@@ -31,6 +31,7 @@ For more information on how to use these scripts please check out https://www.ma
 * MH - Select Items Contiguously Overlapping With Item Under Mouse
 * MH - Select Items Contiguously Overlapping With Selected Items
 * MH - Select Only Items on Track Under Mouse
+* MH - Semi Normalize All Selected Items
 * MH - Show Full Source of Selected Items
 * MH - Toggle Mute for Selected Items to the Same Value
 * MH - Toggle Take Volume Envelopes for Selected Items to the Same Value
