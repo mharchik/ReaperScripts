@@ -36,19 +36,20 @@ function MoveCursorForward(track, cursorPos)
                 local length = r.GetMediaItemInfo_Value(item, 'D_LENGTH')
                 local take = r.GetActiveTake(item)
                 local offSet = r.GetMediaItemTakeInfo_Value(take, 'D_STARTOFFS')
+                local playrate = r.GetMediaItemTakeInfo_Value(take, 'D_PLAYRATE')
                 local source = r.GetMediaItemTake_Source(take)
                 local sLength, isSeconds = r.GetMediaSourceLength(source)
                 r.Main_OnCommand('40375', 0) --Calls Action 'Item navigation: Move cursor to next transient in items'
                 --checking if we're passing by the start of the source. If so stop there first.
                 if offSet < 0 then
-                    if cursorPos < itemStart - offSet and r.GetCursorPosition() > itemStart - offSet then
-                        r.SetEditCurPos(itemStart - offSet, true, false)
+                    if cursorPos < itemStart - (offSet/playrate) and r.GetCursorPosition() > itemStart - (offSet/playrate) then
+                        r.SetEditCurPos(itemStart - (offSet/playrate), true, false)
                     end
                 end
                 --checking if we're passing by the end of the source. If so stop there first.
-                if length > sLength - offSet then
-                    if cursorPos < itemStart + (sLength - offSet) and r.GetCursorPosition() > itemStart + (sLength - offSet) then
-                        r.SetEditCurPos(itemStart + (sLength - offSet), true, false)
+                if length > ((sLength - offSet)/playrate) then
+                    if cursorPos < itemStart + ((sLength - offSet)/playrate) and r.GetCursorPosition() > itemStart + ((sLength - offSet)/playrate) then
+                        r.SetEditCurPos(itemStart + ((sLength - offSet)/playrate), true, false)
                     end
                 end
                 didMove = true
