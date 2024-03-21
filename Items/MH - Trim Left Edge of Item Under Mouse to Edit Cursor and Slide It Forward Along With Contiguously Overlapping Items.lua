@@ -97,7 +97,7 @@ function Main()
 		r.SetMediaItemPosition(nextItem, nextItemStart + moveAmount, false)
 	end
 	CheckForCrossfades(item)
-	r.SetEditCurPos(itemStart, false, false)
+	r.SetEditCurPos(itemStart, true, false)
 end
 
 --------------------
