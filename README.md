@@ -33,6 +33,7 @@ For more information on how to use these scripts please check out https://www.ma
 * MH - Select Only Items on Track Under Mouse
 * MH - Semi Normalize All Selected Items
 * MH - Show Full Source of Selected Items
+* MH - Sort Selected Items Alphabetically and Arrange Them Based on Filename
 * MH - Toggle Mute for Selected Items to the Same Value
 * MH - Toggle Take Volume Envelopes for Selected Items to the Same Value
 * MH - Trim Left Edge of Item Under Mouse to Edit Cursor and Slide It Forward Along With Contiguously Overlapping Items
