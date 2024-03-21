@@ -45,6 +45,7 @@ For more information on how to use these scripts please check out https://www.ma
 * MH - Mousewheel - Zoom Vertically Snapping to Active Folder Track
 * MH - Move Edit Cursor to Next Item Edge or Transient on Selected Track
 * MH - Move Edit Cursor to Previous Item Edge or Transient on Selected Track
+* MH - Move Edit Cursor to Start of Selected Items
 * MH - Toggle Zoom to Selected Items Ignoring Locked and Hidden Tracks
 
 ### Tracks
