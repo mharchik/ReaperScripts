@@ -8,7 +8,6 @@
 --
 -- @about   Auto sets track heights, colors, and layouts.
 --          Affects folder parents that are used only as a bus, and any divider tracks
---          Requires using the HYDRA reaper theme if you want it to change the look of your divider tracks. Otherwise you'll need to change the Layout variables to match the Track Control Panel Layout names for your theme
 ----------------------------------------
 --Setup
 ----------------------------------------
@@ -59,48 +58,51 @@ function UpdateTrackSettings(track, height, layout, lock, color, recolor)
         end
     end
     --Check Color
-    if recolor then
-        local curColor = r.GetTrackColor(track)
-        if not color then --Reset Color to Default
-            if curColor ~= 0 then -- if it's already 0 then we don't need to change it anymore
-                r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
-                didChange = true
-            end
-        else
-            --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
-            local trackName = ({r.GetTrackName(track)})[2]:lower()
-            local overrides = tvm.GetOverrides()
-            for index, pair in ipairs(overrides) do
-                for name, newColor in pairs(pair) do
-                    local newName = mh.TrimSpaces(name):lower()
-                    --doing a quick check to make sure the name isn't empty after we removed all the spaces from it
-                    if #newName > 0  then
-                        if trackName:match(newName) then
-                            color = newColor
+    local retval, stringNeedBig = r.GetSetMediaTrackInfo_String( track, 'P_EXT:tvm', '', false)
+    if retval and stringNeedBig == 'tracked' then
+        if recolor then
+            local curColor = r.GetTrackColor(track)
+            if not color then --Reset Color to Default
+                if curColor ~= 0 then -- if it's already 0 then we don't need to change it anymore
+                    r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
+                    didChange = true
+                end
+            else
+                --If the track has one of the override names, we'll use the color set in the table at the start of the script instead
+                local trackName = ({r.GetTrackName(track)})[2]:lower()
+                local overrides = tvm.GetOverrides()
+                for index, pair in ipairs(overrides) do
+                    for name, newColor in pairs(pair) do
+                        local newName = mh.TrimSpaces(name):lower()
+                        --doing a quick check to make sure the name isn't empty after we removed all the spaces from it
+                        if #newName > 0  then
+                            if trackName:match(newName) then
+                                color = newColor
+                            end
                         end
                     end
                 end
-            end
-            -- Red and Blue values from ImGui color picker are switched on windows for some reason
-            color = SwapOSColors(color)
-            --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
-            if trackName:match('<hidden>') then
-                local rgb = ({r.ColorFromNative(color)})
-                for key, value in ipairs(rgb) do
-                    rgb[key] = math.floor(value * 0.5)
+                -- Red and Blue values from ImGui color picker are switched on windows for some reason
+                color = SwapOSColors(color)
+                --If track is hiding other tracks below it, then we'll dim the color to help make that more obvious
+                if trackName:match('<hidden>') then
+                    local rgb = ({r.ColorFromNative(color)})
+                    for key, value in ipairs(rgb) do
+                        rgb[key] = math.floor(value * 0.5)
+                    end
+                    color = r.ColorToNative(rgb[1], rgb[2], rgb[3])
                 end
-                color = r.ColorToNative(rgb[1], rgb[2], rgb[3])
+                --Check if we need to change color
+                if curColor ~= color + 16777216 then
+                    r.SetTrackColor(track, color)
+                    didChange = true
+                end
             end
-            --Check if we need to change color
-            if curColor ~= color + 16777216 then
-                r.SetTrackColor(track, color)
+        else
+            if r.GetTrackColor(track) ~= 0 then -- if it's already 0 then we don't need to change it anymore
+                r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
                 didChange = true
             end
-        end
-    else
-        if r.GetTrackColor(track) ~= 0 then -- if it's already 0 then we don't need to change it anymore
-            r.SetMediaTrackInfo_Value(track, 'I_CUSTOMCOLOR', 0)
-            didChange = true
         end
     end
     --Only refresh arrange view if we actually changed anything
@@ -115,6 +117,19 @@ function SwapOSColors(rgb)
         return r.ColorToNative(b1, g1, r1)
     end
     return rgb
+end
+
+function SetTrackState(track, state)
+    local retval, val = reaper.GetSetMediaTrackInfo_String( track, 'P_EXT:tvm', '', false)
+    if state then
+        if not retval or not val == 'tracked' then
+            reaper.GetSetMediaTrackInfo_String( track, 'P_EXT:tvm', 'tracked', true)
+        end
+    else
+        if retval and val == 'tracked' then
+            reaper.GetSetMediaTrackInfo_String( track, 'P_EXT:tvm', '', true)
+        end
+    end
 end
 
 function Main()
@@ -133,9 +148,11 @@ function Main()
                         local folderDepth = r.GetMediaTrackInfo_Value(track, 'I_FOLDERDEPTH')
                         --Checking if track is a Divider Track
                         if tvm.IsDividerTrack(track) then --Checking if the track is a Divider Track
+                            SetTrackState(track, true) --makes sure tvm knows we're using this track
                             UpdateTrackSettings(track, Values['Divider_TrackHeight'], Values['Divider_TrackLayout'], 1, Values['Divider_TrackColor'], mh.ToBool(Values['Divider_TrackRecolor']))
                         --Checking if track is a folder item track    
                         elseif folderDepth == 1 and r.GetTrackDepth(track) == 0 and numOfItems > 0 then --Checking if the track is a top level Folder Item Track
+                            SetTrackState(track, true) --makes sure tvm knows we're using this track
                             if r.GetMediaTrackInfo_Value(track, 'I_FOLDERCOMPACT') == 2 then --if folder is fully collpased then minimize it's height and lock it
                                 UpdateTrackSettings(track, Values['Folder_TrackHeight'], Values['Folder_TrackLayout'], 1, Values['Folder_TrackColor'], mh.ToBool(Values['Folder_TrackRecolor']))
                             else
@@ -143,9 +160,11 @@ function Main()
                             end
                         --Checking if track is a sub folder bus track
                         elseif folderDepth == 1 and numOfItems == 0 then --Checking if the track is a parent sub mix bus
+                            SetTrackState(track, true) --makes sure tvm knows we're using this track
                             UpdateTrackSettings(track, Values['Bus_TrackHeight'], Values['Bus_TrackLayout'], 1, Values['Bus_TrackColor'], mh.ToBool(Values['Bus_TrackRecolor']))
                         else --if none of the above then we'll set it all back to default
                             UpdateTrackSettings(track, 0, 'Global layout Default', 0, false)
+                            SetTrackState(track, false) --needs to be after recoloring so that we know to remove the ext state
                         end
                     end
                 end
