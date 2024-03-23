@@ -46,8 +46,8 @@ function RepositionItems(table, start)
             start = start + minLength
         end
     end
-    local _, _, _, itemsLength = mh.GetVisibleSelectedItemsSize()
-    return itemsLength
+    local _, _, itemsEnd = mh.GetVisibleSelectedItemsSize()
+    return itemsEnd
 end
 
 function CheckTable(value)
@@ -119,8 +119,11 @@ function Main()
     local _, pos = mh.GetVisibleSelectedItemsSize()
     pos  = RoundTime(pos)
     for j, groupIdentifier in ipairs(Groups) do
-        local itemsLength = RepositionItems(groupIdentifier, pos)
-        pos = pos + RoundTime(itemsLength)
+        local itemsEnd = RepositionItems(groupIdentifier, pos)
+            if math.abs(itemsEnd - RoundTime(itemsEnd)) <= 10 then --ensures that there's atleast a 10 second gap between groups of
+            itemsEnd = itemsEnd + GroupSpacing
+        end
+        pos = RoundTime(itemsEnd)
     end
     r.Main_OnCommand(r.NamedCommandLookup('_SWS_RESTALLSELITEMS1'), 0) -- Calls Action 'SWS: Restore saved selected item(s)''
 end
