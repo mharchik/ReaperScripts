@@ -1,11 +1,12 @@
 ----------------------------------------
 -- @noindex
--- @description default template
+-- @description Insert Sub Track Template and Send Selected Tracks to It
 -- @author Max Harchik
 -- @version 1.0
 -- @links GitHub Repo: https://github.com/mharchik/ReaperScripts
 
--- @about default template
+-- @about Creates a sub send track at the track at the top of the folder structure you have selected, and creates sends for any tracks that are selected and don't already have them
+--        The sub send track template needs to be saved in SWS Track Template Slot 1 
 ----------------------------------------
 --Setup
 ----------------------------------------
