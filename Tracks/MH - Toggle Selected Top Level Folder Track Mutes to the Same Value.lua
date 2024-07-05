@@ -81,9 +81,12 @@ end
 
 function Main()
 	local tracks, prevSelTracks = CheckIfChildrenActive()
-	DeselectChildren(tracks)
-	ToggleTrackMutes()
-	ReselectTracks(prevSelTracks)
+	if tracks and prevSelTracks then
+		DeselectChildren(tracks)
+		ToggleTrackMutes()
+		ReselectTracks(prevSelTracks)
+	end
+
 end
 
 ----------------------------------------
