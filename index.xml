@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="MH Scripts" commit="70e2985a3727d49febe673a6e7a13298ae6e1e19">
+<index version="1" name="MH Scripts" commit="45c0ff2d45afc7ee29f325f9b8f2ad8204230a79">
   <category name="Automation">
     <reapack name="MH - Insert Pooled Automation Items For Selected Items On Last Touched Track.lua" type="script" desc="Insert Pooled Automation Items for Selected Items on Last Touched Track">
       <metadata>
@@ -66,7 +66,7 @@
 ]]></description>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/FX/MH%20-%20Toggle%20FX%20Window%20of%20Track%20or%20Item%20Under%20Mouse.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/45c0ff2d45afc7ee29f325f9b8f2ad8204230a79/FX/MH%20-%20Toggle%20FX%20Window%20of%20Track%20or%20Item%20Under%20Mouse.lua</source>
       </version>
     </reapack>
   </category>
@@ -335,7 +335,7 @@
         <link rel="website" href="https://github.com/mharchik/ReaperScripts">GitHub Repo:</link>
       </metadata>
       <version name="1.0" author="Max Harchik" time="2023-11-13T20:38:38Z">
-        <source main="main">https://github.com/mharchik/ReaperScripts/raw/b3bfea613c40e0c91d378640c0e89cb35c2789ce/Tracks/MH%20-%20Toggle%20Selected%20Top%20Level%20Folder%20Track%20Mutes%20to%20the%20Same%20Value.lua</source>
+        <source main="main">https://github.com/mharchik/ReaperScripts/raw/9b721f0cfc1c42f895b95d6b379da0efb39096a6/Tracks/MH%20-%20Toggle%20Selected%20Top%20Level%20Folder%20Track%20Mutes%20to%20the%20Same%20Value.lua</source>
       </version>
     </reapack>
     <reapack name="MH - Toggle Selected Tracks Mutes to the Same Value.lua" type="script" desc="Toggle Selected Tracks Mutes to the Same Value">
