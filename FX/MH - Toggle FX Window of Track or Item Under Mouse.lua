@@ -33,29 +33,27 @@ function CloseActiveFxWindows(screen_x, screen_y, selItem, selTrack)
 				end
 			end
 			local trackFxCount = r.TrackFX_GetCount(track)
-			if trackFxCount > 0 then
-				if r.TrackFX_GetChainVisible(track) ~= -1 then
-					local win = r.CF_GetTrackFXChain(track)
+			if r.TrackFX_GetChainVisible(track) ~= -1 then
+				local win = r.CF_GetTrackFXChain(track)
+				if CheckMouseOverlap(screen_x, screen_y, win) then
+					didMouseOverlap = true
+					wasMouseOverlappingTrack = true
+				end
+				if not wasSelTrackFxOpen or wasMouseOverlappingTrack then
+					r.JS_Window_Destroy(win)
+					wasFxWindowActive = true
+				end
+			end
+			for j = 0, trackFxCount - 1 do
+				local win = r.TrackFX_GetFloatingWindow(track, j)
+				if win then
 					if CheckMouseOverlap(screen_x, screen_y, win) then
 						didMouseOverlap = true
 						wasMouseOverlappingTrack = true
 					end
 					if not wasSelTrackFxOpen or wasMouseOverlappingTrack then
-						r.JS_Window_Destroy(win)
+						r.TrackFX_Show(track, j, 2)
 						wasFxWindowActive = true
-					end
-				end
-				for j = 0, trackFxCount - 1 do
-					local win = r.TrackFX_GetFloatingWindow(track, j)
-					if win then
-						if CheckMouseOverlap(screen_x, screen_y, win) then
-							didMouseOverlap = true
-							wasMouseOverlappingTrack = true
-						end
-						if not wasSelTrackFxOpen or wasMouseOverlappingTrack then
-							r.TrackFX_Show(track, j, 2)
-							wasFxWindowActive = true
-						end
 					end
 				end
 			end
@@ -74,27 +72,25 @@ function CloseActiveFxWindows(screen_x, screen_y, selItem, selTrack)
 						end
 					end
 					local takeFxCount = r.TakeFX_GetCount(take)
-					if takeFxCount > 0 then
-						if r.TakeFX_GetChainVisible(take) ~= -1 then
-							local win = r.CF_GetTakeFXChain(take)
+					if r.TakeFX_GetChainVisible(take) ~= -1 then
+						local win = r.CF_GetTakeFXChain(take)
+						if CheckMouseOverlap(screen_x, screen_y, win) then
+							didMouseOverlap = true
+						end
+						if not wasSelItemFxOpen then
+							r.JS_Window_Destroy(win)
+							wasFxWindowActive = true
+						end
+					end
+					for m = 0, takeFxCount - 1 do
+						local win = r.TakeFX_GetFloatingWindow(take, m)
+						if win then
 							if CheckMouseOverlap(screen_x, screen_y, win) then
 								didMouseOverlap = true
 							end
 							if not wasSelItemFxOpen then
-								r.JS_Window_Destroy(win)
+								r.TakeFX_Show(take, m, 2)
 								wasFxWindowActive = true
-							end
-						end
-						for m = 0, takeFxCount - 1 do
-							local win = r.TakeFX_GetFloatingWindow(take, m)
-							if win then
-								if CheckMouseOverlap(screen_x, screen_y, win) then
-									didMouseOverlap = true
-								end
-								if not wasSelItemFxOpen then
-									r.TakeFX_Show(take, m, 2)
-									wasFxWindowActive = true
-								end
 							end
 						end
 					end
@@ -114,6 +110,7 @@ function SelectOnlyObjectUnderMouse(screen_x, screen_y)
 			r.SelectAllMediaItems(0, false)
 		end
 		r.SetMediaItemSelected(itemInfo, true)
+		trackInfo = nil --wiping track reference if item is selected (there's probably a better way to do this but I don't have time to go through this whole script right now)
 	elseif trackInfo then
 		r.SetOnlyTrackSelected(trackInfo)
 	end
@@ -124,16 +121,10 @@ function OpenFxWindow(item, track)
 	if item then
 		local take = r.GetActiveTake(item)
 		if take then
-			local fxCount = r.TakeFX_GetCount(take)
-			if fxCount > 0 then
-				r.Main_OnCommand(40638, 0) --Calls action 'Item: Show FX chain for item take'
-			end
+			r.Main_OnCommand(40638, 0) --Calls action 'Item: Show FX chain for item take'
 		end
 	elseif track then
-		local fxCount = r.TrackFX_GetCount(track)
-		if fxCount > 0 then
-			r.Main_OnCommand(40291, 0) --Calls action 'Track: View FX chain for current/last touched track'
-		end
+		r.Main_OnCommand(40291, 0) --Calls action 'Track: View FX chain for current/last touched track'
 	end
 end
 
@@ -188,7 +179,7 @@ end
 ----------------------------------------
 --Main
 ----------------------------------------
---reaper.ClearConsole()
+--r.ClearConsole()
 r.PreventUIRefresh(1)
 r.Undo_BeginBlock()
 Main()
