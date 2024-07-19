@@ -22,7 +22,6 @@ function CloseActiveFxWindows(screen_x, screen_y, selItem, selTrack)
 	if numOfTracks > 0 then
 		for i = 0, numOfTracks - 1 do
 			local wasSelTrackFxOpen = false
-			local wasMouseOverlappingTrack = false
 			local track = r.GetTrack(0, i)
 			if selTrack then
 				if track == selTrack then
@@ -37,9 +36,8 @@ function CloseActiveFxWindows(screen_x, screen_y, selItem, selTrack)
 				local win = r.CF_GetTrackFXChain(track)
 				if CheckMouseOverlap(screen_x, screen_y, win) then
 					didMouseOverlap = true
-					wasMouseOverlappingTrack = true
 				end
-				if not wasSelTrackFxOpen or wasMouseOverlappingTrack then
+				if not wasSelTrackFxOpen or didMouseOverlap then
 					r.JS_Window_Destroy(win)
 					wasFxWindowActive = true
 				end
@@ -49,9 +47,8 @@ function CloseActiveFxWindows(screen_x, screen_y, selItem, selTrack)
 				if win then
 					if CheckMouseOverlap(screen_x, screen_y, win) then
 						didMouseOverlap = true
-						wasMouseOverlappingTrack = true
 					end
-					if not wasSelTrackFxOpen or wasMouseOverlappingTrack then
+					if not wasSelTrackFxOpen or didMouseOverlap then
 						r.TrackFX_Show(track, j, 2)
 						wasFxWindowActive = true
 					end
@@ -103,14 +100,14 @@ end
 
 function SelectOnlyObjectUnderMouse(screen_x, screen_y)
 	local trackInfo = r.GetTrackFromPoint(screen_x, screen_y)
-	local itemInfo, takeInfo = r.GetItemFromPoint(screen_x, screen_y, true)
+	local itemInfo, _ = r.GetItemFromPoint(screen_x, screen_y, true)
 	if itemInfo then
 		local SelItemCount = r.CountSelectedMediaItems(0)
 		if SelItemCount > 0 then
 			r.SelectAllMediaItems(0, false)
 		end
 		r.SetMediaItemSelected(itemInfo, true)
-		trackInfo = nil --wiping track reference if item is selected (there's probably a better way to do this but I don't have time to go through this whole script right now)
+		trackInfo = nil --wiping track reference if item is selected, this is to fix a bug where item fx wouldn't open if you had the same track fx already open (there's probably a better way to do this but I don't have time to go through this whole script right now)
 	elseif trackInfo then
 		r.SetOnlyTrackSelected(trackInfo)
 	end
