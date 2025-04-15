@@ -68,7 +68,7 @@ function Main()
 		local ignoreTrack = false
 		local track = r.GetTrack(0, i)
 		local trackSoloState = r.GetMediaTrackInfo_Value(track, 'I_SOLO')
-		if trackSoloState > 0 then
+		if trackSoloState > 0 and trackSoloState < 5 then --ignoring tracks that are "solo defeat"
 			--if the track is selected or a parent of a selected track, we don't need to check it
 			for key, selTrack in ipairs(soloSelTracks) do
 				if track == selTrack then

@@ -16,7 +16,7 @@ if not mh.SWS() then mh.noundo() return end
 ----------------------------------------
 --User Settings
 ----------------------------------------
-local strength = 0.5 --how much of the normalization is applied to selected items. 1 = 100% strength
+local strength = 0.3 --how much of the normalization is applied to selected items. 1 = 100% strength
 ----------------------------------------
 --Functions
 ----------------------------------------

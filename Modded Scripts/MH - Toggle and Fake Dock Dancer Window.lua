@@ -20,7 +20,7 @@ local WINDOW_NAME = 'DancerWindow' --Type the name of the window you'd like to c
 ----------------------------------------
 --Script Variables
 ----------------------------------------
-local refreshRate = 0.01
+local refreshRate = 0.5
 local winCheckRefreshRate = 5
 local lastActiveTime = r.time_precise()
 local lastWinCheckTime = r.time_precise()
